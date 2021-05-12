@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.1145
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{202899A3-C531-4771-9089-0213D66978AE}") = "ScopeApplication2", "ScopeApplication2\ScopeApplication2.scopeproj", "{28423FBE-642F-4F8E-B9B6-8B36C31B2463}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{28423FBE-642F-4F8E-B9B6-8B36C31B2463}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28423FBE-642F-4F8E-B9B6-8B36C31B2463}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28423FBE-642F-4F8E-B9B6-8B36C31B2463}.Debug|x64.ActiveCfg = Debug|x64
+		{28423FBE-642F-4F8E-B9B6-8B36C31B2463}.Debug|x64.Build.0 = Debug|x64
+		{28423FBE-642F-4F8E-B9B6-8B36C31B2463}.Debug|x86.ActiveCfg = Debug|x86
+		{28423FBE-642F-4F8E-B9B6-8B36C31B2463}.Debug|x86.Build.0 = Debug|x86
+		{28423FBE-642F-4F8E-B9B6-8B36C31B2463}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28423FBE-642F-4F8E-B9B6-8B36C31B2463}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28423FBE-642F-4F8E-B9B6-8B36C31B2463}.Release|x64.ActiveCfg = Release|x64
+		{28423FBE-642F-4F8E-B9B6-8B36C31B2463}.Release|x64.Build.0 = Release|x64
+		{28423FBE-642F-4F8E-B9B6-8B36C31B2463}.Release|x86.ActiveCfg = Release|x86
+		{28423FBE-642F-4F8E-B9B6-8B36C31B2463}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {71E45F8E-5310-41B1-9769-E6C20229909A}
+	EndGlobalSection
+EndGlobal
