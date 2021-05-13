@@ -8,11 +8,12 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            TestListResize();
+            //ShowListResize();
+            ShowRandomBag();
             Console.ReadKey();
         }
 
-        public static void TestListResize()
+        public static void ShowListResize()
         {
             List1<int> numbers = new List1<int>();
             Stopwatch watch = new Stopwatch();
@@ -21,6 +22,18 @@ namespace ConsoleApp1
                 watch.Restart();
                 numbers.Add(i);
                 Console.WriteLine(watch.ElapsedTicks);
+            }
+        }
+
+        public static void ShowRandomBag()
+        {
+            RandomBag<int> rBag = new RandomBag<int>();
+            for (int i = 0; i < 100; i++)
+                rBag.Add(i);
+            foreach (int n in rBag)
+            {
+                Console.Write(n);
+                Console.Write(" ");
             }
         }
     }
