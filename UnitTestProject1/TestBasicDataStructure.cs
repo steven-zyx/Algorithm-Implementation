@@ -250,5 +250,38 @@ namespace UnitTestProject1
             Assert.ThrowsException<Exception>(() => deque.PopRight());
             Assert.ThrowsException<Exception>(() => deque.PopLeft());
         }
+
+        [TestMethod]
+        public void TestJosephus1()
+        {
+            int[] expectedtoDied = new int[] { 1, 3, 5, 0, 4, 2, 6 };
+            Josephus josephusClient = new Josephus(7, 2);
+            for (int i = 0; i < expectedtoDied.Length; i++)
+            {
+                Assert.AreEqual(expectedtoDied[i], josephusClient.DiedPeople.Dequeue());
+            }
+        }
+
+        [TestMethod]
+        public void TestJosephus2()
+        {
+            int[] expectedtoDied = new int[] { 3, 0, 5, 4, 6, 2, 1 };
+            Josephus josephusClient = new Josephus(7, 4);
+            for (int i = 0; i < expectedtoDied.Length; i++)
+            {
+                Assert.AreEqual(expectedtoDied[i], josephusClient.DiedPeople.Dequeue());
+            }
+        }
+
+        [TestMethod]
+        public void TestJosephus3()
+        {
+            int[] expectedtoDied = new int[] { 2, 5, 8, 1, 6, 0, 7, 4, 9, 3 };
+            Josephus josephusClient = new Josephus(10, 3);
+            for (int i = 0; i < expectedtoDied.Length; i++)
+            {
+                Assert.AreEqual(expectedtoDied[i], josephusClient.DiedPeople.Dequeue());
+            }
+        }
     }
 }
