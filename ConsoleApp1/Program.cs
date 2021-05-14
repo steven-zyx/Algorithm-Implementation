@@ -9,7 +9,8 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             //ShowListResize();
-            ShowRandomBag();
+            //ShowRandomBag();
+            ShowRandomQueue();
             Console.ReadKey();
         }
 
@@ -34,6 +35,24 @@ namespace ConsoleApp1
             {
                 Console.Write(n);
                 Console.Write(" ");
+            }
+        }
+
+        public static void ShowRandomQueue()
+        {
+            RandomQueue<int> rq = new RandomQueue<int>();
+            for (int i = 1; i <= 13; i++)
+                rq.Enqueue(i);
+
+            for (int i = 1; i <= 5; i++)
+            {
+                Console.WriteLine($"Sample #No {i}:\t{rq.Sample()}");
+            }
+
+            Console.WriteLine("Dequeue all:");
+            for (int i = 0; i < 13; i++)
+            {
+                Console.Write($"{rq.Dequeue()}\t");
             }
         }
     }
