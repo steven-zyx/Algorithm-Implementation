@@ -283,5 +283,26 @@ namespace UnitTestProject1
                 Assert.AreEqual(expectedtoDied[i], josephusClient.DiedPeople.Dequeue());
             }
         }
+
+        [TestMethod]
+        public void TestGeneralizedQueue_A()
+        {
+            GeneralizedQueue_A<int> queueA = new GeneralizedQueue_A<int>();
+            for (int i = 1; i <= 100_000; i++)
+            {
+                queueA.Insert(i);
+            }
+            Assert.AreEqual(3, queueA.Delete(3));
+            Assert.AreEqual(10_001, queueA.Delete(10_000));
+            Assert.AreEqual(50_002, queueA.Delete(50_000));
+
+            int offset = 3;
+            for (int i = 99_997; i >= 1; i--)
+            {
+                if (i == 2 || i == 9_999 || i == 49_999)
+                    offset--;
+                Assert.AreEqual(i + offset, queueA.Delete(i));
+            }
+        }
     }
 }
