@@ -20,7 +20,7 @@ namespace BasicDataStrcture
             _size = size;
             _data = new T[_size];
             _startIndex = 7;
-            _endIndex = 6;
+            _endIndex = 7;
             _eventHasElement = new ManualResetEventSlim(false);
             _eventHasVacancy = new ManualResetEventSlim(true);
             _lockObj = new object();
@@ -44,12 +44,12 @@ namespace BasicDataStrcture
                 //Block the Enqueue request if full
                 _eventHasVacancy.Wait();
                 //Increment the pointer and add the item
+                _data[_endIndex] = t;
                 _endIndex++;
                 if (_endIndex == _size)
                     _endIndex = 0;
-                _data[_endIndex] = t;
                 //check if full
-                if (_endIndex + 1 == _startIndex || (_endIndex == _size - 1 && _startIndex == 0))
+                if (_endIndex == _startIndex)
                     _eventHasVacancy.Reset();
                 //To show the collection is not empty, allow the Dequeue request to proceed
                 if (!_eventHasElement.IsSet)
@@ -69,7 +69,7 @@ namespace BasicDataStrcture
                 if (_startIndex == _size)
                     _startIndex = 0;
                 //check if empty
-                if (_startIndex - 1 == _endIndex || (_startIndex == 0 && _endIndex == _size - 1))
+                if (_endIndex == _startIndex)
                     _eventHasElement.Reset();
                 // To show there is vacancy, allow the Enqueue request to proceed
                 if (!_eventHasVacancy.IsSet)
