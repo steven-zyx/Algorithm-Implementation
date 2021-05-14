@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
 namespace BasicDataStrcture
 {
-    public class RandomQueue<T>
+    public class RandomQueue<T> : IEnumerable<T>
     {
         private T[] _data;
         private int _count;
@@ -51,5 +52,14 @@ namespace BasicDataStrcture
             _data = newData;
         }
 
+        public IEnumerator<T> GetEnumerator()
+        {
+            return new RandomBag<T>.RandomBagEnumerator(_data, _count);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }

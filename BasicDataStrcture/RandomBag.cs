@@ -48,7 +48,7 @@ namespace BasicDataStrcture
             return GetEnumerator();
         }
 
-        private class RandomBagEnumerator : IEnumerator<T>
+        internal class RandomBagEnumerator : IEnumerator<T>
         {
             private T[] _data;
             private int _count;

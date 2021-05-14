@@ -49,7 +49,13 @@ namespace ConsoleApp1
                 Console.WriteLine($"Sample #No {i}:\t{rq.Sample()}");
             }
 
-            Console.WriteLine("Dequeue all:");
+            Console.WriteLine("Enumerate all:");
+            foreach (int item in rq)
+            {
+                Console.Write($"{item}\t");
+            }
+
+            Console.WriteLine("\nDequeue all:");
             for (int i = 0; i < 13; i++)
             {
                 Console.Write($"{rq.Dequeue()}\t");
