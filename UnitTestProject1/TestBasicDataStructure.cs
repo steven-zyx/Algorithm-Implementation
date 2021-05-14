@@ -305,7 +305,6 @@ namespace UnitTestProject1
             }
         }
 
-
         [TestMethod]
         public void TestGeneralizedQueue_L()
         {
@@ -324,6 +323,19 @@ namespace UnitTestProject1
                 if (i == 2 || i == 9_999 || i == 49_999)
                     offset--;
                 Assert.AreEqual(i + offset, queueL.Delete(i));
+            }
+        }
+
+        [TestMethod]
+        public void TestRingBuffer()
+        {
+            RingBuffer<int> rBuffer = new RingBuffer<int>(16);
+            for (int i = 0; i < 4; i++)
+            {
+                for (int n = 0; n < 12; n++)
+                    rBuffer.Enqueue(n);
+                for (int n = 0; n < 12; n++)
+                    Assert.AreEqual(n, rBuffer.Dequeue());
             }
         }
     }
