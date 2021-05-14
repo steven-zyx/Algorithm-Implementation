@@ -330,12 +330,18 @@ namespace UnitTestProject1
         public void TestRingBuffer()
         {
             RingBuffer<int> rBuffer = new RingBuffer<int>(16);
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 100; i++)
             {
-                for (int n = 0; n < 12; n++)
+                for (int n = 0; n < 7; n++)
+                {
+                    //Assert.AreEqual(n, rBuffer.Count);
                     rBuffer.Enqueue(n);
-                for (int n = 0; n < 12; n++)
+                }
+                for (int n = 0; n < 7; n++)
+                {
+                    //Assert.AreEqual(12 - n, rBuffer.Count);
                     Assert.AreEqual(n, rBuffer.Dequeue());
+                }
             }
         }
     }

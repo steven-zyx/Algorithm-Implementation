@@ -14,38 +14,46 @@ namespace BasicDataStrcture
         private ManualResetEventSlim _eventHasVacancy;
         private ManualResetEventSlim _eventHasElement;
         private static object _lockObj;
-        private int _count = 0;
 
         public RingBuffer(int size)
         {
             _size = size;
             _data = new T[_size];
-            _startIndex = 9;
-            _endIndex = 9;
+            _startIndex = 7;
+            _endIndex = 6;
             _eventHasElement = new ManualResetEventSlim(false);
             _eventHasVacancy = new ManualResetEventSlim(true);
             _lockObj = new object();
+        }
+
+        public int Count
+        {
+            get
+            {
+                if (_endIndex < _startIndex)
+                    return _endIndex + 12 - _startIndex;
+                else
+                    return _endIndex - _startIndex;
+            }
         }
 
         public void Enqueue(T t)
         {
             lock (_lockObj)
             {
-                //Check if the collection is full, block the Enqueue request if so
-                if (_count == _size)
-                {
-                    _eventHasVacancy.Reset();
-                    _eventHasVacancy.Wait();
-                }
-                //Add the item and increment the pointer
-                _data[_endIndex] = t;
+                //Block the Enqueue request if full
+                _eventHasVacancy.Wait();
+                //Increment the pointer and add the item
                 _endIndex++;
                 if (_endIndex == _size)
                     _endIndex = 0;
+                _data[_endIndex] = t;
+                //check if full
+                if (_endIndex + 1 == _startIndex || (_endIndex == _size - 1 && _startIndex == 0))
+                    _eventHasVacancy.Reset();
                 //To show the collection is not empty, allow the Dequeue request to proceed
                 if (!_eventHasElement.IsSet)
                     _eventHasElement.Set();
-                _count++;
             }
         }
 
@@ -53,21 +61,19 @@ namespace BasicDataStrcture
         {
             lock (_lockObj)
             {
-                //Check if the collection is empty, block the Dequeue reqeust if so
-                if (_count == 0)
-                {
-                    _eventHasElement.Reset();
-                    _eventHasElement.Wait();
-                }
+                //Block the Dequeue request if empty
+                _eventHasElement.Wait();
                 //Remove an item and increment the pointer
                 T value = _data[_startIndex];
                 _startIndex++;
                 if (_startIndex == _size)
                     _startIndex = 0;
-                //To show there is vacancy, allow the Enqueue request to proceed
+                //check if empty
+                if (_startIndex - 1 == _endIndex || (_startIndex == 0 && _endIndex == _size - 1))
+                    _eventHasElement.Reset();
+                // To show there is vacancy, allow the Enqueue request to proceed
                 if (!_eventHasVacancy.IsSet)
                     _eventHasVacancy.Set();
-                _count--;
                 return value;
             }
         }
