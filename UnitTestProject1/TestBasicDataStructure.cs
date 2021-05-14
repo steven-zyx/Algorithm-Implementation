@@ -304,5 +304,27 @@ namespace UnitTestProject1
                 Assert.AreEqual(i + offset, queueA.Delete(i));
             }
         }
+
+
+        [TestMethod]
+        public void TestGeneralizedQueue_L()
+        {
+            GeneralizedQueue_L<int> queueL = new GeneralizedQueue_L<int>();
+            for (int i = 1; i <= 100_000; i++)
+            {
+                queueL.Insert(i);
+            }
+            Assert.AreEqual(3, queueL.Delete(3));
+            Assert.AreEqual(10_001, queueL.Delete(10_000));
+            Assert.AreEqual(50_002, queueL.Delete(50_000));
+
+            int offset = 3;
+            for (int i = 99_997; i >= 1; i--)
+            {
+                if (i == 2 || i == 9_999 || i == 49_999)
+                    offset--;
+                Assert.AreEqual(i + offset, queueL.Delete(i));
+            }
+        }
     }
 }
