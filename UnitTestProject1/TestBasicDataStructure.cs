@@ -355,7 +355,7 @@ namespace UnitTestProject1
         {
             RingBuffer<int> rBuffer = new RingBuffer<int>(100);
 
-            int loopCount = 4_000_000;
+            int loopCount = 40_000_000;
             Task writeTask = new Task(() =>
             {
                 for (int i = 0; i < loopCount; i++)

@@ -15,7 +15,6 @@ namespace BasicDataStrcture
         private int _endIndex = 0;      //Pointing to the postion right behine the last element in the ring
         private ManualResetEventSlim _eventHasVacancy = new ManualResetEventSlim(true);
         private ManualResetEventSlim _eventHasElement = new ManualResetEventSlim(false);
-        private static readonly object _lockObj = new object();
         private static readonly object _enqueueLock = new object();
         private static readonly object _dequeueLock = new object();
 
@@ -27,32 +26,33 @@ namespace BasicDataStrcture
 
         public int Count => _endIndex - _startIndex;
 
+
+        public void Dnqueue2(T t)
+        {
+
+        }
+
+
         public void Enqueue(T t)
         {
             OutputDebug($"E: {t}");
             //Check if full
             //Block the Enqueue request if full
-            if (_endIndex - _size == _startIndex)
+            while (_endIndex - _size == _startIndex)
             {
                 OutputDebug("E: C");
                 _eventHasVacancy.Reset();
                 OutputDebug("E: R");
-                _eventHasVacancy.Wait();
+                _eventHasVacancy.Wait(100);
                 OutputDebug("E: W");
-                if (_endIndex - _size == _startIndex)
-                {
-                    OutputDebug("E: C2");
-                    _eventHasVacancy.Reset();
-                    OutputDebug("E: R2");
-                    _eventHasVacancy.Wait();
-                    OutputDebug("E: W2");
-                }
             }
+            _eventHasVacancy.Set();
+            OutputDebug("E: S");
             //Increment the pointer and add the item
             lock (_enqueueLock)
             {
                 _data[_endIndex % _size] = t;
-                OutputDebug("E: S");
+                OutputDebug("E: WR");
                 _endIndex++;
                 OutputDebug("E: I");
             }
@@ -67,22 +67,16 @@ namespace BasicDataStrcture
             OutputDebug("D:   ");
             //Check if empty
             //Block the Dequeue request if empty
-            if (_endIndex == _startIndex)
+            while (_endIndex == _startIndex)
             {
                 OutputDebug("D: C");
                 _eventHasElement.Reset();
                 OutputDebug("D: R");
-                _eventHasElement.Wait();
+                _eventHasElement.Wait(100);
                 OutputDebug("D: W");
-                if (_endIndex == _startIndex)
-                {
-                    OutputDebug("D: C2");
-                    _eventHasElement.Reset();
-                    OutputDebug("D: R2");
-                    _eventHasElement.Wait();
-                    OutputDebug("D: W2");
-                }
             }
+            _eventHasElement.Set();
+            OutputDebug("D: S");
             //Remove an item and increment the pointer
             T value = default(T);
             lock (_dequeueLock)
@@ -95,6 +89,85 @@ namespace BasicDataStrcture
             // To show there is vacancy, allow the Enqueue request to proceed
             if (!_eventHasVacancy.IsSet)
                 _eventHasVacancy.Set();
+            OutputDebug("D: RL");
+            return value;
+        }
+
+        private void OutputDebug(string message)
+        {
+            //Trace.WriteLine($"{message}\t_s:{_startIndex}\t_e:{_endIndex}\t_eV:{_eventHasVacancy.IsSet}\t_eE:{_eventHasElement.IsSet}");
+            //Trace.WriteLine(string.Join(" ", _data));
+        }
+    }
+    public class RingBuffer2<T>
+    {
+        private T[] _data;
+        private int _size;
+        private int _startIndex = 0;    //Pointing to the first element in the ring
+        private int _endIndex = 0;      //Pointing to the postion right behine the last element in the ring
+        private static readonly object _enqueueLock = new object();
+        private static readonly object _dequeueLock = new object();
+
+        public RingBuffer2(int size)
+        {
+            _size = size;
+            _data = new T[size];
+        }
+
+        public int Count => _endIndex - _startIndex;
+
+
+        public void Enqueue2(T t)
+        {
+            while(_endIndex - _size == _startIndex)
+            {
+                OutputDebug("E: C");
+                Thread.SpinWait(1000);
+                OutputDebug("E: W");
+            }
+        }
+
+
+        public void Enqueue(T t)
+        {
+            OutputDebug($"E: {t}");
+            //Check if full
+            //Block the Enqueue request if full
+            while (_endIndex - _size == _startIndex)
+            {
+                OutputDebug("E: C");
+            }
+            OutputDebug("E: S");
+            //Increment the pointer and add the item
+            lock (_enqueueLock)
+            {
+                _data[_endIndex % _size] = t;
+                OutputDebug("E: WR");
+                _endIndex++;
+                OutputDebug("E: I");
+            }
+            OutputDebug("E: RL");
+        }
+
+        public T Dequeue()
+        {
+            OutputDebug("D:   ");
+            //Check if empty
+            //Block the Dequeue request if empty
+            while (_endIndex == _startIndex)
+            {
+                OutputDebug("D: C");
+            }
+            OutputDebug("D: S");
+            //Remove an item and increment the pointer
+            T value = default(T);
+            lock (_dequeueLock)
+            {
+                value = _data[_startIndex % _size];
+                OutputDebug($"D: {value}");
+                _startIndex++;
+                OutputDebug("D: I");
+            }
             OutputDebug("D: RL");
             return value;
         }
