@@ -334,14 +334,15 @@ namespace UnitTestProject1
             {
                 for (int n = 0; n < 7; n++)
                 {
-                    //Assert.AreEqual(n, rBuffer.Count);
+                    Assert.AreEqual(n, rBuffer.Count);
                     rBuffer.Enqueue(n);
                 }
                 for (int n = 0; n < 7; n++)
                 {
-                    //Assert.AreEqual(12 - n, rBuffer.Count);
+                    Assert.AreEqual(7 - n, rBuffer.Count);
                     Assert.AreEqual(n, rBuffer.Dequeue());
                 }
+                Assert.AreEqual(0, rBuffer.Count);
             }
         }
     }
