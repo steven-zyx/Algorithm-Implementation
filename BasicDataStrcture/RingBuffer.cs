@@ -33,7 +33,7 @@ namespace BasicDataStrcture
                 if (_endIndex < _startIndex)
                     return _endIndex + 12 - _startIndex;
                 else
-                    return _endIndex - _startIndex;
+                    return _endIndex - _startIndex; 
             }
         }
 
