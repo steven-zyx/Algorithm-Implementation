@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BasicDataStrcture;
 using System.Diagnostics;
 using System;
+using System.Threading.Tasks;
 
 namespace UnitTestProject1
 {
@@ -329,21 +330,57 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestRingBuffer()
         {
-            RingBuffer<int> rBuffer = new RingBuffer<int>(16);
-            for (int i = 0; i < 100; i++)
+            int size = 128;
+            RingBuffer<int> rBuffer = new RingBuffer<int>(size);
+            for (int i = 0; i < 500000; i++)
             {
-                for (int n = 0; n < 7; n++)
+                int elementCount = i % size;
+
+                for (int n = 0; n < elementCount; n++)
                 {
                     Assert.AreEqual(n, rBuffer.Count);
                     rBuffer.Enqueue(n);
                 }
-                for (int n = 0; n < 7; n++)
+                for (int n = 0; n < elementCount; n++)
                 {
-                    Assert.AreEqual(7 - n, rBuffer.Count);
+                    Assert.AreEqual(elementCount - n, rBuffer.Count);
                     Assert.AreEqual(n, rBuffer.Dequeue());
                 }
                 Assert.AreEqual(0, rBuffer.Count);
             }
+        }
+
+        [TestMethod]
+        public void TestRingBuffer_Concurrent()
+        {
+            RingBuffer<int> rBuffer = new RingBuffer<int>(100);
+
+            int loopCount = 100_000;
+            Task writeTask = new Task(() =>
+            {
+                for (int i = 0; i < loopCount; i++)
+                    rBuffer.Enqueue(i);
+            });
+            Task readTask = new Task(() =>
+            {
+                for (int j = 0; j < loopCount; j++)
+                    Assert.AreEqual(j, rBuffer.Dequeue());
+            });
+
+            writeTask.Start();
+            readTask.Start();
+            Task.WaitAll(writeTask, readTask);
+            Assert.AreEqual(0, rBuffer.Count);
+
+            //for (int n = 0; n < 10; n++)
+            //{
+            //    writeTask.Start();
+            //    readTask.Start();
+            //    Task.WaitAll(writeTask, readTask);
+            //}
+
+
+            //the problem of i;
         }
     }
 }

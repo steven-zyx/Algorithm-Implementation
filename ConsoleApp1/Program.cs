@@ -10,7 +10,7 @@ namespace ConsoleApp1
         {
             //ShowListResize();
             //ShowRandomBag();
-            ShowRandomQueue();
+            //ShowRandomQueue();
             Console.ReadKey();
         }
 
