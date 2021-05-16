@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Diagnostics;
 using BasicDataStrcture;
 
@@ -11,6 +12,7 @@ namespace ConsoleApp1
             //ShowListResize();
             //ShowRandomBag();
             //ShowRandomQueue();
+            CASTest();
             Console.ReadKey();
         }
 
@@ -60,6 +62,21 @@ namespace ConsoleApp1
             {
                 Console.Write($"{rq.Dequeue()}\t");
             }
+        }
+
+        public static void CASTest()
+        {
+            int _startIndex = 0;
+            int _dequeueIndex = 4;
+
+
+            int initialValue, result;
+            do
+            {
+                initialValue = _startIndex;
+                result = Interlocked.CompareExchange(ref _startIndex, _dequeueIndex + 1, initialValue);
+
+            } while (initialValue != result);
         }
     }
 }

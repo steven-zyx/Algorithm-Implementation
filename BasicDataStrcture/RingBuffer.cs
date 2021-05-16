@@ -103,10 +103,13 @@ namespace BasicDataStrcture
     {
         private T[] _data;
         private int _size;
-        private int _startIndex = 0;    //Pointing to the first element in the ring
-        private int _endIndex = 0;      //Pointing to the postion right behine the last element in the ring
+        private int _startIndex = 0;    //Pointing to the position right behind the first element in the ring
+        private int _endIndex = 0;      //Pointing to the last element in the ring
         private static readonly object _enqueueLock = new object();
         private static readonly object _dequeueLock = new object();
+        private int _dequeueIndex = -1;
+        private int _enqueueIndex = -1;
+        private bool _finishWrite = false;
 
         public RingBuffer2(int size)
         {
@@ -118,24 +121,59 @@ namespace BasicDataStrcture
 
         public void Enqueue(T t)
         {
-            while (_endIndex - _size == _startIndex) { }
             lock (_enqueueLock)
             {
-                _data[_endIndex % _size] = t;
-                _endIndex++;
+                while (_enqueueIndex + 1 - _size == _startIndex) { }
+                _enqueueIndex++;
             }
+
+            _data[_enqueueIndex % _size] = t;
+
+            int initialValue = _endIndex;
+            while (_endIndex < _enqueueIndex + 1)
+            {
+                if (Interlocked.CompareExchange(ref _endIndex, _enqueueIndex + 1, initialValue) == initialValue)
+                    break;
+            }
+        }
+
+        public T Dequeue(out bool isFinished)
+        {
+            lock (_dequeueLock)
+            {
+                while (_endIndex == _dequeueIndex + 1)
+                {
+                    if (_finishWrite)
+                    {
+                        isFinished = true;
+                        return default(T);
+                    }
+                }
+                _dequeueIndex++;
+            }
+
+            T value = default(T);
+            value = _data[_dequeueIndex % _size];
+
+            int initialValue = _startIndex;
+            while (_startIndex < _dequeueIndex + 1)
+            {
+                if (Interlocked.CompareExchange(ref _startIndex, _dequeueIndex + 1, initialValue) == initialValue)
+                    break;
+            }
+            isFinished = false;
+            return value;
         }
 
         public T Dequeue()
         {
-            while (_endIndex == _startIndex) { }
-            T value = default(T);
-            lock (_dequeueLock)
-            {
-                value = _data[_startIndex % _size];
-                _startIndex++;
-            }
-            return value;
+            bool isFinished;
+            return Dequeue(out isFinished);
+        }
+
+        public void FinishWrite()
+        {
+            _finishWrite = true;
         }
     }
 }
