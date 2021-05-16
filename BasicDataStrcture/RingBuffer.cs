@@ -116,66 +116,26 @@ namespace BasicDataStrcture
 
         public int Count => _endIndex - _startIndex;
 
-
-        public void Enqueue2(T t)
-        {
-            while(_endIndex - _size == _startIndex)
-            {
-                OutputDebug("E: C");
-                Thread.SpinWait(1000);
-                OutputDebug("E: W");
-            }
-        }
-
-
         public void Enqueue(T t)
         {
-            OutputDebug($"E: {t}");
-            //Check if full
-            //Block the Enqueue request if full
-            while (_endIndex - _size == _startIndex)
-            {
-                OutputDebug("E: C");
-            }
-            OutputDebug("E: S");
-            //Increment the pointer and add the item
+            while (_endIndex - _size == _startIndex) { }
             lock (_enqueueLock)
             {
                 _data[_endIndex % _size] = t;
-                OutputDebug("E: WR");
                 _endIndex++;
-                OutputDebug("E: I");
             }
-            OutputDebug("E: RL");
         }
 
         public T Dequeue()
         {
-            OutputDebug("D:   ");
-            //Check if empty
-            //Block the Dequeue request if empty
-            while (_endIndex == _startIndex)
-            {
-                OutputDebug("D: C");
-            }
-            OutputDebug("D: S");
-            //Remove an item and increment the pointer
+            while (_endIndex == _startIndex) { }
             T value = default(T);
             lock (_dequeueLock)
             {
                 value = _data[_startIndex % _size];
-                OutputDebug($"D: {value}");
                 _startIndex++;
-                OutputDebug("D: I");
             }
-            OutputDebug("D: RL");
             return value;
-        }
-
-        private void OutputDebug(string message)
-        {
-            //Trace.WriteLine($"{message}\t_s:{_startIndex}\t_e:{_endIndex}\t_eV:{_eventHasVacancy.IsSet}\t_eE:{_eventHasElement.IsSet}");
-            //Trace.WriteLine(string.Join(" ", _data));
         }
     }
 }
