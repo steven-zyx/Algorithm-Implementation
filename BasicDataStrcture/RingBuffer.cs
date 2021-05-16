@@ -12,11 +12,14 @@ namespace BasicDataStrcture
         private T[] _data;
         private int _size;
         private int _startIndex = 0;    //Pointing to the first element in the ring
+        private int _virtualStartIndex = 0;
         private int _endIndex = 0;      //Pointing to the postion right behine the last element in the ring
-        private ManualResetEventSlim _eventHasVacancy = new ManualResetEventSlim(true);
-        private ManualResetEventSlim _eventHasElement = new ManualResetEventSlim(false);
         private static readonly object _enqueueLock = new object();
         private static readonly object _dequeueLock = new object();
+        private bool _finishWrite = false;
+
+        public StringBuilder _log = new StringBuilder();
+        private static readonly object _logLock = new object();
 
         public RingBuffer(int size)
         {
@@ -26,90 +29,108 @@ namespace BasicDataStrcture
 
         public int Count => _endIndex - _startIndex;
 
-
-        public void Dnqueue2(T t)
-        {
-
-        }
-
-
         public void Enqueue(T t)
         {
-            OutputDebug($"E: {t}");
-            //Check if full
-            //Block the Enqueue request if full
-            while (_endIndex - _size == _startIndex)
+            Log___E("Start");
+            while (_endIndex - _size == _startIndex) { }
+            Log___E("Passed");
+            _data[_endIndex % _size] = t;
+            Log___E($"Set {t}");
+            _endIndex++;
+            Log___E($"Increment");
+        }
+
+        public T Dequeue(out bool isFinished)
+        {
+            Log___D("Start");
+            int localIndex;
+            lock (_dequeueLock)
             {
-                OutputDebug("E: C");
-                _eventHasVacancy.Reset();
-                OutputDebug("E: R");
-                _eventHasVacancy.Wait(100);
-                OutputDebug("E: W");
+                Log___D("Lock");
+                while (_endIndex == _startIndex || _virtualStartIndex == _endIndex)
+                {
+                    if (_finishWrite)
+                    {
+                        isFinished = true;
+                        return default(T);
+                    }
+                }
+                localIndex = _virtualStartIndex;
+                _virtualStartIndex++;
+                Log___D($"Set local {localIndex}:");
             }
-            _eventHasVacancy.Set();
-            OutputDebug("E: S");
-            //Increment the pointer and add the item
-            lock (_enqueueLock)
-            {
-                _data[_endIndex % _size] = t;
-                OutputDebug("E: WR");
-                _endIndex++;
-                OutputDebug("E: I");
-            }
-            //To show the collection is not empty, allow the Dequeue request to proceed
-            if (!_eventHasElement.IsSet)
-                _eventHasElement.Set();
-            OutputDebug("E: RL");
+
+            T value = _data[localIndex % _size];
+            Log___D($"Get {value}");
+
+            //int initialValue;
+            //while (_startIndex < localIndex + 1)
+            //{
+            //    initialValue = _startIndex;
+            //    if (Interlocked.CompareExchange(ref _startIndex, localIndex + 1, initialValue) == initialValue)
+            //        break;
+            //}
+            //Log___D($"CAS");
+
+            while (_startIndex < localIndex) { }
+            _startIndex++;
+
+            isFinished = false;
+            return value;
         }
 
         public T Dequeue()
         {
-            OutputDebug("D:   ");
-            //Check if empty
-            //Block the Dequeue request if empty
-            while (_endIndex == _startIndex)
-            {
-                OutputDebug("D: C");
-                _eventHasElement.Reset();
-                OutputDebug("D: R");
-                _eventHasElement.Wait(100);
-                OutputDebug("D: W");
-            }
-            _eventHasElement.Set();
-            OutputDebug("D: S");
-            //Remove an item and increment the pointer
-            T value = default(T);
-            lock (_dequeueLock)
-            {
-                value = _data[_startIndex % _size];
-                OutputDebug($"D: {value}");
-                _startIndex++;
-                OutputDebug("D: I");
-            }
-            // To show there is vacancy, allow the Enqueue request to proceed
-            if (!_eventHasVacancy.IsSet)
-                _eventHasVacancy.Set();
-            OutputDebug("D: RL");
-            return value;
+            bool isFinished;
+            return Dequeue(out isFinished);
         }
 
-        private void OutputDebug(string message)
+        public void FinishWrite()
         {
-            //Trace.WriteLine($"{message}\t_s:{_startIndex}\t_e:{_endIndex}\t_eV:{_eventHasVacancy.IsSet}\t_eE:{_eventHasElement.IsSet}");
-            //Trace.WriteLine(string.Join(" ", _data));
+            _finishWrite = true;
+        }
+
+        private void Log___D(string message)
+        {
+            //Log("Dequeue_" + message);
+        }
+
+        private void Log___E(string message)
+        {
+            //Log("Eequeue_" + message);
+        }
+
+
+        private void Log(string message)
+        {
+            StringBuilder sb = new StringBuilder(message);
+            for (int i = message.Length; i < 20; i++)
+            {
+                sb.Append(" ");
+            }
+            sb.Append($"\t_s:{_startIndex}\t_vS:{_virtualStartIndex}\t_e:{_endIndex}\r\n");
+            sb.Append(string.Join(" ", _data) + "\r\n");
+
+            lock (_logLock)
+            {
+                _log.Append(sb);
+            }
         }
     }
+
     public class RingBuffer2<T>
     {
         private T[] _data;
         private int _size;
-        private int _startIndex = 0;    //Pointing to the position right behind the first element in the ring
-        private int _endIndex = 0;      //Pointing to the last element in the ring
+        private int _startIndex = 0;    //Pointing to the first element in the ring
+        private int _virtualStartIndex = 0;
+        private int _endIndex = 0;      //Pointing to the postion right behine the last element in the ring
         private static readonly object _enqueueLock = new object();
         private static readonly object _dequeueLock = new object();
-        private int _dequeueIndex = -1;
-        private int _enqueueIndex = -1;
         private bool _finishWrite = false;
+
+        public StringBuilder _log = new StringBuilder();
+        private static readonly object _logLock = new object();
 
         public RingBuffer2(int size)
         {
@@ -121,27 +142,17 @@ namespace BasicDataStrcture
 
         public void Enqueue(T t)
         {
-            lock (_enqueueLock)
-            {
-                while (_enqueueIndex + 1 - _size == _startIndex) { }
-                _enqueueIndex++;
-            }
-
-            _data[_enqueueIndex % _size] = t;
-
-            int initialValue = _endIndex;
-            while (_endIndex < _enqueueIndex + 1)
-            {
-                if (Interlocked.CompareExchange(ref _endIndex, _enqueueIndex + 1, initialValue) == initialValue)
-                    break;
-            }
+            while (_endIndex - _size == _startIndex) { }
+            _data[_endIndex % _size] = t;
+            _endIndex++;
         }
 
         public T Dequeue(out bool isFinished)
         {
+            int localIndex;
             lock (_dequeueLock)
             {
-                while (_endIndex == _dequeueIndex + 1)
+                while (_endIndex == _startIndex || _virtualStartIndex == _endIndex)
                 {
                     if (_finishWrite)
                     {
@@ -149,18 +160,23 @@ namespace BasicDataStrcture
                         return default(T);
                     }
                 }
-                _dequeueIndex++;
+                localIndex = _virtualStartIndex;
+                _virtualStartIndex++;
             }
 
-            T value = default(T);
-            value = _data[_dequeueIndex % _size];
+            T value = _data[localIndex % _size];
 
-            int initialValue = _startIndex;
-            while (_startIndex < _dequeueIndex + 1)
-            {
-                if (Interlocked.CompareExchange(ref _startIndex, _dequeueIndex + 1, initialValue) == initialValue)
-                    break;
-            }
+            //int initialValue;
+            //while (_startIndex < localIndex + 1)
+            //{
+            //    initialValue = _startIndex;
+            //    if (Interlocked.CompareExchange(ref _startIndex, localIndex + 1, initialValue) == initialValue)
+            //        break;
+            //}
+
+            while (_startIndex < localIndex) { }
+            _startIndex++;
+
             isFinished = false;
             return value;
         }
