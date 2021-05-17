@@ -5,76 +5,66 @@ using System.Threading;
 using System.IO;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace BasicDataStrcture
 {
     public class RingBuffer<T>
     {
         private T[] _data;
+        private bool[] _state;
         private int _size;
-        private int _startIndex = 0;    //Pointing to the first element in the ring
-        private int _virtualStartIndex = 0;
-        private int _endIndex = 0;      //Pointing to the postion right behine the last element in the ring
-        private static readonly object _enqueueLock = new object();
-        private static readonly object _dequeueLock = new object();
+        private int _virtualStartIndex;
+        private int _virtualEndIndex;
         private bool _finishWrite = false;
 
         public StringBuilder _log = new StringBuilder();
         private static readonly object _logLock = new object();
 
+
+
         public RingBuffer(int size)
         {
             _size = size;
             _data = new T[size];
-        }
+            _state = new bool[size];
 
-        public int Count => _endIndex - _startIndex;
+            _virtualStartIndex = -1;
+            _virtualEndIndex = -1;
+        }
 
         public void Enqueue(T t)
         {
-            Log___E("Start");
-            while (_endIndex - _size == _startIndex) { }
-            Log___E("Passed");
-            _data[_endIndex % _size] = t;
-            Log___E($"Set {t}");
-            _endIndex++;
-            Log___E($"Increment");
+            Log($"Start:{t}");
+            int localIndex = Interlocked.Increment(ref _virtualEndIndex) % _size;
+            Log($"LIndex:{localIndex}");
+            while (_state[localIndex] == true) { }
+            Log($"Pass");
+            _data[localIndex] = t;
+            Log($"Set:{t}");
+            _state[localIndex] = true;
+            Log("tag true");
         }
 
         public T Dequeue(out bool isFinished)
         {
-            Log___D("Start");
-            int localIndex;
-            lock (_dequeueLock)
+            Log($"Start");
+            int localIndex = Interlocked.Increment(ref _virtualStartIndex) % _size;
+            Log($"LIndex:{localIndex}");
+            while (_state[localIndex] == false)
             {
-                Log___D("Lock");
-                while (_endIndex == _startIndex || _virtualStartIndex == _endIndex)
+                if (_finishWrite)
                 {
-                    if (_finishWrite)
-                    {
-                        isFinished = true;
-                        return default(T);
-                    }
+                    isFinished = true;
+                    return default(T);
                 }
-                localIndex = _virtualStartIndex;
-                _virtualStartIndex++;
-                Log___D($"Set local {localIndex}:");
             }
+            Log($"Pass");
 
-            T value = _data[localIndex % _size];
-            Log___D($"Get {value}");
-
-            //int initialValue;
-            //while (_startIndex < localIndex + 1)
-            //{
-            //    initialValue = _startIndex;
-            //    if (Interlocked.CompareExchange(ref _startIndex, localIndex + 1, initialValue) == initialValue)
-            //        break;
-            //}
-            //Log___D($"CAS");
-
-            while (_startIndex < localIndex) { }
-            _startIndex++;
+            T value = _data[localIndex];
+            Log($"Get:{value}");
+            _state[localIndex] = false;
+            Log("tag false");
 
             isFinished = false;
             return value;
@@ -91,75 +81,71 @@ namespace BasicDataStrcture
             _finishWrite = true;
         }
 
-        private void Log___D(string message)
+        private void Log(string message, [CallerMemberName] string method = "")
         {
-            //Log("Dequeue_" + message);
-        }
-
-        private void Log___E(string message)
-        {
-            //Log("Eequeue_" + message);
-        }
-
-
-        private void Log(string message)
-        {
-            StringBuilder sb = new StringBuilder(message);
-            for (int i = message.Length; i < 20; i++)
+            StringBuilder sb = new StringBuilder();
+            sb.Append(method[0]);
+            sb.Append(" ");
+            sb.Append(Thread.CurrentThread.ManagedThreadId);
+            for (int i = sb.Length; i < 5; i++)
             {
                 sb.Append(" ");
             }
-            sb.Append($"\t_s:{_startIndex}\t_vS:{_virtualStartIndex}\t_e:{_endIndex}\r\n");
-            sb.Append(string.Join(" ", _data) + "\r\n");
-
+            sb.Append(message);
+            for (int i = sb.Length; i < 15; i++)
+            {
+                sb.Append(" ");
+            }
+            sb.Append($" s:{_virtualStartIndex} e:{_virtualEndIndex}");
+            for (int i = sb.Length; i < 35; i++)
+            {
+                sb.Append(" ");
+            }
+            for (int i = 0; i < _data.Length; i++)
+            {
+                sb.Append(_data[i]);
+                sb.Append(" ");
+                sb.Append(_state[i] ? "1" : "0");
+                sb.Append(",");
+            }
+            sb.Append("\r\n");
             lock (_logLock)
             {
                 _log.Append(sb);
             }
         }
     }
-
     public class RingBuffer2<T>
     {
         private T[] _data;
         private bool[] _state;
         private int _size;
-        //private int _startIndex;    //Pointing to the first element in the ring
         private int _virtualStartIndex;
-        private int _endIndex;      //Pointing to the postion right behine the last element in the ring
+        private int _virtualEndIndex;
         private bool _finishWrite = false;
-
-
 
         public RingBuffer2(int size)
         {
             _size = size;
             _data = new T[size];
-            _state = Enumerable.Repeat<bool>(true, size).ToArray();
+            _state = new bool[size];
 
-            //_startIndex = 0;
             _virtualStartIndex = -1;
-            _endIndex = 0;
+            _virtualEndIndex = -1;
         }
-
-        //public int Count => _endIndex - _startIndex;
 
         public void Enqueue(T t)
         {
-            while (_state[_endIndex % _size] == false) { }
-            //while (_endIndex - _size == _startIndex) { }
-            //SpinWait.SpinUntil(() => _endIndex - _size != _startIndex);
-
-
-            _data[_endIndex % _size] = t;
-            _state[_endIndex % _size] = false;
-            _endIndex++;
+            int localIndex = Interlocked.Increment(ref _virtualEndIndex) % _size;
+            while (_state[localIndex] == true) { }
+            _data[localIndex] = t;
+            _state[localIndex] = true;
         }
 
         public T Dequeue(out bool isFinished)
         {
-            int localIndex = Interlocked.Increment(ref _virtualStartIndex);
-            while (localIndex >= _endIndex)
+            int localIndex = Interlocked.Increment(ref _virtualStartIndex) % _size;
+            while (_state[localIndex] == false)
             {
                 if (_finishWrite)
                 {
@@ -168,10 +154,8 @@ namespace BasicDataStrcture
                 }
             }
 
-            T value = _data[localIndex % _size];
-            _state[localIndex % _size] = true;
-
-
+            T value = _data[localIndex];
+            _state[localIndex] = false;
 
             isFinished = false;
             return value;

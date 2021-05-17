@@ -396,17 +396,17 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestRingBuffer_1WriteNRead_Concurrent()
         {
-            RingBuffer2<int> rBuffer = new RingBuffer2<int>(100_000);
+            RingBuffer<int> rBuffer = new RingBuffer<int>(20);
 
             Task writeTask = new Task(() =>
             {
-                foreach (int n in Enumerable.Range(0, 40_000_000))
+                foreach (int n in Enumerable.Range(0, 4_000))
                     rBuffer.Enqueue(n);
                 rBuffer.FinishWrite();
             });
 
             var readTasks = new List<Task<List<int>>>();
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 2; i++)
             {
                 var task = new Task<List<int>>(() =>
                 {
@@ -435,7 +435,7 @@ namespace UnitTestProject1
             {
                 finalResult.AddRange(readTask.Result);
             }
-            //File.WriteAllText(@"C:\Users\10788\Desktop\log.txt", rBuffer._log.ToString());
+            File.WriteAllText(@"C:\Users\v-yuzhu\Desktop\log.txt", rBuffer._log.ToString());
 
 
             finalResult.Sort();
@@ -444,6 +444,59 @@ namespace UnitTestProject1
                 Assert.AreEqual(i, finalResult[i]);
             }
             //Assert.AreEqual(0, rBuffer.Count);
+        }
+
+        [TestMethod]
+        public void TestRingBuffer_NWriteNRead_Concurrent()
+        {
+            RingBuffer2<int> rBuffer = new RingBuffer2<int>(40);
+
+            List<Task> writeTasks = new List<Task>();
+            for (int i = 0; i < 3; i++)
+            {
+                var task = new Task(() =>
+                {
+                    foreach (int n in Enumerable.Range(0, 4_000))
+                        rBuffer.Enqueue(n);
+                });
+                writeTasks.Add(task);
+            }
+
+            var readTasks = new List<Task<List<int>>>();
+            for (int i = 0; i < 3; i++)
+            {
+                var task = new Task<List<int>>(() =>
+                {
+                    List<int> result = new List<int>();
+                    bool isFinished = false;
+                    while (true)
+                    {
+                        int value = rBuffer.Dequeue(out isFinished);
+                        if (!isFinished)
+                            result.Add(value);
+                        else
+                            break;
+                    }
+                    return result;
+                });
+                readTasks.Add(task);
+            }
+
+            writeTasks.ForEach(x => x.Start());
+            readTasks.ForEach(x => x.Start());
+            Task.WaitAll(writeTasks.ToArray());
+            rBuffer.FinishWrite();
+            List<int> finalResult = new List<int>();
+            foreach (var readTask in readTasks)
+            {
+                finalResult.AddRange(readTask.Result);
+            }
+
+            finalResult.Sort();
+            for (int i = 0; i < finalResult.Count; i++)
+            {
+                Assert.AreEqual(i / writeTasks.Count, finalResult[i]);
+            }
         }
     }
 }
