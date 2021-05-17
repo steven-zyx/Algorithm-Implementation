@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading;
 using System.IO;
 using System.Diagnostics;
+using System.Linq;
 
 namespace BasicDataStrcture
 {
@@ -121,36 +122,44 @@ namespace BasicDataStrcture
     public class RingBuffer2<T>
     {
         private T[] _data;
-        private bool[] _states;
+        private bool[] _state;
         private int _size;
-        private int _startIndex = 0;    //Pointing to the first element in the ring
-        private int _virtualStartIndex = -1;
-        private int _endIndex = 0;      //Pointing to the postion right behine the last element in the ring
+        //private int _startIndex;    //Pointing to the first element in the ring
+        private int _virtualStartIndex;
+        private int _endIndex;      //Pointing to the postion right behine the last element in the ring
         private bool _finishWrite = false;
 
-        public StringBuilder _log = new StringBuilder();
-        private static readonly object _logLock = new object();
+
 
         public RingBuffer2(int size)
         {
             _size = size;
             _data = new T[size];
-            _states = new bool[size];
+            _state = Enumerable.Repeat<bool>(true, size).ToArray();
+
+            //_startIndex = 0;
+            _virtualStartIndex = -1;
+            _endIndex = 0;
         }
 
-        public int Count => _endIndex - _startIndex;
+        //public int Count => _endIndex - _startIndex;
 
         public void Enqueue(T t)
         {
-            while (_endIndex - _size == _startIndex) { }
+            while (_state[_endIndex % _size] == false) { }
+            //while (_endIndex - _size == _startIndex) { }
+            //SpinWait.SpinUntil(() => _endIndex - _size != _startIndex);
+
+
             _data[_endIndex % _size] = t;
+            _state[_endIndex % _size] = false;
             _endIndex++;
         }
 
         public T Dequeue(out bool isFinished)
         {
             int localIndex = Interlocked.Increment(ref _virtualStartIndex);
-            while (localIndex == _endIndex)
+            while (localIndex >= _endIndex)
             {
                 if (_finishWrite)
                 {
@@ -159,20 +168,10 @@ namespace BasicDataStrcture
                 }
             }
 
-            localIndex %= _size;
-            T value = _data[localIndex];
+            T value = _data[localIndex % _size];
+            _state[localIndex % _size] = true;
 
-            //int initialValue;
-            //while (_startIndex < localIndex + 1)
-            //{
-            //    initialValue = _startIndex;
-            //    if (Interlocked.CompareExchange(ref _startIndex, localIndex + 1, initialValue) == initialValue)
-            //        break;
-            //}
 
-            while (_startIndex < localIndex) { }
-            _startIndex++;
-            //_states[localIndex] = true;
 
             isFinished = false;
             return value;
