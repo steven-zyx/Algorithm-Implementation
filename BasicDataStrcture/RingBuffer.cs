@@ -121,12 +121,11 @@ namespace BasicDataStrcture
     public class RingBuffer2<T>
     {
         private T[] _data;
+        private bool[] _states;
         private int _size;
         private int _startIndex = 0;    //Pointing to the first element in the ring
-        private int _virtualStartIndex = 0;
+        private int _virtualStartIndex = -1;
         private int _endIndex = 0;      //Pointing to the postion right behine the last element in the ring
-        private static readonly object _enqueueLock = new object();
-        private static readonly object _dequeueLock = new object();
         private bool _finishWrite = false;
 
         public StringBuilder _log = new StringBuilder();
@@ -136,6 +135,7 @@ namespace BasicDataStrcture
         {
             _size = size;
             _data = new T[size];
+            _states = new bool[size];
         }
 
         public int Count => _endIndex - _startIndex;
@@ -149,22 +149,18 @@ namespace BasicDataStrcture
 
         public T Dequeue(out bool isFinished)
         {
-            int localIndex;
-            lock (_dequeueLock)
+            int localIndex = Interlocked.Increment(ref _virtualStartIndex);
+            while (localIndex == _endIndex)
             {
-                while (_endIndex == _startIndex || _virtualStartIndex == _endIndex)
+                if (_finishWrite)
                 {
-                    if (_finishWrite)
-                    {
-                        isFinished = true;
-                        return default(T);
-                    }
+                    isFinished = true;
+                    return default(T);
                 }
-                localIndex = _virtualStartIndex;
-                _virtualStartIndex++;
             }
 
-            T value = _data[localIndex % _size];
+            localIndex %= _size;
+            T value = _data[localIndex];
 
             //int initialValue;
             //while (_startIndex < localIndex + 1)
@@ -176,6 +172,7 @@ namespace BasicDataStrcture
 
             while (_startIndex < localIndex) { }
             _startIndex++;
+            //_states[localIndex] = true;
 
             isFinished = false;
             return value;

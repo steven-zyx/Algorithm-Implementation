@@ -406,7 +406,7 @@ namespace UnitTestProject1
             });
 
             var readTasks = new List<Task<List<int>>>();
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < 3; i++)
             {
                 var task = new Task<List<int>>(() =>
                 {
@@ -435,7 +435,7 @@ namespace UnitTestProject1
             {
                 finalResult.AddRange(readTask.Result);
             }
-            File.WriteAllText(@"C:\Users\10788\Desktop\log.txt", rBuffer._log.ToString());
+            //File.WriteAllText(@"C:\Users\10788\Desktop\log.txt", rBuffer._log.ToString());
 
 
             finalResult.Sort();
