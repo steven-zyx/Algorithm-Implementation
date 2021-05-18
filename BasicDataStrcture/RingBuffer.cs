@@ -12,7 +12,7 @@ namespace BasicDataStrcture
     public class RingBuffer<T>
     {
         private T[] _data;
-        private bool[] _state;
+        private int[] _state;
         private int _size;
         private int _virtualStartIndex;
         private int _virtualEndIndex;
@@ -27,7 +27,7 @@ namespace BasicDataStrcture
         {
             _size = size;
             _data = new T[size];
-            _state = new bool[size];
+            _state = new int[size];
 
             _virtualStartIndex = -1;
             _virtualEndIndex = -1;
@@ -35,23 +35,27 @@ namespace BasicDataStrcture
 
         public void Enqueue(T t)
         {
+
             Log($"Start:{t}");
             int localIndex = Interlocked.Increment(ref _virtualEndIndex) % _size;
             Log($"LIndex:{localIndex}");
-            while (_state[localIndex] == true) { }
+            while (_state[localIndex] != 0) { }
             Log($"Pass");
+            _state[localIndex] = 1;
+            Log($"tag Setting");
             _data[localIndex] = t;
             Log($"Set:{t}");
-            _state[localIndex] = true;
-            Log("tag true");
+            _state[localIndex] = 2;
+            Log("tag Set");
         }
 
         public T Dequeue(out bool isFinished)
         {
+        Start:
             Log($"Start");
             int localIndex = Interlocked.Increment(ref _virtualStartIndex) % _size;
             Log($"LIndex:{localIndex}");
-            while (_state[localIndex] == false)
+            while (_state[localIndex] != 2)
             {
                 if (_finishWrite)
                 {
@@ -61,10 +65,17 @@ namespace BasicDataStrcture
             }
             Log($"Pass");
 
+
+            if (Interlocked.CompareExchange(ref _state[localIndex], -1, 2) != 2)
+            {
+                Log("Restart");
+                goto Start;
+            }
+            Log("tag Getting");
             T value = _data[localIndex];
             Log($"Get:{value}");
-            _state[localIndex] = false;
-            Log("tag false");
+            _state[localIndex]++;
+            Log("tag Got");
 
             isFinished = false;
             return value;
@@ -105,7 +116,7 @@ namespace BasicDataStrcture
             {
                 sb.Append(_data[i]);
                 sb.Append(" ");
-                sb.Append(_state[i] ? "1" : "0");
+                sb.Append(_state[i]);
                 sb.Append(",");
             }
             sb.Append("\r\n");
@@ -118,7 +129,7 @@ namespace BasicDataStrcture
     public class RingBuffer2<T>
     {
         private T[] _data;
-        private bool[] _state;
+        private int[] _state;
         private int _size;
         private int _virtualStartIndex;
         private int _virtualEndIndex;
@@ -128,7 +139,7 @@ namespace BasicDataStrcture
         {
             _size = size;
             _data = new T[size];
-            _state = new bool[size];
+            _state = new int[size];
 
             _virtualStartIndex = -1;
             _virtualEndIndex = -1;
@@ -137,25 +148,34 @@ namespace BasicDataStrcture
         public void Enqueue(T t)
         {
             int localIndex = Interlocked.Increment(ref _virtualEndIndex) % _size;
-            while (_state[localIndex] == true) { }
+            while (_state[localIndex] != 0) { }
+            _state[localIndex]++;
             _data[localIndex] = t;
-            _state[localIndex] = true;
+            _state[localIndex]++;
         }
 
         public T Dequeue(out bool isFinished)
         {
+        Start:
             int localIndex = Interlocked.Increment(ref _virtualStartIndex) % _size;
-            while (_state[localIndex] == false)
+            while (_state[localIndex] != 2)
             {
                 if (_finishWrite)
                 {
-                    isFinished = true;
-                    return default(T);
+                    if (localIndex == 0)
+                    {
+                        isFinished = true;
+                        return default(T);
+                    }
+                    else
+                        break;
                 }
             }
 
+            if (Interlocked.CompareExchange(ref _state[localIndex], -1, 2) != 2)
+                goto Start;
             T value = _data[localIndex];
-            _state[localIndex] = false;
+            _state[localIndex]++;
 
             isFinished = false;
             return value;

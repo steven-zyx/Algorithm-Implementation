@@ -12,7 +12,7 @@ namespace ConsoleApp1
             //ShowListResize();
             //ShowRandomBag();
             //ShowRandomQueue();
-            TestArray();
+            TestCAS();
             Console.ReadKey();
         }
 
@@ -62,6 +62,13 @@ namespace ConsoleApp1
             {
                 Console.Write($"{rq.Dequeue()}\t");
             }
+        }
+
+        public static void TestCAS()
+        {
+            int[] a = new int[3];
+            foreach (int b in a)
+                Console.WriteLine(b);
         }
     }
 }

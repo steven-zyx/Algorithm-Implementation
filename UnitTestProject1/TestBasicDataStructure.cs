@@ -396,11 +396,11 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestRingBuffer_1WriteNRead_Concurrent()
         {
-            RingBuffer<int> rBuffer = new RingBuffer<int>(20);
+            var rBuffer = new RingBuffer2<int>(100);
 
             Task writeTask = new Task(() =>
             {
-                foreach (int n in Enumerable.Range(0, 4_000))
+                foreach (int n in Enumerable.Range(0, 4_000_000))
                     rBuffer.Enqueue(n);
                 rBuffer.FinishWrite();
             });
@@ -435,7 +435,7 @@ namespace UnitTestProject1
             {
                 finalResult.AddRange(readTask.Result);
             }
-            File.WriteAllText(@"C:\Users\v-yuzhu\Desktop\log.txt", rBuffer._log.ToString());
+            //File.WriteAllText(@"C:\Users\v-yuzhu\Desktop\log.txt", rBuffer._log.ToString());
 
 
             finalResult.Sort();
@@ -449,10 +449,10 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestRingBuffer_NWriteNRead_Concurrent()
         {
-            RingBuffer2<int> rBuffer = new RingBuffer2<int>(40);
+            var rBuffer = new RingBuffer2<int>(20);
 
             List<Task> writeTasks = new List<Task>();
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 2; i++)
             {
                 var task = new Task(() =>
                 {
@@ -463,7 +463,7 @@ namespace UnitTestProject1
             }
 
             var readTasks = new List<Task<List<int>>>();
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 2; i++)
             {
                 var task = new Task<List<int>>(() =>
                 {
