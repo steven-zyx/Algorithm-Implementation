@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
-using System.IO;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace BasicDataStrcture
 {
@@ -131,8 +127,8 @@ namespace BasicDataStrcture
         private T[] _data;
         private int[] _state;
         private int _size;
-        private int _virtualStartIndex;
-        private int _virtualEndIndex;
+        private int _getRequestNo = -1;
+        private int _setRequestNo = -1;
         private bool _finishWrite = false;
 
         public RingBuffer2(int size)
@@ -140,15 +136,12 @@ namespace BasicDataStrcture
             _size = size;
             _data = new T[size];
             _state = new int[size];
-
-            _virtualStartIndex = -1;
-            _virtualEndIndex = -1;
         }
 
         public void Enqueue(T t)
         {
         Start:
-            int localIndex = Interlocked.Increment(ref _virtualEndIndex) % _size;
+            int localIndex = Interlocked.Increment(ref _setRequestNo) % _size;
             while (_state[localIndex] != 0) { }
 
             if (Interlocked.CompareExchange(ref _state[localIndex], 1, 0) != 0)
@@ -157,18 +150,18 @@ namespace BasicDataStrcture
             _state[localIndex]++;
         }
 
-        public T Dequeue(out bool isFinished)
+        public bool Dequeue(out T value)
         {
         Start:
-            int localIndex = Interlocked.Increment(ref _virtualStartIndex) % _size;
+            int localIndex = Interlocked.Increment(ref _getRequestNo) % _size;
             while (_state[localIndex] != 2)
             {
                 if (_finishWrite)
                 {
                     if (localIndex == 0)
                     {
-                        isFinished = true;
-                        return default(T);
+                        value = default(T);
+                        return false;
                     }
                     else
                         break;
@@ -177,17 +170,10 @@ namespace BasicDataStrcture
 
             if (Interlocked.CompareExchange(ref _state[localIndex], -1, 2) != 2)
                 goto Start;
-            T value = _data[localIndex];
+            value = _data[localIndex];
             _state[localIndex]++;
 
-            isFinished = false;
-            return value;
-        }
-
-        public T Dequeue()
-        {
-            bool isFinished;
-            return Dequeue(out isFinished);
+            return true;
         }
 
         public void FinishWrite()
