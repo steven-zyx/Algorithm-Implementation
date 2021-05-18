@@ -146,6 +146,7 @@ namespace BasicDataStrcture
 
             if (Interlocked.CompareExchange(ref _state[localIndex], 1, 0) != 0)
                 goto Start;
+
             _data[localIndex] = t;
             _state[localIndex]++;
         }
