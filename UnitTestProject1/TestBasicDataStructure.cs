@@ -449,14 +449,14 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestRingBuffer_NWriteNRead_Concurrent()
         {
-            var rBuffer = new RingBuffer2<int>(20);
+            var rBuffer = new RingBuffer2<int>(100_000);
 
             List<Task> writeTasks = new List<Task>();
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 3; i++)
             {
                 var task = new Task(() =>
                 {
-                    foreach (int n in Enumerable.Range(0, 4_000))
+                    foreach (int n in Enumerable.Range(0, 20_000_000))
                         rBuffer.Enqueue(n);
                 });
                 writeTasks.Add(task);

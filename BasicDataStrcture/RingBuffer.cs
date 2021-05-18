@@ -147,9 +147,12 @@ namespace BasicDataStrcture
 
         public void Enqueue(T t)
         {
+        Start:
             int localIndex = Interlocked.Increment(ref _virtualEndIndex) % _size;
             while (_state[localIndex] != 0) { }
-            _state[localIndex]++;
+
+            if (Interlocked.CompareExchange(ref _state[localIndex], 1, 0) != 0)
+                goto Start;
             _data[localIndex] = t;
             _state[localIndex]++;
         }
