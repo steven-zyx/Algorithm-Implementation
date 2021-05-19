@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using System.Collections;
 
 namespace BasicDataStrcture
 {
@@ -55,6 +56,13 @@ namespace BasicDataStrcture
             _state[localIndex]++;
 
             return true;
+        }
+
+        public IEnumerable GetComsumingEnumerator()
+        {
+            T value;
+            while (Dequeue(out value))
+                yield return value;
         }
 
         public void FinishWrite()

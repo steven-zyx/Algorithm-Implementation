@@ -446,9 +446,11 @@ namespace UnitTestProject1
                 var task = new Task<List<int>>(() =>
                 {
                     List<int> result = new List<int>();
-                    int value;
-                    while (rBuffer.Dequeue(out value))
-                        result.Add(value);
+                    //int value;
+                    //while (rBuffer.Dequeue(out value))
+                    //    result.Add(value);
+                    foreach (int n in rBuffer.GetComsumingEnumerator())
+                        result.Add(n);
                     return result;
                 });
                 readTasks.Add(task);
