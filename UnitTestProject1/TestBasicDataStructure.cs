@@ -553,5 +553,17 @@ namespace UnitTestProject1
                 Assert.AreEqual(stackN.Pop(), queueA2.Pop());
             }
         }
+
+        [TestMethod]
+        public void TestStackGenerability()
+        {
+            int?[] sequence1 = new int?[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, null, null, null };
+            int?[] sequence2 = new int?[] { 1, 2, null, null, 1, 2, 3, null, null, null, 1, 2, 3, 4, null };
+            int?[] sequence3 = new int?[] { 1, 2, null, null, 1, 2, 3, null, null, 4, 5, null, null, null, null, 1, 2, 3 };
+
+            Assert.IsTrue(Stack_A<int>.IsGenerable(sequence1));
+            Assert.IsTrue(Stack_A<int>.IsGenerable(sequence2));
+            Assert.IsFalse(Stack_A<int>.IsGenerable(sequence3));
+        }
     }
 }

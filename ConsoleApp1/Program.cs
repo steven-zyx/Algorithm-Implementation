@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Diagnostics;
 using BasicDataStrcture;
+using System.IO;
+using System.Collections;
 
 namespace ConsoleApp1
 {
@@ -11,7 +13,8 @@ namespace ConsoleApp1
         {
             //ShowListResize();
             //ShowRandomBag();
-            ShowRandomQueue();
+            //ShowRandomQueue();
+            ListingFiles.List();
             Console.ReadKey();
         }
 

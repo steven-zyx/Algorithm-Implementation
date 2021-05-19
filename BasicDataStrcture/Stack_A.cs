@@ -58,5 +58,20 @@ namespace BasicDataStrcture
             for (int i = _count - 1; i >= 0; i--)
                 yield return _data[i];
         }
+
+        public static bool IsGenerable(int?[] input)
+        {
+            int index = 0;
+            foreach (int? value in input)
+            {
+                if (value.HasValue)
+                    index++;
+                else
+                    index--;
+                if (index < 0)
+                    return false;
+            }
+            return true;
+        }
     }
 }
