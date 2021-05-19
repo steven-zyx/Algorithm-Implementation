@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BasicDataStrcture
 {
-    public class RandomQueue<T> : IEnumerable<T>
+    public class RandomQueue<T> : IEnumerable
     {
         private T[] _data;
         private int _count;
@@ -52,14 +52,20 @@ namespace BasicDataStrcture
             _data = newData;
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public IEnumerator GetEnumerator()
         {
-            return new RandomBag<T>.RandomBagEnumerator(_data, _count);
-        }
+            T[] output = new T[_count];
+            Array.Copy(_data, output, _count);
+            for (int i = 0; i < _count; i++)
+            {
+                T temp = output[i];
+                int randomIndex = ran.Next(0, _count);
+                output[i] = output[randomIndex];
+                output[randomIndex] = temp;
+            }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
+            for (int i = 0; i < _count; i++)
+                yield return output[i];
         }
     }
 }

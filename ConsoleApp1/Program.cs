@@ -11,8 +11,7 @@ namespace ConsoleApp1
         {
             //ShowListResize();
             //ShowRandomBag();
-            //ShowRandomQueue();
-            TestCAS();
+            ShowRandomQueue();
             Console.ReadKey();
         }
 

@@ -470,5 +470,22 @@ namespace UnitTestProject1
                 Assert.AreEqual(i / writeTasks.Count, finalResult[i]);
             }
         }
+
+        [TestMethod]
+        public void TestMoveToFront()
+        {
+            char[] input = new char[] { 'a', 'b', 'c', 'd', 'b', 'c', 'a' };
+            MoveToFront mtf = new MoveToFront();
+            foreach (char c in input)
+            {
+                mtf.Add(c);
+            }
+
+            Queue<char> output = new Queue<char>(new char[] { 'a', 'c', 'b', 'd' });
+            foreach (char c in mtf)
+            {
+                Assert.AreEqual(output.Dequeue(), c);
+            }
+        }
     }
 }

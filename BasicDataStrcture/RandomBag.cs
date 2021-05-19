@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BasicDataStrcture
 {
-    public class RandomBag<T> : IEnumerable<T>
+    public class RandomBag<T> : IEnumerable
     {
         private T[] _data;
         private int _count;
@@ -28,9 +28,6 @@ namespace BasicDataStrcture
             _count++;
         }
 
-
-
-
         private void Resize(int newSize)
         {
             T[] newData = new T[newSize];
@@ -38,61 +35,24 @@ namespace BasicDataStrcture
             _data = newData;
         }
 
-        public IEnumerator<T> GetEnumerator()
+        private void Shuffle()
         {
-            return new RandomBagEnumerator(_data, _count);
+            Random r = new Random(DateTime.Now.Second);
+            for (int i = 0; i < _count; i++)
+            {
+                T temp = _data[i];
+                int randomIndex = r.Next(0, _count);
+                _data[i] = _data[randomIndex];
+                _data[randomIndex] = temp;
+            }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        public IEnumerator GetEnumerator()
         {
-            return GetEnumerator();
-        }
-
-        internal class RandomBagEnumerator : IEnumerator<T>
-        {
-            private T[] _data;
-            private int _count;
-            private int _index;
-
-            public RandomBagEnumerator(T[] data, int count)
-            {
-                _data = data;
-                _count = count;
-                Shuffle();
-                _index = -1;
-            }
-
-            public T Current => _data[_index];
-
-            object IEnumerator.Current => Current;
-
-            public void Dispose()
-            {
-                _data = null;
-            }
-
-            public bool MoveNext()
-            {
-                _index++;
-                return _index < _count;
-            }
-
-            public void Reset()
-            {
-                _index = -1;
-            }
-
-            private void Shuffle()
-            {
-                Random r = new Random(DateTime.Now.Second);
-                for (int i = 0; i < _count; i++)
-                {
-                    T temp = _data[i];
-                    int randomIndex = r.Next(0, _count);
-                    _data[i] = _data[randomIndex];
-                    _data[randomIndex] = temp;
-                }
-            }
+            Shuffle();
+            for (int i = 0; i < _count; i++)
+                yield return _data[i];
         }
     }
 }
+
