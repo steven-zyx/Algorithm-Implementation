@@ -332,7 +332,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestRingBuffer_Serial()
         {
-            int size = 10_000;
+            int size = 100;
             RingBuffer2<int> rBuffer = new RingBuffer2<int>(size);
             for (int i = 0; i < 500_000; i++)
             {
@@ -427,7 +427,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestRingBuffer_NWriteNRead_Concurrent()
         {
-            var rBuffer = new RingBuffer2<int>(1000);
+            var rBuffer = new RingBuffer2<int>(100_000);
 
             List<Task> writeTasks = new List<Task>();
             for (int i = 0; i < 3; i++)
@@ -458,58 +458,6 @@ namespace UnitTestProject1
             readTasks.ForEach(x => x.Start());
             Task.WaitAll(writeTasks.ToArray());
             rBuffer.FinishWrite();
-            List<int> finalResult = new List<int>();
-            foreach (var readTask in readTasks)
-            {
-                finalResult.AddRange(readTask.Result);
-            }
-
-            finalResult.Sort();
-            for (int i = 0; i < finalResult.Count; i++)
-            {
-                Assert.AreEqual(i / writeTasks.Count, finalResult[i]);
-            }
-        }
-
-        [TestMethod]
-        public void TestRingBuffer_NWriteNRead_Concurrent_Native()
-        {
-            var rBuffer = new BlockingCollection<int>(1000);
-
-            List<Task> writeTasks = new List<Task>();
-            for (int i = 0; i < 3; i++)
-            {
-                var task = new Task(() =>
-                {
-                    foreach (int n in Enumerable.Range(0, 10_000_000))
-                        rBuffer.Add(n);
-                });
-                writeTasks.Add(task);
-            }
-
-            var readTasks = new List<Task<List<int>>>();
-            for (int i = 0; i < 3; i++)
-            {
-                var task = new Task<List<int>>(() =>
-                {
-                    List<int> result = new List<int>();
-                    //int value;
-                    //while (rBuffer.TryTake(out value))
-                    //    result.Add(value);
-
-                    foreach (int value in rBuffer.GetConsumingEnumerable())
-                    {
-                        result.Add(value);
-                    }
-                    return result;
-                });
-                readTasks.Add(task);
-            }
-
-            writeTasks.ForEach(x => x.Start());
-            readTasks.ForEach(x => x.Start());
-            Task.WaitAll(writeTasks.ToArray());
-            rBuffer.CompleteAdding();
             List<int> finalResult = new List<int>();
             foreach (var readTask in readTasks)
             {
