@@ -6,11 +6,11 @@ namespace BasicDataStrcture
 {
     public class Josephus
     {
-        private Queue1<int> _diedPeople = new Queue1<int>();
+        private Queue_N<int> _diedPeople = new Queue_N<int>();
 
         public Josephus(int count, int indexToDie)
         {
-            Queue1<int> people = new Queue1<int>();
+            Queue_N<int> people = new Queue_N<int>();
             for (int i = 0; i < count; i++)
                 people.Enqueue(i);
 
@@ -27,6 +27,6 @@ namespace BasicDataStrcture
             _diedPeople.Enqueue(people.Dequeue());
         }
 
-        public Queue1<int> DiedPeople => _diedPeople;
+        public Queue_N<int> DiedPeople => _diedPeople;
     }
 }

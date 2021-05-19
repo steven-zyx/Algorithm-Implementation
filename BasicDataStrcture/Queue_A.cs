@@ -1,20 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Collections;
 
 namespace BasicDataStrcture
 {
-    public class Queue2<T>
+    public class Queue_A<T> : IQueue<T>, IEnumerable
     {
         private T[] _data;
-        private int _startIndex;
-        private int _endIndex;
+        private int _startIndex = 0;
+        private int _endIndex = 0;
 
-        public Queue2()
+        public Queue_A()
         {
             _data = new T[4];
-            _startIndex = 0;
-            _endIndex = 0;
+        }
+
+        public Queue_A(IQueue<T> source)
+        {
+            _data = new T[source.Length];
+            foreach (T item in (IEnumerable)source)
+            {
+                _data[_endIndex] = item;
+                _endIndex++;
+            }
         }
 
         public void Enqueue(T t)
@@ -46,6 +55,12 @@ namespace BasicDataStrcture
             _data = newData;
             _endIndex = Length;
             _startIndex = 0;
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            for (int i = _startIndex; i < _endIndex; i++)
+                yield return _data[i];
         }
     }
 }

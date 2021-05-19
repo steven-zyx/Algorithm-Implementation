@@ -1,14 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Collections;
+
 
 namespace BasicDataStrcture
 {
-    public class Queue1<T>
+    public class Queue_N<T> : IQueue<T>, IEnumerable
     {
         private Node<T> _last;
         private Node<T> _first;
         private int _count;
+
+        public Queue_N() { }
+
+        public Queue_N(IQueue<T> source)
+        {
+            foreach (T item in (IEnumerable)source)
+                Enqueue(item);
+        }
 
         public void Enqueue(T t)
         {
@@ -32,5 +42,15 @@ namespace BasicDataStrcture
         }
 
         public int Length => _count;
+
+        public IEnumerator GetEnumerator()
+        {
+            Node<T> current = _first;
+            for (int i = 0; i < _count; i++)
+            {
+                yield return current.Value;
+                current = current.Next;
+            }
+        }
     }
 }

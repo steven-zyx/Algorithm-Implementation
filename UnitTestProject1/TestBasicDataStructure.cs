@@ -28,7 +28,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestQueue1Correct()
         {
-            Queue1<int> numbers = new Queue1<int>();
+            Queue_N<int> numbers = new Queue_N<int>();
             for (int i = 0; i < 10; i++)
             {
                 numbers.Enqueue(i);
@@ -59,7 +59,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestQueue2Correct()
         {
-            Queue2<int> numbers = new Queue2<int>();
+            Queue_A<int> numbers = new Queue_A<int>();
             for (int i = 0; i < 100_000; i++)
             {
                 numbers.Enqueue(i);
@@ -485,6 +485,27 @@ namespace UnitTestProject1
             foreach (char c in mtf)
             {
                 Assert.AreEqual(output.Dequeue(), c);
+            }
+        }
+
+        [TestMethod]
+        public void TestCopyAQueue()
+        {
+            List<int> data = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            Queue_A<int> queueA = new Queue_A<int>();
+            data.ForEach(x => queueA.Enqueue(x));
+
+            Queue_N<int> queueN = new Queue_N<int>(queueA);
+            for (int i = 0; i < data.Count; i++)
+            {
+                Assert.AreEqual(queueA.Dequeue(), queueN.Dequeue());
+            }
+
+            data.ForEach(x => queueN.Enqueue(x));
+            Queue_A<int> queueA2 = new Queue_A<int>(queueN);
+            for (int i = 0; i < data.Count; i++)
+            {
+                Assert.AreEqual(queueN.Dequeue(), queueA2.Dequeue());
             }
         }
     }
