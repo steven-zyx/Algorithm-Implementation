@@ -1,18 +1,29 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
 namespace BasicDataStrcture
 {
-    public class Stack2<T>
+    public class Stack_A<T> : IStack<T>, IEnumerable
     {
         private T[] _data;
         private int _count;
 
-        public Stack2()
+        public Stack_A()
         {
             _data = new T[4];
             _count = 0;
+        }
+
+        public Stack_A(IStack<T> source) : this()
+        {
+            _count = source.Length;
+            _data = new T[_count];
+            for (int i = _count - 1; i >= 0; i--)
+                _data[i] = source.Pop();
+            foreach (T item in _data)
+                source.Push(item);
         }
 
         public void Push(T t)
@@ -40,6 +51,12 @@ namespace BasicDataStrcture
             T[] newData = new T[newLength];
             Array.Copy(_data, newData, _count);
             _data = newData;
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            for (int i = _count - 1; i >= 0; i--)
+                yield return _data[i];
         }
     }
 }

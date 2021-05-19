@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
+using System.Collections;
 
 namespace UnitTestProject1
 {
@@ -90,7 +91,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestStack1Correct()
         {
-            Stack1<int> numbers = new Stack1<int>();
+            Stack_N<int> numbers = new Stack_N<int>();
             for (int i = 0; i < 10; i++)
             {
                 numbers.Push(i);
@@ -121,7 +122,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestStack2Correct()
         {
-            Stack2<int> numbers = new Stack2<int>();
+            Stack_A<int> numbers = new Stack_A<int>();
             for (int i = 0; i < 100_000; i++)
             {
                 numbers.Push(i);
@@ -491,23 +492,65 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
-        public void TestCopyAQueue()
+        public void TestCopyAQueue_Enumerate()
         {
             List<int> data = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
             Queue_A<int> queueA = new Queue_A<int>();
             data.ForEach(x => queueA.Enqueue(x));
 
-            Queue_N<int> queueN = new Queue_N<int>(queueA);
+            Queue_N<int> queueN = new Queue_N<int>(queueA as IEnumerable);
             for (int i = 0; i < data.Count; i++)
             {
                 Assert.AreEqual(queueA.Dequeue(), queueN.Dequeue());
             }
 
             data.ForEach(x => queueN.Enqueue(x));
-            Queue_A<int> queueA2 = new Queue_A<int>(queueN);
+            Queue_A<int> queueA2 = new Queue_A<int>(queueN as IEnumerable);
             for (int i = 0; i < data.Count; i++)
             {
                 Assert.AreEqual(queueN.Dequeue(), queueA2.Dequeue());
+            }
+        }
+
+        [TestMethod]
+        public void TestCopyAQueue_Dequeue()
+        {
+            List<int> data = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            Queue_A<int> queueA = new Queue_A<int>();
+            data.ForEach(x => queueA.Enqueue(x));
+
+            Queue_N<int> queueN = new Queue_N<int>(queueA as IQueue<int>);
+            for (int i = 0; i < data.Count; i++)
+            {
+                Assert.AreEqual(queueA.Dequeue(), queueN.Dequeue());
+            }
+
+            data.ForEach(x => queueN.Enqueue(x));
+            Queue_A<int> queueA2 = new Queue_A<int>(queueN as IQueue<int>);
+            for (int i = 0; i < data.Count; i++)
+            {
+                Assert.AreEqual(queueN.Dequeue(), queueA2.Dequeue());
+            }
+        }
+
+        [TestMethod]
+        public void TestCopyAStack_Enumerate()
+        {
+            List<int> data = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            var stackA = new Stack_A<int>();
+            data.ForEach(x => stackA.Push(x));
+
+            var stackN = new Stack_N<int>(stackA as IStack<int>);
+            for (int i = 0; i < data.Count; i++)
+            {
+                Assert.AreEqual(stackA.Pop(), stackN.Pop());
+            }
+
+            data.ForEach(x => stackN.Push(x));
+            var queueA2 = new Stack_A<int>(stackN as IStack<int>);
+            for (int i = 0; i < data.Count; i++)
+            {
+                Assert.AreEqual(stackN.Pop(), queueA2.Pop());
             }
         }
     }

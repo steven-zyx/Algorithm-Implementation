@@ -16,13 +16,19 @@ namespace BasicDataStrcture
             _data = new T[4];
         }
 
-        public Queue_A(IQueue<T> source)
+        public Queue_A(IEnumerable source) : this()
         {
-            _data = new T[source.Length];
-            foreach (T item in (IEnumerable)source)
+            foreach (T item in source)
+                Enqueue(item);
+        }
+
+        public Queue_A(IQueue<T> source) : this()
+        {
+            for (int i = 0; i < source.Length; i++)
             {
-                _data[_endIndex] = item;
-                _endIndex++;
+                T item = source.Dequeue();
+                source.Enqueue(item);
+                Enqueue(item);
             }
         }
 

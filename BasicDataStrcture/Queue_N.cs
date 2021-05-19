@@ -14,10 +14,20 @@ namespace BasicDataStrcture
 
         public Queue_N() { }
 
+        public Queue_N(IEnumerable source)
+        {
+            foreach (T item in source)
+                Enqueue(item);
+        }
+
         public Queue_N(IQueue<T> source)
         {
-            foreach (T item in (IEnumerable)source)
+            for (int i = 0; i < source.Length; i++)
+            {
+                T item = source.Dequeue();
+                source.Enqueue(item);
                 Enqueue(item);
+            }
         }
 
         public void Enqueue(T t)
