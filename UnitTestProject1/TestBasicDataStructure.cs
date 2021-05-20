@@ -565,5 +565,6 @@ namespace UnitTestProject1
             Assert.IsTrue(Stack_A<int>.IsGenerable(sequence2));
             Assert.IsFalse(Stack_A<int>.IsGenerable(sequence3));
         }
+
     }
 }
