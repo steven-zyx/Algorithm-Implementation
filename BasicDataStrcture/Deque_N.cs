@@ -4,13 +4,13 @@ using System.Text;
 
 namespace BasicDataStrcture
 {
-    public class Deque1<T>
+    public class Deque_N<T> : IDeque<T>
     {
         private int _count;
         private Node2<T> _mostLeft;
         private Node2<T> _mostRight;
 
-        public Deque1()
+        public Deque_N()
         {
             _count = 0;
         }

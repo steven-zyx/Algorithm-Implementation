@@ -198,7 +198,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestDeque1Correct1()
         {
-            Deque1<int> deque = new Deque1<int>();
+            Deque_N<int> deque = new Deque_N<int>();
             for (int i = 0; i < 5; i++)
                 deque.PushLeft(i);
             Assert.AreEqual(5, deque.Size);
@@ -228,7 +228,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestDeque2Correct1()
         {
-            Deque2<int> deque = new Deque2<int>();
+            Deque_A<int> deque = new Deque_A<int>();
             for (int i = 0; i < 100_000; i++)
                 deque.PushLeft(i);
             Assert.AreEqual(100_000, deque.Size);
@@ -566,5 +566,28 @@ namespace UnitTestProject1
             Assert.IsFalse(Stack_A<int>.IsGenerable(sequence3));
         }
 
+        [TestMethod]
+        public void TestDoubleStack()
+        {
+            int[] input1 = new int[] { 1, 2, 3, 4, 5 };
+            int[] input2 = new int[] { -1, -2, -3, -4, -5 };
+            var ds = new DoubleStack<int, Deque_A<int>>();
+
+
+            foreach (int i in input1)
+                ds.Push1(i);
+            Assert.ThrowsException<Exception>(() => ds.Pop2());
+
+            foreach (int i in input2)
+                ds.Push2(i);
+
+            for (int i = 4; i >= 0; i--)
+            {
+                Assert.AreEqual(input1[i], ds.Pop1());
+                Assert.AreEqual(input2[i], ds.Pop2());
+            }
+            Assert.ThrowsException<Exception>(() => ds.Pop1());
+            Assert.ThrowsException<Exception>(() => ds.Pop2());
+        }
     }
 }
