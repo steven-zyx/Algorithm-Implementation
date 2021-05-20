@@ -589,5 +589,22 @@ namespace UnitTestProject1
             Assert.ThrowsException<Exception>(() => ds.Pop1());
             Assert.ThrowsException<Exception>(() => ds.Pop2());
         }
+
+        [TestMethod]
+        public void TestFailFastOfStack()
+        {
+            Stack_A<int> stack = new Stack_A<int>();
+            for (int i = 0; i < 10; i++)
+                stack.Push(i);
+
+            var enumerator = stack.GetEnumerator();
+            Assert.IsTrue(enumerator.MoveNext());
+            Assert.AreEqual(9, enumerator.Current);
+            Assert.IsTrue(enumerator.MoveNext());
+            Assert.AreEqual(8, enumerator.Current);
+
+            stack.Push(100);
+            Assert.ThrowsException<InvalidOperationException>(() => enumerator.MoveNext());
+        }
     }
 }

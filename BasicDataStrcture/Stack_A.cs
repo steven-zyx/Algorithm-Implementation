@@ -9,6 +9,7 @@ namespace BasicDataStrcture
     {
         private T[] _data;
         private int _count;
+        private int _operationCount = 0;
 
         public Stack_A()
         {
@@ -28,6 +29,8 @@ namespace BasicDataStrcture
 
         public void Push(T t)
         {
+            _operationCount++;
+
             _data[_count] = t;
             _count++;
             if (_data.Length == _count)
@@ -36,6 +39,8 @@ namespace BasicDataStrcture
 
         public T Pop()
         {
+            _operationCount++;
+
             if (_count == 0)
                 throw new Exception("Empty");
             else if (_count == _data.Length / 4)
@@ -55,8 +60,14 @@ namespace BasicDataStrcture
 
         public IEnumerator GetEnumerator()
         {
+            int currentOpCount = _operationCount;
             for (int i = _count - 1; i >= 0; i--)
-                yield return _data[i];
+            {
+                if (currentOpCount != _operationCount)
+                    throw new InvalidOperationException("Can not change the Stack when iterating");
+                else
+                    yield return _data[i];
+            }
         }
 
         public static bool IsGenerable(int?[] input)
