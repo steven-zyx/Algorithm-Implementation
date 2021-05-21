@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BasicDataStrcture\BasicDataStrcture.csproj" />
+    <ProjectReference Include="..\Sorting\Sorting.csproj" />
   </ItemGroup>
 
 </Project>

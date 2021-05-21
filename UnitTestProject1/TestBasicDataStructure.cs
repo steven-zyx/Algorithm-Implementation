@@ -1,4 +1,5 @@
 using BasicDataStrcture;
+using Sorting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using System.Collections;
+
 
 namespace UnitTestProject1
 {
@@ -605,6 +607,49 @@ namespace UnitTestProject1
 
             stack.Push(100);
             Assert.ThrowsException<InvalidOperationException>(() => enumerator.MoveNext());
+        }
+
+        private int[] GenerateRandomArray(int start, int count)
+        {
+            int[] source = Enumerable.Range(start, count).ToArray();
+            Random ran = new Random(DateTime.Now.Second);
+
+            int temp;
+            int randomIndex;
+            for (int i = 0; i < count; i++)
+            {
+                randomIndex = ran.Next(0, count);
+                temp = source[i];
+                source[i] = source[randomIndex];
+                source[randomIndex] = temp;
+            }
+            return source;
+        }
+
+        [TestMethod]
+        public void TestSelectionSort()
+        {
+            var source = GenerateRandomArray(0, 30_000);
+            SelectionSort ss = new SelectionSort();
+            ss.Sort(source);
+
+            for (int i = 0; i < 30_000; i++)
+            {
+                Assert.AreEqual(i, source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestInsertionSort()
+        {
+            var source = GenerateRandomArray(0, 50_000);
+            InsertionSort ss = new InsertionSort();
+            ss.Sort(source);
+
+            for (int i = 0; i < 30_000; i++)
+            {
+                Assert.AreEqual(i, source[i]);
+            }
         }
     }
 }

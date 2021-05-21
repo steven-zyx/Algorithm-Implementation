@@ -62,5 +62,10 @@ namespace BasicDataStrcture
                 current = current.Next;
             }
         }
+
+        public void Catenation(IQueue<T> source)
+        {
+
+        }
     }
 }
