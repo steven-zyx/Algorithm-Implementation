@@ -39,39 +39,5 @@ namespace Sorting
                 else source[i] = _aux[rightIndex++];
             }
         }
-
-        public void SortImproved(int[] source)
-        {
-            _aux = new int[source.Length];
-            SortImproved(source, 0, source.Length - 1);
-        }
-
-        private void SortImproved(int[] source, int lo, int hi)
-        {
-            if (hi - 14 <= lo)
-            {
-                InsertionSort(source, lo, hi);
-                return;
-            }
-            int mid = lo + (hi - lo) / 2;
-            SortImproved(source, lo, mid);
-            SortImproved(source, mid + 1, hi);
-            if (source[mid] > source[mid + 1])
-                Merge(source, lo, mid, hi);
-        }
-
-        private void InsertionSort(int[] source, int lo, int hi)
-        {
-            int temp;
-            for (int i = lo + 1; i <= hi; i++)
-            {
-                for (int j = i; j > lo && source[j - 1] > source[j]; j--)
-                {
-                    temp = source[j];
-                    source[j] = source[j - 1];
-                    source[j - 1] = temp;
-                }
-            }
-        }
     }
 }

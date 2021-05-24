@@ -713,8 +713,8 @@ namespace UnitTestProject1
         {
             int count = 20_000_000;
             var source = GenerateRandomArray(0, count);
-            var client = new MergeSort();
-            client.SortImproved(source);
+            var client = new MergeSortImproved();
+            client.Sort(source);
 
             for (int i = 0; i < count; i++)
             {
