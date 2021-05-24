@@ -4,6 +4,8 @@ using System.Diagnostics;
 using BasicDataStrcture;
 using System.IO;
 using System.Collections;
+using Sorting;
+using System.Linq;
 
 namespace ConsoleApp1
 {
@@ -14,8 +16,9 @@ namespace ConsoleApp1
             //ShowListResize();
             //ShowRandomBag();
             //ShowRandomQueue();
-            ListingFiles.List();
-            Console.ReadKey();
+            //ListingFiles.List();
+            ShellSortCases();
+            Console.ReadLine();
         }
 
         public static void ShowListResize()
@@ -64,6 +67,12 @@ namespace ConsoleApp1
             {
                 Console.Write($"{rq.Dequeue()}\t");
             }
+        }
+
+        public static void ShellSortCases()
+        {
+            ShellSortCases ssc = new ShellSortCases();
+            ssc.EnumerateConcurrently();
         }
     }
 }

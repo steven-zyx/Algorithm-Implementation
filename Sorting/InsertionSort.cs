@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BasicDataStrcture
+namespace Sorting
 {
     public class InsertionSort
     {

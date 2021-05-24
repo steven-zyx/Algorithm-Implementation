@@ -630,8 +630,8 @@ namespace UnitTestProject1
         public void TestSelectionSort()
         {
             var source = GenerateRandomArray(0, 30_000);
-            SelectionSort ss = new SelectionSort();
-            ss.Sort(source);
+            var client = new SelectionSort();
+            client.Sort(source);
 
             for (int i = 0; i < 30_000; i++)
             {
@@ -642,11 +642,81 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestInsertionSort()
         {
-            var source = GenerateRandomArray(0, 50_000);
-            InsertionSort ss = new InsertionSort();
-            ss.Sort(source);
+            var source = GenerateRandomArray(0, 30_000);
+            var client = new InsertionSort();
+            client.Sort(source);
 
             for (int i = 0; i < 30_000; i++)
+            {
+                Assert.AreEqual(i, source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestShellSort()
+        {
+            var source = GenerateRandomArray(0, 2_000_000);
+            var client = new ShellSort();
+            client.Sort(source);
+
+            for (int i = 0; i < 2_000_000; i++)
+            {
+                Assert.AreEqual(i, source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestShellSort2()
+        {
+            var source = GenerateRandomArray(0, 255).Select(x => (byte)x).ToArray();
+            var client = new ShellSort();
+            client.Sort_2(source);
+
+            for (int i = 0; i < 255; i++)
+            {
+                Assert.AreEqual(i, source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestDequeueSort()
+        {
+            Queue<int> source = new Queue<int>(new int[] { 1, 7, 6, 3, 4, 8, 9, 5 });
+            DequeueSort client = new DequeueSort();
+            client.Sort(source, 1, 9);
+
+            int preivous = source.Dequeue();
+            int current;
+            while (source.Count > 0)
+            {
+                current = source.Dequeue();
+                Assert.IsTrue(preivous < current);
+            }
+        }
+
+        [TestMethod]
+        public void TestMergeSort()
+        {
+            int count = 20_000_000;
+            var source = GenerateRandomArray(0, count);
+            var client = new MergeSort();
+            client.Sort(source);
+
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(i, source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestMergeSortImproved()
+        {
+            int count = 20_000_000;
+            var source = GenerateRandomArray(0, count);
+            var client = new MergeSort();
+            client.SortImproved(source);
+
+            for (int i = 0; i < count; i++)
             {
                 Assert.AreEqual(i, source[i]);
             }
