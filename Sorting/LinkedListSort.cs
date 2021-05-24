@@ -9,22 +9,20 @@ namespace Sorting
     {
         public Node<int> Sort(Node<int> start)
         {
-            var p = new Node<int>(int.MinValue);
-            p.Next = start;
-            var orignalP = p;
-
+            var originalP = new Node<int>(int.MinValue);
+            originalP.Next = start;
 
             int subArrayCount = 1;
             int mergeCount = 0;
 
-
             do
             {
                 mergeCount = 0;
-                p = orignalP;
+                Node<int> p = originalP;
+                Node<int> right;
                 while (p.Next != null)
                 {
-                    Node<int> right = p.Next;
+                    right = p.Next;
                     for (int i = 0; i < subArrayCount && right != null; i++)
                         right = right.Next;
 
@@ -38,7 +36,7 @@ namespace Sorting
             }
             while (mergeCount > 1);
 
-            return orignalP.Next;
+            return originalP.Next;
         }
 
 
