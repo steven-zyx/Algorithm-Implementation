@@ -735,5 +735,36 @@ namespace UnitTestProject1
                 Assert.AreEqual(i, source[i]);
             }
         }
+
+
+        private Node<int> GenerateLinkedList(int[] numbers)
+        {
+            Node<int> start = new Node<int>(numbers[0]);
+            Node<int> current = start;
+            for (int i = 1; i < numbers.Length; i++)
+            {
+                Node<int> item = new Node<int>(numbers[i]);
+                current.Next = item;
+                current = item;
+            }
+            return start;
+        }
+
+        [TestMethod]
+        public void TestLinkedListSort()
+        {
+            int count = 6_000_000;
+            var startNode = GenerateLinkedList(GenerateRandomArray(0, count));
+
+            LinkedListSort client = new LinkedListSort();
+            Node<int> result = client.Sort(startNode);
+
+            int value = 0;
+            for (Node<int> current = result; current != null; current = current.Next)
+            {
+                Assert.AreEqual(value, current.Value);
+                value++;
+            }
+        }
     }
 }
