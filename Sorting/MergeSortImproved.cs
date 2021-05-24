@@ -6,27 +6,27 @@ namespace Sorting
 {
     public class MergeSortImproved
     {
-        public void Sort(int[] source)
+        public int[] Sort(int[] source)
         {
             int[] aux = new int[source.Length];
-            Array.Copy(source, aux, source.Length);
             Sort(aux, source, 0, source.Length - 1);
+            return aux;
         }
 
         private void Sort(int[] aux, int[] source, int lo, int hi)
         {
             if (hi - 15 <= lo)
             {
-                InsertionSort(source, lo, hi);
+                InsertionSort(aux, lo, hi);
                 return;
             }
             int mid = lo + (hi - lo) / 2;
             Sort(source, aux, lo, mid);
             Sort(source, aux, mid + 1, hi);
-            if (aux[mid] <= aux[mid + 1])
-                Array.Copy(aux, lo, source, lo, hi - lo + 1);
+            if (source[mid] <= source[mid + 1])
+                Array.Copy(source, lo, aux, lo, hi - lo + 1);
             else
-                Merge(source, aux, lo, mid, hi);
+                Merge(aux, source, lo, mid, hi);
         }
 
         private void InsertionSort(int[] source, int lo, int hi)

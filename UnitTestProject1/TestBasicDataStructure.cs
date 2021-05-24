@@ -714,6 +714,20 @@ namespace UnitTestProject1
             int count = 20_000_000;
             var source = GenerateRandomArray(0, count);
             var client = new MergeSortImproved();
+            source = client.Sort(source);
+
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(i, source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestBottomUpMergeSort()
+        {
+            int count = 20_000_000;
+            var source = GenerateRandomArray(0, count);
+            var client = new BottomUpMergeSort();
             client.Sort(source);
 
             for (int i = 0; i < count; i++)
