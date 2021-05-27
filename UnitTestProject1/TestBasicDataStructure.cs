@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using System.Collections;
+using System.Diagnostics;
 
 
 namespace UnitTestProject1
@@ -765,6 +766,93 @@ namespace UnitTestProject1
                 Assert.AreEqual(value, current.Value);
                 value++;
             }
+        }
+
+        [TestMethod]
+        public void TestMergeSortedQueues()
+        {
+            int count = 10_000_000;
+            Queue<int> left = new Queue<int>(Enumerable.Range(0, count / 10).Select(x => x * 10));
+            Queue<int> right = new Queue<int>(Enumerable.Range(0, count));
+
+            MergeSortedQueues client = new MergeSortedQueues();
+            Queue<int> result = client.Sort(left, right);
+
+            int current = result.Dequeue();
+            while (result.Count > 0)
+            {
+                Assert.IsTrue(current <= result.Peek());
+                current = result.Dequeue();
+            }
+        }
+
+        [TestMethod]
+        public void BottomUpQueueMergeSort()
+        {
+            int[] source = GenerateRandomArray(0, 1_000_000);
+            BottomUpQueueMergeSort client = new BottomUpQueueMergeSort();
+            Queue<int> result = client.Sort(source);
+
+
+            for (int i = 0; i < source.Length; i++)
+            {
+                Assert.AreEqual(i, result.Dequeue());
+            }
+        }
+
+        [TestMethod]
+        public void TestFastMergeSort()
+        {
+            int[] source = GenerateRandomArray(0, 20_000_000);
+            FasterMerge client = new FasterMerge();
+            client.Sort(source);
+            for (int i = 0; i < source.Length; i++)
+            {
+                Assert.AreEqual(i, source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestNaturalMergeSort()
+        {
+            int[] source = GenerateRandomArray(0, 20_000_000);
+            NaturalMergeSort client = new NaturalMergeSort();
+            client.Sort(source);
+            for (int i = 0; i < source.Length; i++)
+            {
+                Assert.AreEqual(i, source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestNaturalMergeSort2()
+        {
+            int count = 20_000_000;
+            int stepSize = 10_000;
+            List<int> numbers = new List<int>(count);
+            for (int i = count - stepSize; i >= 0; i -= stepSize)
+                numbers.AddRange(Enumerable.Range(i, stepSize));
+            int[] source = numbers.ToArray();
+
+            NaturalMergeSort client = new NaturalMergeSort();
+            client.Sort(source);
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(i, source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestCalcInversions()
+        {
+            int count = 30_000;
+            int[] source = GenerateRandomArray(0, count);
+            int[] source2 = new int[source.Length];
+            Array.Copy(source, source2, source.Length);
+            Inversions client = new Inversions();
+            long qR = client.QudraticCalc(source);
+            long lR = client.Calculate(source2);
+            Assert.AreEqual(qR, lR);
         }
     }
 }

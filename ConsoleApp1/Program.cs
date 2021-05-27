@@ -17,7 +17,7 @@ namespace ConsoleApp1
             //ShowRandomBag();
             //ShowRandomQueue();
             //ListingFiles.List();
-            ShellSortCases();
+            ShuffleLinkedList();
             Console.ReadLine();
         }
 
@@ -73,6 +73,32 @@ namespace ConsoleApp1
         {
             ShellSortCases ssc = new ShellSortCases();
             ssc.EnumerateConcurrently();
+        }
+
+        public static void ShuffleLinkedList()
+        {
+            Node<int> start = GenerateLinkedList(Enumerable.Range(0, 100).ToArray());
+            ShuffleLinkedList client = new ShuffleLinkedList();
+            Node<int> result = client.Shuffle(start);
+
+            for (Node<int> current = result; current != null; current = current.Next)
+            {
+                Console.Write(current.Value);
+                Console.Write(" ");
+            }
+        }
+
+        private static Node<int> GenerateLinkedList(int[] numbers)
+        {
+            Node<int> start = new Node<int>(numbers[0]);
+            Node<int> current = start;
+            for (int i = 1; i < numbers.Length; i++)
+            {
+                Node<int> item = new Node<int>(numbers[i]);
+                current.Next = item;
+                current = item;
+            }
+            return start;
         }
     }
 }
