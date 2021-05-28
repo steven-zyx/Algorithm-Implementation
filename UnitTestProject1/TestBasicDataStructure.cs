@@ -854,5 +854,79 @@ namespace UnitTestProject1
             long lR = client.Calculate(source2);
             Assert.AreEqual(qR, lR);
         }
+
+        [TestMethod]
+        public void TestIndirectSort()
+        {
+            int count = 10_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            IndirectSort client = new IndirectSort();
+            int[] perm = client.Sort(source);
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(i, source[perm[i]]);
+            }
+        }
+
+        [TestMethod]
+        public void TestIndirectSort2()
+        {
+            int count = 10_000_000;
+            int[] source = GenerateRandomArray(0, count);
+
+            int i = 0;
+            foreach (int x in source.OrderBy())
+            {
+                Assert.AreEqual(i, x);
+                i++;
+            }
+        }
+
+        [TestMethod]
+        public void TestTriplicates()
+        {
+            List<int> l1 = new List<int>();
+            List<int> l2 = new List<int>();
+            List<int> l3 = new List<int>();
+
+            for (int i = 1; i < 10_000_000; i++)
+            {
+                if (i % 83 == 0) l1.Add(i);
+                if (i % 89 == 0) l2.Add(i);
+                if (i % 97 == 0) l3.Add(i);
+            }
+
+            Triplicates client = new Triplicates();
+            int common = client.FindCommon(l1.ToArray(), l2.ToArray(), l3.ToArray());
+            Assert.AreEqual(716_539, common);
+        }
+
+        [TestMethod]
+        public void Test3WayMergeSort()
+        {
+            int count = 20_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            _3WayMergeSort client = new _3WayMergeSort();
+            client.Sort(source);
+
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(i, source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestQuickSort()
+        {
+            int count = 20_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            QuickSort client = new QuickSort();
+            client.Sort(source);
+
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(i, source[i]);
+            }
+        }
     }
 }
