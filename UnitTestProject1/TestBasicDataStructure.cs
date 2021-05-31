@@ -1057,5 +1057,61 @@ namespace UnitTestProject1
                 Assert.AreEqual(i, bolts[i]);
             }
         }
+
+        [TestMethod]
+        public void TestBestCase()
+        {
+            int count = 10;
+            int[] source = GenerateRandomArray(0, count);
+            BestCase client = new BestCase();
+            int[] bestCase = client.Generate(source);
+            bool isBest = client.SortAndValidate(bestCase);
+        }
+
+        [TestMethod]
+        public void TestNonRecursiveQuickSort()
+        {
+            int count = 20_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            NonRecursiveQuickSort client = new NonRecursiveQuickSort();
+            client.Sort(source);
+
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(i, source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestFast3WayPartition()
+        {
+            int count = 20_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            Fast3WayPartition client = new Fast3WayPartition();
+            client.Sort(source);
+
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(i, source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestFast3WayPartition_Duplicate()
+        {
+            int count = 20_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            for (int i = 0; i < source.Length; i++)
+            {
+                source[i] = source[i] % 10;
+            }
+            Fast3WayPartition client = new Fast3WayPartition();
+            client.Sort(source);
+
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(i / (count / 10), source[i]);
+            }
+        }
     }
 }
