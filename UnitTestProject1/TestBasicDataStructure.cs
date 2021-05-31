@@ -928,5 +928,134 @@ namespace UnitTestProject1
                 Assert.AreEqual(i, source[i]);
             }
         }
+
+        [TestMethod]
+        public void TestSentinels()
+        {
+            int count = 20_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            Sentinels client = new Sentinels();
+            client.Sort(source);
+
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(i, source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestQuickSort_SameItem()
+        {
+            int count = 10_000_000;
+            int[] source1 = GenerateRandomArray(0, count);
+            int[] source2 = GenerateRandomArray(0, count);
+            int[] source = new int[count * 2];
+            Array.Copy(source1, source, count);
+            Array.Copy(source2, 0, source, count, count);
+
+
+            QuickSort client = new QuickSort();
+            client.Sort(source);
+
+            for (int i = 0; i < count * 2; i++)
+            {
+                Assert.AreEqual(i / 2, source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestQuickSort3Way()
+        {
+            int count = 20_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            QuickSort3Way client = new QuickSort3Way();
+            client.Sort(source);
+
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(i, source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestQuickSort3Way_Duplicate()
+        {
+            int count = 20_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            for (int i = 0; i < source.Length; i++)
+            {
+                source[i] = source[i] % 10;
+            }
+            QuickSort3Way client = new QuickSort3Way();
+            client.Sort(source);
+
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(i / (count / 10), source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestQuickSort_Duplicate()
+        {
+            int count = 20_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            for (int i = 0; i < source.Length; i++)
+            {
+                source[i] = source[i] % 10;
+            }
+            QuickSort client = new QuickSort();
+            client.Sort(source);
+
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(i / (count / 10), source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestMedianOf3()
+        {
+            int count = 20_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            MedianOf3Partitioning client = new MedianOf3Partitioning();
+            client.Sort(source);
+
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(i, source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestMedianOf5()
+        {
+            int count = 20_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            MedianOf5Partitioning client = new MedianOf5Partitioning();
+            client.Sort(source);
+
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(i, source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestNutsAndBolts()
+        {
+            int count = 10_000_000;
+            int[] nuts = GenerateRandomArray(0, count);
+            int[] bolts = GenerateRandomArray(0, count);
+
+            NutsAndBolts client = new NutsAndBolts();
+            client.Sort(nuts, bolts);
+
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(i, nuts[i]);
+                Assert.AreEqual(i, bolts[i]);
+            }
+        }
     }
 }

@@ -4,14 +4,19 @@ using System.Text;
 
 namespace Sorting
 {
-    public class QuickSort
+    public class Sentinels
     {
         private int[] _source;
 
-        public void Sort(int[] source)
+        public void Sort(int[] input)
         {
-            _source = source;
-            Sort(0, source.Length - 1);
+            int size = input.Length;
+
+            _source = new int[size + 1];
+            Array.Copy(input, _source, size);
+            _source[size] = int.MaxValue;
+            Sort(0, size);
+            Array.Copy(_source, input, size);
         }
 
         private void Sort(int lo, int hi)
@@ -30,12 +35,8 @@ namespace Sorting
 
             while (true)
             {
-                while (_source[++leftIndex] < midE)
-                    if (leftIndex >= hi)
-                        break;
-                while (midE < _source[--rightIndex])
-                    if (rightIndex <= lo)
-                        break;
+                while (_source[++leftIndex] < midE) { }
+                while (midE < _source[--rightIndex]) { }
                 if (leftIndex >= rightIndex)
                     break;
                 Exchange(leftIndex, rightIndex);

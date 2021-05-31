@@ -18,6 +18,20 @@ namespace Sorting
             }
         }
 
+        public void Sort(int[] source, int lo, int hi)
+        {
+            int temp;
+            for (int i = lo + 1; i <= hi; i++)
+            {
+                for (int j = i; j > lo && source[j - 1] > source[j]; j--)
+                {
+                    temp = source[j];
+                    source[j] = source[j - 1];
+                    source[j - 1] = temp;
+                }
+            }
+        }
+
         private void Exchange<T>(T[] source, int i, int j)
         {
             T item = source[i];
