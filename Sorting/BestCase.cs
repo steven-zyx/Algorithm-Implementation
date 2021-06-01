@@ -7,19 +7,30 @@ namespace Sorting
 {
     public class BestCase
     {
-        private bool _isBest = true;
+        private bool _isBest;
+        private Queue<int> midNumbers = new Queue<int>();
 
-        public int[] Generate(int[] input)
+
+        public void Generate(int[] input)
         {
-            return null;
+            int hi = input.Length - 1;
+            Sort(input, 0, hi);
+            Reverse(input, 0, hi);
         }
 
-
-
-
+        private void Reverse(int[] source, int lo, int hi)
+        {
+            if (lo >= hi)
+                return;
+            int mid = lo + (hi - lo) / 2;
+            Reverse(source, lo, mid - 1);
+            Reverse(source, mid + 1, hi);
+            Exchange(source, lo, mid);
+        }
 
         public bool SortAndValidate(int[] source)
         {
+            _isBest = true;
             Sort(source, 0, source.Length - 1);
             return _isBest;
         }

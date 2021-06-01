@@ -1061,11 +1061,11 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestBestCase()
         {
-            int count = 10;
+            int count = 10_000_000;
             int[] source = GenerateRandomArray(0, count);
             BestCase client = new BestCase();
-            int[] bestCase = client.Generate(source);
-            bool isBest = client.SortAndValidate(bestCase);
+            client.Generate(source);
+            bool isBest = client.SortAndValidate(source);
         }
 
         [TestMethod]
@@ -1085,14 +1085,23 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestFast3WayPartition()
         {
-            int count = 20_000_000;
-            int[] source = GenerateRandomArray(0, count);
-            Fast3WayPartition client = new Fast3WayPartition();
-            client.Sort(source);
-
-            for (int i = 0; i < count; i++)
+            while (true)
             {
-                Assert.AreEqual(i, source[i]);
+                int count = 5;
+                int[] source = GenerateRandomArray(0, count);
+                //int[] source = { 2, 3, 1, 4, 0 };
+                List<int> backup = new List<int>(source);
+                Fast3WayPartition client = new Fast3WayPartition();
+                try
+                {
+                    client.Sort(source);
+                }
+                catch (Exception) { }
+
+                for (int i = 0; i < count; i++)
+                {
+                    Assert.AreEqual(i, source[i]);
+                }
             }
         }
 
