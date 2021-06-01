@@ -1087,7 +1087,6 @@ namespace UnitTestProject1
         {
             int count = 20_000_000;
             int[] source = GenerateRandomArray(0, count);
-            List<int> backup = new List<int>(source);
             Fast3WayPartition client = new Fast3WayPartition();
             client.Sort(source);
             for (int i = 0; i < count; i++)
@@ -1119,7 +1118,6 @@ namespace UnitTestProject1
         {
             int count = 20_000_000;
             int[] source = GenerateRandomArray(0, count);
-            List<int> backup = new List<int>(source);
             JavaSystemSort client = new JavaSystemSort();
             client.Sort(source);
             for (int i = 0; i < count; i++)
@@ -1143,6 +1141,27 @@ namespace UnitTestProject1
             for (int i = 0; i < count; i++)
             {
                 Assert.AreEqual(i / (count / 10), source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestSampleSort()
+        {
+            int count = 20_000_000;
+            int[] source = GenerateRandomArray(0, count);
+
+            Random r = new Random(DateTime.Now.Second);
+            HashSet<int> sample = new HashSet<int>();
+            while (sample.Count < 10)
+            {
+                sample.Add(r.Next(0, count));
+            }
+
+            SampleSort client = new SampleSort();
+            client.Sort(source, sample.ToArray());
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(i, source[i]);
             }
         }
     }
