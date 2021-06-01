@@ -1085,24 +1085,15 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestFast3WayPartition()
         {
-            //while (true)
-            //{
-            int count = 10_000_000;
+            int count = 20_000_000;
             int[] source = GenerateRandomArray(0, count);
-            //int[] source = { 2, 3, 1, 4, 0 };
             List<int> backup = new List<int>(source);
             Fast3WayPartition client = new Fast3WayPartition();
-            try
-            {
-                client.Sort(source);
-            }
-            catch (Exception e) { }
-
+            client.Sort(source);
             for (int i = 0; i < count; i++)
             {
                 Assert.AreEqual(i, source[i]);
             }
-            //}
         }
 
         [TestMethod]
@@ -1115,6 +1106,38 @@ namespace UnitTestProject1
                 source[i] = source[i] % 10;
             }
             Fast3WayPartition client = new Fast3WayPartition();
+            client.Sort(source);
+
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(i / (count / 10), source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestJavaSystemSort()
+        {
+            int count = 20_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            List<int> backup = new List<int>(source);
+            JavaSystemSort client = new JavaSystemSort();
+            client.Sort(source);
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(i, source[i]);
+            }
+        }
+
+        [TestMethod]
+        public void TestJavaSystemSort_Duplicate()
+        {
+            int count = 20_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            for (int i = 0; i < source.Length; i++)
+            {
+                source[i] = source[i] % 10;
+            }
+            JavaSystemSort client = new JavaSystemSort();
             client.Sort(source);
 
             for (int i = 0; i < count; i++)

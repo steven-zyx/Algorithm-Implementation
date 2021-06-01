@@ -19,48 +19,41 @@ namespace Sorting
             if (hi <= lo) return;
 
             int sample = _source[lo];
-            int le = lo + 1;
-            int lt = lo + 1;
-            int re = hi;
-            int gt = hi;
+            int le = lo + 1, lt = lo + 1;
+            int re = hi, gt = hi;
+
 
             while (true)
             {
-                //if (_source[lt] == sample) Exchange(le++, lt++);
-                //else if (_source[gt] == sample) Exchange(re--, gt--);
-                //else if (_source[lt] < sample) lt++;
-                //else Exchange(lt, gt--);
-
-
-                while (_source[gt] >= sample)
-                {
-                    if (_source[gt] == sample)
-                        Exchange(re--, gt);
-                    gt--;
-                    if (gt == le - 1)
-                        break;
-                }
-                while (_source[lt] <= sample)
+                while (lt < re + 1 && _source[lt] <= sample)
                 {
                     if (_source[lt] == sample)
                         Exchange(le++, lt);
                     lt++;
-                    if (lt == re + 1)
-                        break;
+                }
+                while (gt > le - 1 && _source[gt] >= sample)
+                {
+                    if (_source[gt] == sample)
+                        Exchange(re--, gt);
+                    gt--;
                 }
                 if (gt < lt)
                     break;
                 Exchange(lt++, gt--);
             }
 
+            if (lt == le && lt == hi + 1)
+                return;
+
             int leftEnd = lo;
-            while (gt >= le) Exchange(gt--, leftEnd++);
+            while (leftEnd < le && gt >= le)
+                Exchange(gt--, leftEnd++);
             int rightEnd = hi;
-            while (lt <= re) Exchange(lt++, rightEnd--);
+            while (rightEnd > re && lt <= re)
+                Exchange(lt++, rightEnd--);
 
-
-            Sort(lo, leftEnd - 1);
-            Sort(rightEnd + 1, hi);
+            Sort(lo, gt);
+            Sort(lt, hi);
         }
 
         private void Exchange(int l, int r)
