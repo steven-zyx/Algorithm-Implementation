@@ -24,12 +24,33 @@ namespace Sorting
             int re = hi;
             int gt = hi;
 
-            while (gt >= lt)
+            while (true)
             {
-                if (_source[lt] == sample) Exchange(le++, lt++);
-                else if (_source[gt] == sample) Exchange(re--, gt--);
-                else if (_source[lt] < sample) lt++;
-                else Exchange(lt, gt--);
+                //if (_source[lt] == sample) Exchange(le++, lt++);
+                //else if (_source[gt] == sample) Exchange(re--, gt--);
+                //else if (_source[lt] < sample) lt++;
+                //else Exchange(lt, gt--);
+
+
+                while (_source[gt] >= sample)
+                {
+                    if (_source[gt] == sample)
+                        Exchange(re--, gt);
+                    gt--;
+                    if (gt == le - 1)
+                        break;
+                }
+                while (_source[lt] <= sample)
+                {
+                    if (_source[lt] == sample)
+                        Exchange(le++, lt);
+                    lt++;
+                    if (lt == re + 1)
+                        break;
+                }
+                if (gt < lt)
+                    break;
+                Exchange(lt++, gt--);
             }
 
             int leftEnd = lo;
