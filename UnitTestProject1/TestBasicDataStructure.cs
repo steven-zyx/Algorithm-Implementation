@@ -1164,5 +1164,141 @@ namespace UnitTestProject1
                 Assert.AreEqual(i, source[i]);
             }
         }
+
+        [TestMethod]
+        public void TestMaxPQ()
+        {
+            int count = 10_000_000;
+            int[] source = GenerateRandomArray(0, count);
+
+            MaxPQ pq = new MaxPQ(count);
+            foreach (int n in source)
+                pq.Insert(n);
+
+            for (int i = count - 1; i >= 0; i--)
+                Assert.AreEqual(i, pq.DelMax());
+        }
+
+        [TestMethod]
+        public void TestIndexMinPQ_1()
+        {
+            int count = 5_000_000;
+            int[] source = GenerateRandomArray(0, count);
+
+            IndexMinPQ pq = new IndexMinPQ(count);
+            for (int i = 0; i < count; i++)
+                pq.Insert(i, source[i]);
+
+            Assert.IsFalse(pq.IsEmpty);
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(count - i, pq.Size);
+                Assert.AreEqual(i, pq.Min);
+                Assert.AreEqual(i, source[pq.MinIndex]);
+                Assert.AreEqual(i, source[pq.DelMin()]);
+            }
+            Assert.IsTrue(pq.IsEmpty);
+        }
+
+        [TestMethod]
+        public void TestIndexMinPQ_2()
+        {
+            int count = 5_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            int[] source2 = GenerateRandomArray(0, count);
+
+            IndexMinPQ pq = new IndexMinPQ(count);
+            for (int i = 0; i < count; i++)
+                pq.Insert(i, source[i]);
+
+            for (int i = 0; i < count; i += 2)
+            {
+                pq.Delete(i);
+                int j = i + 1;
+                //pq.Change(j, source2[j]);
+            }
+
+            int min = int.MinValue;
+            for (int i = 0; i < count; i += 2)
+            {
+                Assert.IsFalse(pq.Contains(i));
+
+                int currentMin = source2[pq.DelMin()];
+                Assert.IsTrue(min < currentMin);
+                min = currentMin;
+            }
+        }
+
+        [TestMethod]
+        public void TestMaxPQ_Resize()
+        {
+            int count = 1_000_000;
+            int[] source = GenerateRandomArray(0, count);
+
+            MaxPQ pq = new MaxPQ();
+
+            for (int x = 0; x <= 2; x++)
+            {
+                foreach (int n in source)
+                    pq.Insert(n);
+
+                for (int i = count - 1; i >= 0; i--)
+                    Assert.AreEqual(i, pq.DelMax());
+            }
+        }
+
+        [TestMethod]
+        public void TestMaxPQ_Min()
+        {
+            int count = 1_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            MaxPQ pq = new MaxPQ();
+
+
+            for (int i = 0; i < 3; i++)
+            {
+                Assert.ThrowsException<InvalidOperationException>(() => pq.Min);
+                int min = int.MaxValue;
+                foreach (int n in source)
+                {
+                    if (n < min)
+                        min = n;
+                    pq.Insert(n);
+                    Assert.AreEqual(min, pq.Min);
+                }
+                foreach (int n in source)
+                {
+                    Assert.AreEqual(min, pq.Min);
+                    pq.DelMax();
+                }
+                Assert.ThrowsException<InvalidOperationException>(() => pq.Min);
+            }
+        }
+
+        [TestMethod]
+        public void TestHeapSort()
+        {
+            int count = 10_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            HeapSort client = new HeapSort();
+            client.Sort(source);
+
+            for (int i = 0; i < count; i++)
+                Assert.AreEqual(i, source[i]);
+        }
+
+
+        [TestMethod]
+        public void TestHeapSortAlternative()
+        {
+            int count = 10_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            List<int> backup = new List<int>(source);
+            HeapSort_Alternative client = new HeapSort_Alternative();
+            client.Sort(source);
+
+            for (int i = 0; i < count; i++)
+                Assert.AreEqual(i, source[i]);
+        }
     }
 }
