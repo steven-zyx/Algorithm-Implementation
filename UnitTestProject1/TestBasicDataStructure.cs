@@ -1300,5 +1300,35 @@ namespace UnitTestProject1
             for (int i = 0; i < count; i++)
                 Assert.AreEqual(i, source[i]);
         }
+
+
+        [TestMethod]
+        public void TestHeapWithoutExchanges()
+        {
+            int count = 10_000_000;
+            int[] source = GenerateRandomArray(0, count);
+
+            HeapWithoutExchanges pq = new HeapWithoutExchanges(count);
+            foreach (int n in source)
+                pq.Insert(n);
+
+            for (int i = count - 1; i >= 0; i--)
+                Assert.AreEqual(i, pq.DelMax());
+        }
+
+        [TestMethod]
+        public void TestFastInsert()
+        {
+            int count = 10_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            List<int> backUp = new List<int>(source);
+
+            FastInsert pq = new FastInsert(count);
+            foreach (int n in source)
+                pq.Insert(n);
+
+            for (int i = count - 1; i >= 0; i--)
+                Assert.AreEqual(i, pq.DelMax());
+        }
     }
 }
