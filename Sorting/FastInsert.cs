@@ -76,9 +76,11 @@ namespace Sorting
             _source[parents[le]] = item;
         }
 
+        private int Log2(int n) => (int)(Math.Log10(n) / Math.Log10(2));
+
         private int[] ShowParents(int i)
         {
-            int length = (int)(Math.Log10(i) / Math.Log10(2)) + 2;
+            int length = Log2(i) + 2;
             int[] parents = new int[length];
             for (int n = length - 1; n >= 0; n--)
             {
