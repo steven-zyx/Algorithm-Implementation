@@ -17,7 +17,11 @@ namespace ConsoleApp1
             //ShowRandomBag();
             //ShowRandomQueue();
             //ListingFiles.List();
-            ShuffleLinkedList();
+            //ShuffleLinkedList();
+            //ShowMultiwayHeap();
+            //ShowComputaionalNumberTheory();
+            //ShowLoadBalancing();
+            ShowSortByReverseDomain();
             Console.ReadLine();
         }
 
@@ -99,6 +103,86 @@ namespace ConsoleApp1
                 current = item;
             }
             return start;
+        }
+
+        private static int[] GenerateRandomArray(int start, int count)
+        {
+            int[] source = Enumerable.Range(start, count).ToArray();
+            Random ran = new Random(DateTime.Now.Second);
+
+            int temp;
+            int randomIndex;
+            for (int i = 0; i < count; i++)
+            {
+                randomIndex = ran.Next(0, count);
+                temp = source[i];
+                source[i] = source[randomIndex];
+                source[randomIndex] = temp;
+            }
+            return source;
+        }
+
+        public static void ShowMultiwayHeap()
+        {
+            int count = 1_000_000;
+            int[] source = GenerateRandomArray(0, count);
+
+            for (int i = 2; i <= 9; i++)
+            {
+                MultiwayHeap pq = new MultiwayHeap(count, i);
+                foreach (int n in source)
+                    pq.Insert(n);
+                for (int n = 0; n < count; n++)
+                    pq.DeleteMax();
+
+                Console.WriteLine($"{i}-ary heap did {pq.CompareCount.ToString("N0")} compares.");
+            }
+
+            for (int i = 2; i <= 9; i++)
+            {
+                MultiwayHeap_Floyds pq = new MultiwayHeap_Floyds(count, i);
+                foreach (int n in source)
+                    pq.Insert(n);
+                for (int n = 0; n < count; n++)
+                    pq.DeleteMax();
+
+                Console.WriteLine($"{i}-ary heap using floyd's method did {pq.CompareCount.ToString("N0")} compares.");
+            }
+        }
+
+        public static void ShowComputaionalNumberTheory()
+        {
+            ComputaionalNumberTheory client = new ComputaionalNumberTheory(100);
+            client.Calculate();
+            client.OutputPairs();
+        }
+
+        public static void ShowLoadBalancing()
+        {
+            int count = 100;
+            int[] task = GenerateRandomArray(0, count);
+
+            LoadBalancing client = new LoadBalancing(task, 20);
+            client.Arrange();
+            var minMax = client.ShowMinMax();
+
+            Console.WriteLine($"Minimum processing time:\t{minMax.Item1}");
+            Console.WriteLine($"Maximum processing time:\t{minMax.Item2}");
+        }
+
+        public static void ShowSortByReverseDomain()
+        {
+            string[] domainList = new string[]
+            {
+                "baidu.com.cn",
+                "apple.com.cn",
+                "pricetoen.com.edu",
+            };
+            SortByReverseDomain client = new SortByReverseDomain();
+            foreach (string domain in client.Sort(domainList))
+            {
+                Console.WriteLine(domain);
+            }
         }
     }
 }

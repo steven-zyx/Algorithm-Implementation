@@ -1330,5 +1330,145 @@ namespace UnitTestProject1
             for (int i = count - 1; i >= 0; i--)
                 Assert.AreEqual(i, pq.DelMax());
         }
+
+        [TestMethod]
+        public void TestIndexMinMaxPQ()
+        {
+            int count = 5_000_000;
+            int[] source = GenerateRandomArray(0, count);
+
+            IndexMinMaxPQ pq = new IndexMinMaxPQ(count);
+            foreach (int n in source)
+                pq.Insert(n);
+
+            int min = 0, max = count - 1;
+            while (!pq.IsEmpty)
+            {
+                Assert.AreEqual(min++, pq.DeleteMin());
+                Assert.AreEqual(max--, pq.DeleteMax());
+            }
+        }
+
+        [TestMethod]
+        public void TestPQwithExplicitLinks()
+        {
+            //while (true)
+            //{
+            int count = 10_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            List<int> backup = source.ToList();
+
+            PQwithExplicitLinks pq = new PQwithExplicitLinks();
+            foreach (int n in source)
+            {
+                pq.Insert(n);
+                //Assert.IsTrue(pq.IsConsistant());
+            }
+
+            for (int i = 0; i < count; i++)
+            {
+                Assert.AreEqual(i, pq.DeleteMin());
+                //Assert.IsTrue(pq.IsConsistant());
+            }
+            //}
+        }
+
+        [TestMethod]
+        public void TestMultiwayHeap()
+        {
+            //while (true)
+            //{
+            int count = 1_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            //List<int> backup = source.ToList();
+
+            MultiwayHeap pq = new MultiwayHeap(count, 3);
+            foreach (int n in source)
+            {
+                pq.Insert(n);
+                //Assert.IsTrue(pq.TestConsistant());
+            }
+
+            for (int i = source.Length - 1; i >= 0; i--)
+            {
+                Assert.AreEqual(i, pq.DeleteMax());
+                //Assert.IsTrue(pq.TestConsistant());
+            }
+            //}
+        }
+
+
+        [TestMethod]
+        public void TestMultiwayHeap_Floyds()
+        {
+            //while (true)
+            //{
+            int count = 10_000_000;
+            int[] source = GenerateRandomArray(0, count);
+            //List<int> backup = source.ToList();
+
+            MultiwayHeap_Floyds pq = new MultiwayHeap_Floyds(count, 3);
+            foreach (int n in source)
+            {
+                pq.Insert(n);
+                //Assert.IsTrue(pq.TestConsistant());
+            }
+
+            for (int i = source.Length - 1; i >= 0; i--)
+            {
+                Assert.AreEqual(i, pq.DeleteMax());
+                //Assert.IsTrue(pq.TestConsistant());
+            }
+            //}
+        }
+
+        [TestMethod]
+        public void TestMinPQ()
+        {
+            int count = 10_000_000;
+            int[] source = GenerateRandomArray(0, count);
+
+            var pq = new MinPQ<int>();
+            foreach (int n in source)
+                pq.Insert(n);
+
+            for (int i = 0; i < count; i++)
+                Assert.AreEqual(i, pq.DeleteMin());
+        }
+
+        [TestMethod]
+        public void TestDynamicMedianFinding()
+        {
+            int count = 10_000_000;
+            int[] source = Enumerable.Range(0, count).ToArray();
+
+            DynamicMedianFinding client = new DynamicMedianFinding();
+            foreach (int x in source)
+            {
+                client.Insert(x);
+                Assert.IsTrue(client.Median == x / 2 || client.Median == x / 2 + 1);
+            }
+
+            float middle = count / 2;
+            int previousM = client.DeleteMedian();
+            while (client.Count > 0)
+            {
+                int currentM = client.DeleteMedian();
+                Assert.IsTrue(Math.Abs(currentM - middle) >= Math.Abs(previousM - middle));
+                previousM = currentM;
+            }
+        }
+
+        [TestMethod]
+        public void TestFindTheMedian()
+        {
+            int count = 100_000_001;
+            int[] source = GenerateRandomArray(0, count);
+
+            FindTheMedian client = new FindTheMedian();
+            Assert.AreEqual(count / 2, client.FindMedian(source));
+        }
+
+
     }
 }
