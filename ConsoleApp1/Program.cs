@@ -22,7 +22,8 @@ namespace ConsoleApp1
             //ShowComputaionalNumberTheory();
             //ShowLoadBalancing();
             //ShowSortByReverseDomain();
-            ShowSpamCampaign();
+            //ShowSpamCampaign();
+            //ShowCalifornia();
             Console.ReadLine();
         }
 
@@ -197,6 +198,20 @@ namespace ConsoleApp1
                 "v-dox@microsoft.com",
             };
             new SpamCampaign(emailList);
+        }
+
+        public static void ShowCalifornia()
+        {
+            string[] nameList = new string[]
+            {
+                "steven",
+                "john",
+                "amy",
+                "ted"
+            };
+            California client = new California();
+            foreach (string item in client.Sort(nameList))
+                Console.WriteLine(item);
         }
     }
 }
