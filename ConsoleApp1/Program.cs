@@ -21,7 +21,8 @@ namespace ConsoleApp1
             //ShowMultiwayHeap();
             //ShowComputaionalNumberTheory();
             //ShowLoadBalancing();
-            ShowSortByReverseDomain();
+            //ShowSortByReverseDomain();
+            ShowSpamCampaign();
             Console.ReadLine();
         }
 
@@ -183,6 +184,19 @@ namespace ConsoleApp1
             {
                 Console.WriteLine(domain);
             }
+        }
+
+        public static void ShowSpamCampaign()
+        {
+            string[] emailList = new string[]
+            {
+                "zhuyuxuan@beyondsoft.com",
+                "v-yuzhu@microsoft.com",
+                "steven_chuh@foxmail.com",
+                "xiedongxidong@beyondsoft.com",
+                "v-dox@microsoft.com",
+            };
+            new SpamCampaign(emailList);
         }
     }
 }
