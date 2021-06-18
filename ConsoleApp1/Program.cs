@@ -24,6 +24,7 @@ namespace ConsoleApp1
             //ShowSortByReverseDomain();
             //ShowSpamCampaign();
             //ShowCalifornia();
+            ShowCheckStability();
             Console.ReadLine();
         }
 
@@ -212,6 +213,14 @@ namespace ConsoleApp1
             California client = new California();
             foreach (string item in client.Sort(nameList))
                 Console.WriteLine(item);
+        }
+
+        public static void ShowCheckStability()
+        {
+            CheckStability client = new CheckStability();
+            Console.WriteLine($"Is merge sort stable? {client.IsMergeSortStable()}");
+            Console.WriteLine($"Is quick sort stable? {client.IsQuickSortStable()}");
+            Console.WriteLine($"Is quick sort stable by force? {client.IsQuickSortStableByForce()}");
         }
     }
 }
