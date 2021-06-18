@@ -1469,6 +1469,15 @@ namespace UnitTestProject1
             Assert.AreEqual(count / 2, client.FindMedian(source));
         }
 
+        [TestMethod]
+        public void TestSelectionWithSampling()
+        {
+            int count = 100_000_000;
+            int k = 100;
+            int[] source = GenerateRandomArray(0, count);
 
+            SelectionWithSampling client = new SelectionWithSampling();
+            Assert.AreEqual(k, client.FindXth(source, k));
+        }
     }
 }
