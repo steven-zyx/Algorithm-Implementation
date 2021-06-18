@@ -24,7 +24,9 @@ namespace ConsoleApp1
             //ShowSortByReverseDomain();
             //ShowSpamCampaign();
             //ShowCalifornia();
-            ShowCheckStability();
+            //ShowCheckStability();
+            //ShowKendallTauDistance();
+            ShowIdleTime();
             Console.ReadLine();
         }
 
@@ -221,6 +223,25 @@ namespace ConsoleApp1
             Console.WriteLine($"Is merge sort stable? {client.IsMergeSortStable()}");
             Console.WriteLine($"Is quick sort stable? {client.IsQuickSortStable()}");
             Console.WriteLine($"Is quick sort stable by force? {client.IsQuickSortStableByForce()}");
+        }
+
+        public static void ShowKendallTauDistance()
+        {
+            int[] identityPermutation = { 0, 3, 1, 6, 2, 5, 4 };
+            int[] source = { 1, 0, 3, 6, 4, 2, 5 };
+
+            KendallTauDistance client = new KendallTauDistance();
+            long ktDistinct = client.CalculateByMergeSort(source, identityPermutation);
+            Console.WriteLine($"Kendall tau distance is: {ktDistinct}");
+        }
+
+        public static void ShowIdleTime()
+        {
+            IdleTime client = new IdleTime();
+            Tuple<int, int>[] tasks = client.GenerateJob(1000, 1_000, 3);
+            var result = client.MaxIdleAndBusyDuration(tasks);
+            Console.WriteLine($"Maximun idle duration: {result.Item1}");
+            Console.WriteLine($"Maximun busy duration: {result.Item2}");
         }
     }
 }
