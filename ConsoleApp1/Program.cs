@@ -24,9 +24,9 @@ namespace ConsoleApp1
             //ShowSortByReverseDomain();
             //ShowSpamCampaign();
             //ShowCalifornia();
-            //ShowCheckStability();
+            ShowCheckStability();
             //ShowKendallTauDistance();
-            ShowIdleTime();
+            //ShowIdleTime();
             Console.ReadLine();
         }
 
@@ -223,6 +223,7 @@ namespace ConsoleApp1
             Console.WriteLine($"Is merge sort stable? {client.IsMergeSortStable()}");
             Console.WriteLine($"Is quick sort stable? {client.IsQuickSortStable()}");
             Console.WriteLine($"Is quick sort stable by force? {client.IsQuickSortStableByForce()}");
+            Console.WriteLine($"Is adjusted priority queue stable? {client.IsAdjustedPriorityQueueStable()}");
         }
 
         public static void ShowKendallTauDistance()

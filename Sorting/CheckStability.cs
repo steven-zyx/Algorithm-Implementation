@@ -40,7 +40,6 @@ namespace Sorting
     public class CheckStability
     {
         private QuickSort_C<Airline> _sortClient_Q = new QuickSort_C<Airline>();
-        private MergeSort_C<Airline> _sortClient_M = new MergeSort_C<Airline>();
         private Airline[] _source;
 
         public CheckStability()
@@ -50,16 +49,15 @@ namespace Sorting
             foreach (string lo in locations)
                 for (int i = 0; i < 20; i++)
                     airLines.Add(new Airline(lo, i));
-
-            Airline[] source = airLines.ToArray();
-            _sortClient_Q.Sort(source, new Airline.AirlineEventTimeC());
-            _source = source;
+            _source = airLines.ToArray();
         }
 
         public bool IsMergeSortStable()
         {
             _sortClient_Q.Sort(_source, new Airline.AirlineEventTimeC());
-            _sortClient_M.Sort(_source, new Airline.AirlineLocationC());
+
+            MergeSort_C<Airline> client = new MergeSort_C<Airline>();
+            client.Sort(_source, new Airline.AirlineLocationC());
             return IsStable();
         }
 
@@ -68,6 +66,20 @@ namespace Sorting
             _sortClient_Q.Sort(_source, new Airline.AirlineEventTimeC());
             _sortClient_Q.Sort(_source, new Airline.AirlineLocationC());
             return IsStable();
+        }
+
+        public bool IsAdjustedPriorityQueueStable()
+        {
+            _sortClient_Q.Sort(_source, new Airline.AirlineEventTimeC());
+
+            MinPQ_Stable<Airline> client = new MinPQ_Stable<Airline>(_source.Length);
+            foreach (Airline a in _source)
+                client.Insert(a);
+            for (int i = 0; i < _source.Length; i++)
+                _source[i] = client.DeleteMin();
+
+            return IsStable();
+
         }
 
         public bool IsQuickSortStableByForce()
