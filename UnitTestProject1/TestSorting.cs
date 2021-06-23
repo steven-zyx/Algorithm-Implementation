@@ -4,33 +4,18 @@ using Sorting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Utils;
 
 namespace UnitTestProject1
 {
     [TestClass]
     public class TestSorting
     {
-        private int[] GenerateRandomArray(int start, int count)
-        {
-            int[] source = Enumerable.Range(start, count).ToArray();
-            Random ran = new Random(DateTime.Now.Second);
-
-            int temp;
-            int randomIndex;
-            for (int i = 0; i < count; i++)
-            {
-                randomIndex = ran.Next(0, count);
-                temp = source[i];
-                source[i] = source[randomIndex];
-                source[randomIndex] = temp;
-            }
-            return source;
-        }
 
         [TestMethod]
         public void TestSelectionSort()
         {
-            var source = GenerateRandomArray(0, 30_000);
+            var source = Util.GenerateRandomArray(0, 30_000);
             var client = new SelectionSort();
             client.Sort(source);
 
@@ -43,7 +28,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestInsertionSort()
         {
-            var source = GenerateRandomArray(0, 30_000);
+            var source = Util.GenerateRandomArray(0, 30_000);
             var client = new InsertionSort();
             client.Sort(source);
 
@@ -56,7 +41,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestShellSort()
         {
-            var source = GenerateRandomArray(0, 2_000_000);
+            var source = Util.GenerateRandomArray(0, 2_000_000);
             var client = new ShellSort();
             client.Sort(source);
 
@@ -69,7 +54,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestShellSort2()
         {
-            var source = GenerateRandomArray(0, 255).Select(x => (byte)x).ToArray();
+            var source = Util.GenerateRandomArray(0, 255).Select(x => (byte)x).ToArray();
             var client = new ShellSort();
             client.Sort_2(source);
 
@@ -99,7 +84,7 @@ namespace UnitTestProject1
         public void TestMergeSort()
         {
             int count = 20_000_000;
-            var source = GenerateRandomArray(0, count);
+            var source = Util.GenerateRandomArray(0, count);
             var client = new MergeSort();
             client.Sort(source);
 
@@ -113,7 +98,7 @@ namespace UnitTestProject1
         public void TestMergeSortImproved()
         {
             int count = 20_000_000;
-            var source = GenerateRandomArray(0, count);
+            var source = Util.GenerateRandomArray(0, count);
             var client = new MergeSortImproved();
             source = client.Sort(source);
 
@@ -127,7 +112,7 @@ namespace UnitTestProject1
         public void TestBottomUpMergeSort()
         {
             int count = 20_000_000;
-            var source = GenerateRandomArray(0, count);
+            var source = Util.GenerateRandomArray(0, count);
             var client = new BottomUpMergeSort();
             client.Sort(source);
 
@@ -137,25 +122,11 @@ namespace UnitTestProject1
             }
         }
 
-
-        private Node<int> GenerateLinkedList(int[] numbers)
-        {
-            Node<int> start = new Node<int>(numbers[0]);
-            Node<int> current = start;
-            for (int i = 1; i < numbers.Length; i++)
-            {
-                Node<int> item = new Node<int>(numbers[i]);
-                current.Next = item;
-                current = item;
-            }
-            return start;
-        }
-
         [TestMethod]
         public void TestLinkedListSort()
         {
             int count = 6_000_000;
-            var startNode = GenerateLinkedList(GenerateRandomArray(0, count));
+            var startNode = Util.GenerateLinkedList(Util.GenerateRandomArray(0, count));
 
             LinkedListSort client = new LinkedListSort();
             Node<int> result = client.Sort(startNode);
@@ -189,7 +160,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void BottomUpQueueMergeSort()
         {
-            int[] source = GenerateRandomArray(0, 1_000_000);
+            int[] source = Util.GenerateRandomArray(0, 1_000_000);
             BottomUpQueueMergeSort client = new BottomUpQueueMergeSort();
             Queue<int> result = client.Sort(source);
 
@@ -203,7 +174,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestFastMergeSort()
         {
-            int[] source = GenerateRandomArray(0, 20_000_000);
+            int[] source = Util.GenerateRandomArray(0, 20_000_000);
             FasterMerge client = new FasterMerge();
             client.Sort(source);
             for (int i = 0; i < source.Length; i++)
@@ -215,7 +186,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestNaturalMergeSort()
         {
-            int[] source = GenerateRandomArray(0, 20_000_000);
+            int[] source = Util.GenerateRandomArray(0, 20_000_000);
             NaturalMergeSort client = new NaturalMergeSort();
             client.Sort(source);
             for (int i = 0; i < source.Length; i++)
@@ -246,7 +217,7 @@ namespace UnitTestProject1
         public void TestCalcInversions()
         {
             int count = 30_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             int[] source2 = new int[source.Length];
             Array.Copy(source, source2, source.Length);
             Inversions client = new Inversions();
@@ -259,7 +230,7 @@ namespace UnitTestProject1
         public void TestIndirectSort()
         {
             int count = 10_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             IndirectSort client = new IndirectSort();
             int[] perm = client.Sort(source);
             for (int i = 0; i < count; i++)
@@ -272,7 +243,7 @@ namespace UnitTestProject1
         public void TestIndirectSort2()
         {
             int count = 10_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
 
             int i = 0;
             foreach (int x in source.OrderBy())
@@ -305,7 +276,7 @@ namespace UnitTestProject1
         public void Test3WayMergeSort()
         {
             int count = 20_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             _3WayMergeSort client = new _3WayMergeSort();
             client.Sort(source);
 
@@ -319,7 +290,7 @@ namespace UnitTestProject1
         public void TestQuickSort()
         {
             int count = 20_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             QuickSort client = new QuickSort();
             client.Sort(source);
 
@@ -333,7 +304,7 @@ namespace UnitTestProject1
         public void TestSentinels()
         {
             int count = 20_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             Sentinels client = new Sentinels();
             client.Sort(source);
 
@@ -347,8 +318,8 @@ namespace UnitTestProject1
         public void TestQuickSort_SameItem()
         {
             int count = 10_000_000;
-            int[] source1 = GenerateRandomArray(0, count);
-            int[] source2 = GenerateRandomArray(0, count);
+            int[] source1 = Util.GenerateRandomArray(0, count);
+            int[] source2 = Util.GenerateRandomArray(0, count);
             int[] source = new int[count * 2];
             Array.Copy(source1, source, count);
             Array.Copy(source2, 0, source, count, count);
@@ -367,7 +338,7 @@ namespace UnitTestProject1
         public void TestQuickSort3Way()
         {
             int count = 20_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             QuickSort3Way client = new QuickSort3Way();
             client.Sort(source);
 
@@ -381,7 +352,7 @@ namespace UnitTestProject1
         public void TestQuickSort3Way_Duplicate()
         {
             int count = 20_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             for (int i = 0; i < source.Length; i++)
             {
                 source[i] = source[i] % 10;
@@ -399,7 +370,7 @@ namespace UnitTestProject1
         public void TestQuickSort_Duplicate()
         {
             int count = 20_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             for (int i = 0; i < source.Length; i++)
             {
                 source[i] = source[i] % 10;
@@ -417,7 +388,7 @@ namespace UnitTestProject1
         public void TestMedianOf3()
         {
             int count = 20_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             MedianOf3Partitioning client = new MedianOf3Partitioning();
             client.Sort(source);
 
@@ -431,7 +402,7 @@ namespace UnitTestProject1
         public void TestMedianOf5()
         {
             int count = 20_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             MedianOf5Partitioning client = new MedianOf5Partitioning();
             client.Sort(source);
 
@@ -445,8 +416,8 @@ namespace UnitTestProject1
         public void TestNutsAndBolts()
         {
             int count = 10_000_000;
-            int[] nuts = GenerateRandomArray(0, count);
-            int[] bolts = GenerateRandomArray(0, count);
+            int[] nuts = Util.GenerateRandomArray(0, count);
+            int[] bolts = Util.GenerateRandomArray(0, count);
 
             NutsAndBolts client = new NutsAndBolts();
             client.Sort(nuts, bolts);
@@ -462,7 +433,7 @@ namespace UnitTestProject1
         public void TestBestCase()
         {
             int count = 10_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             BestCase client = new BestCase();
             client.Generate(source);
             bool isBest = client.SortAndValidate(source);
@@ -472,7 +443,7 @@ namespace UnitTestProject1
         public void TestNonRecursiveQuickSort()
         {
             int count = 20_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             NonRecursiveQuickSort client = new NonRecursiveQuickSort();
             client.Sort(source);
 
@@ -486,7 +457,7 @@ namespace UnitTestProject1
         public void TestFast3WayPartition()
         {
             int count = 20_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             Fast3WayPartition client = new Fast3WayPartition();
             client.Sort(source);
             for (int i = 0; i < count; i++)
@@ -499,7 +470,7 @@ namespace UnitTestProject1
         public void TestFast3WayPartition_Duplicate()
         {
             int count = 20_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             for (int i = 0; i < source.Length; i++)
             {
                 source[i] = source[i] % 10;
@@ -517,7 +488,7 @@ namespace UnitTestProject1
         public void TestJavaSystemSort()
         {
             int count = 20_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             JavaSystemSort client = new JavaSystemSort();
             client.Sort(source);
             for (int i = 0; i < count; i++)
@@ -530,7 +501,7 @@ namespace UnitTestProject1
         public void TestJavaSystemSort_Duplicate()
         {
             int count = 20_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             for (int i = 0; i < source.Length; i++)
             {
                 source[i] = source[i] % 10;
@@ -548,7 +519,7 @@ namespace UnitTestProject1
         public void TestSampleSort()
         {
             int count = 20_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
 
             Random r = new Random(DateTime.Now.Second);
             HashSet<int> sample = new HashSet<int>();
@@ -569,7 +540,7 @@ namespace UnitTestProject1
         public void TestMaxPQ()
         {
             int count = 10_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
 
             MaxPQ pq = new MaxPQ(count);
             foreach (int n in source)
@@ -583,7 +554,7 @@ namespace UnitTestProject1
         public void TestIndexMinPQ_1()
         {
             int count = 5_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
 
             IndexMinPQ pq = new IndexMinPQ(count);
             for (int i = 0; i < count; i++)
@@ -604,8 +575,8 @@ namespace UnitTestProject1
         public void TestIndexMinPQ_2()
         {
             int count = 5_000_000;
-            int[] source = GenerateRandomArray(0, count);
-            int[] source2 = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
+            int[] source2 = Util.GenerateRandomArray(0, count);
 
             IndexMinPQ pq = new IndexMinPQ(count);
             for (int i = 0; i < count; i++)
@@ -633,7 +604,7 @@ namespace UnitTestProject1
         public void TestMaxPQ_Resize()
         {
             int count = 1_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
 
             MaxPQ pq = new MaxPQ();
 
@@ -651,7 +622,7 @@ namespace UnitTestProject1
         public void TestMaxPQ_Min()
         {
             int count = 1_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             MaxPQ pq = new MaxPQ();
 
 
@@ -679,7 +650,7 @@ namespace UnitTestProject1
         public void TestHeapSort()
         {
             int count = 10_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             HeapSort client = new HeapSort();
             client.Sort(source);
 
@@ -692,7 +663,7 @@ namespace UnitTestProject1
         public void TestHeapSortAlternative()
         {
             int count = 10_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             List<int> backup = new List<int>(source);
             HeapSort_Alternative client = new HeapSort_Alternative();
             client.Sort(source);
@@ -706,7 +677,7 @@ namespace UnitTestProject1
         public void TestHeapWithoutExchanges()
         {
             int count = 10_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
 
             HeapWithoutExchanges pq = new HeapWithoutExchanges(count);
             foreach (int n in source)
@@ -720,7 +691,7 @@ namespace UnitTestProject1
         public void TestFastInsert()
         {
             int count = 10_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             List<int> backUp = new List<int>(source);
 
             FastInsert pq = new FastInsert(count);
@@ -735,7 +706,7 @@ namespace UnitTestProject1
         public void TestIndexMinMaxPQ()
         {
             int count = 5_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
 
             IndexMinMaxPQ pq = new IndexMinMaxPQ(count);
             foreach (int n in source)
@@ -755,7 +726,7 @@ namespace UnitTestProject1
             //while (true)
             //{
             int count = 10_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             List<int> backup = source.ToList();
 
             PQwithExplicitLinks pq = new PQwithExplicitLinks();
@@ -779,7 +750,7 @@ namespace UnitTestProject1
             //while (true)
             //{
             int count = 1_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             //List<int> backup = source.ToList();
 
             MultiwayHeap pq = new MultiwayHeap(count, 3);
@@ -804,7 +775,7 @@ namespace UnitTestProject1
             //while (true)
             //{
             int count = 10_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
             //List<int> backup = source.ToList();
 
             MultiwayHeap_Floyds pq = new MultiwayHeap_Floyds(count, 3);
@@ -826,7 +797,7 @@ namespace UnitTestProject1
         public void TestMinPQ()
         {
             int count = 10_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
 
             var pq = new MinPQ<int>();
             foreach (int n in source)
@@ -863,7 +834,7 @@ namespace UnitTestProject1
         public void TestFindTheMedian()
         {
             int count = 100_000_001;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
 
             FindTheMedian client = new FindTheMedian();
             Assert.AreEqual(count / 2, client.FindMedian(source));
@@ -874,7 +845,7 @@ namespace UnitTestProject1
         {
             int count = 100_000_000;
             int k = 100;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
 
             SelectionWithSampling client = new SelectionWithSampling();
             Assert.AreEqual(k, client.FindXth(source, k));

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Diagnostics;
-using BasicDataStrcture;
-using System.IO;
-using System.Collections;
+﻿using BasicDataStrcture;
 using Sorting;
+using System;
+using System.Diagnostics;
 using System.Linq;
+using Utils;
 
 namespace ConsoleApp1
 {
@@ -86,7 +84,7 @@ namespace ConsoleApp1
 
         public static void ShuffleLinkedList()
         {
-            Node<int> start = GenerateLinkedList(Enumerable.Range(0, 100).ToArray());
+            Node<int> start = Util.GenerateLinkedList(Enumerable.Range(0, 100).ToArray());
             ShuffleLinkedList client = new ShuffleLinkedList();
             Node<int> result = client.Shuffle(start);
 
@@ -97,40 +95,10 @@ namespace ConsoleApp1
             }
         }
 
-        private static Node<int> GenerateLinkedList(int[] numbers)
-        {
-            Node<int> start = new Node<int>(numbers[0]);
-            Node<int> current = start;
-            for (int i = 1; i < numbers.Length; i++)
-            {
-                Node<int> item = new Node<int>(numbers[i]);
-                current.Next = item;
-                current = item;
-            }
-            return start;
-        }
-
-        private static int[] GenerateRandomArray(int start, int count)
-        {
-            int[] source = Enumerable.Range(start, count).ToArray();
-            Random ran = new Random(DateTime.Now.Second);
-
-            int temp;
-            int randomIndex;
-            for (int i = 0; i < count; i++)
-            {
-                randomIndex = ran.Next(0, count);
-                temp = source[i];
-                source[i] = source[randomIndex];
-                source[randomIndex] = temp;
-            }
-            return source;
-        }
-
         public static void ShowMultiwayHeap()
         {
             int count = 1_000_000;
-            int[] source = GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, count);
 
             for (int i = 2; i <= 9; i++)
             {
@@ -165,7 +133,7 @@ namespace ConsoleApp1
         public static void ShowLoadBalancing()
         {
             int count = 100;
-            int[] task = GenerateRandomArray(0, count);
+            int[] task = Util.GenerateRandomArray(0, count);
 
             LoadBalancing client = new LoadBalancing(task, 20);
             client.Arrange();
