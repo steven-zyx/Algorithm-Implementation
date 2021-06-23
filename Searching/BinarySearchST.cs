@@ -3,16 +3,19 @@ using System.Collections;
 
 namespace Searching
 {
-    public class BinarySearchST<K, V> where K : IComparable
+    public class BinarySearchST<K, V> : IOrderedSymbolTable<K, V> where K : IComparable
     {
         private K[] _keys;
         private V[] _values;
-        private int _count = 0;
+        private int _count;
 
-        public BinarySearchST()
+        public BinarySearchST() => Init();
+
+        public void Init()
         {
             _keys = new K[16];
             _values = new V[16];
+            _count = 0;
         }
 
         public V this[K key]
