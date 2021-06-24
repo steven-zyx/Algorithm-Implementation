@@ -47,9 +47,12 @@ namespace Searching
             }
             return default(V);
         }
+
         public bool Delete(K key)
         {
-            if (_start.Key.CompareTo(key) == 0)
+            if (_start == null)
+                return false;
+            else if (_start.Key.CompareTo(key) == 0)
             {
                 _start = _start.Next;
                 _count--;

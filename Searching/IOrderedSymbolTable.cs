@@ -5,24 +5,8 @@ using System.Collections;
 
 namespace Searching
 {
-    public interface IOrderedSymbolTable<K, V> where K : IComparable
+    public interface IOrderedSymbolTable<K, V> : ISymbolTable<K, V> where K : IComparable
     {
-        void Init();
-
-        V this[K key] { get; set; }
-
-        void Put(K key, V value);
-
-        V Get(K key);
-
-        bool Delete(K key);
-
-        bool Contains(K key);
-
-        bool IsEmpty { get; }
-
-        int Size();
-
         V Min { get; }
 
         V Max { get; }
@@ -42,7 +26,5 @@ namespace Searching
         int Size(K lo, K hi);
 
         IEnumerable Keys(K lo, K hi);
-
-        IEnumerable Keys();
     }
 }

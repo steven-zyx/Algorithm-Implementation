@@ -13,16 +13,22 @@ namespace UnitTestProject1
     }
 
     [TestClass]
-    public class TestOrderedSymbolTable
+    public class TestSymbolTable
     {
-        private IOrderedSymbolTable<int, int> _ST_Int = new BinarySearchST<int, int>();
-        private Random _ran = new Random(DateTime.Now.Second);
+        protected Random _ran;
+        protected ISymbolTable<int, int> _ST_Int;
+
+        public TestSymbolTable()
+        {
+            _ran = new Random(DateTime.Now.Second);
+            _ST_Int = new SequentialSearchST<int, int>();
+        }
 
         [TestMethod]
         public void Test_Get_Put_Delete_Resize()
         {
             _ST_Int.Init();
-            int count = 30_000;
+            int count = 10_000;
             int[] source = Util.GenerateRandomArray(0, count);
 
             for (int j = 0; j < 2; j++)
@@ -40,7 +46,7 @@ namespace UnitTestProject1
         public void Test_Get_Put_Delete_Intermixed()
         {
             _ST_Int.Init();
-            int count = 50_000;
+            int count = 10_000;
             int[] source = Util.GenerateRandomArrayRepeat(0, count, 5);
 
             HashSet<int> insertedKeys = new HashSet<int>();
@@ -84,12 +90,12 @@ namespace UnitTestProject1
         {
             _ST_Int.Init();
 
-            int count = 500_000;
+            int count = 10_000;
             int[] source = Util.GenerateRandomArray(0, count);
             for (int i = 0; i < source.Length; i++)
                 _ST_Int.Put(i, source[i]);
 
-            for (int i = 0; i < 100_000; i++)
+            for (int i = 0; i < 10_000; i++)
             {
                 int index = _ran.Next(0, count * 2);
                 if (index < count)
@@ -98,78 +104,90 @@ namespace UnitTestProject1
                     Assert.IsFalse(_ST_Int.Contains(index));
             }
         }
+    }
+
+    [TestClass]
+    public class TestOrderedSymbolTable : TestSymbolTable
+    {
+        private IOrderedSymbolTable<int, int> _OST_Int;
+
+        public TestOrderedSymbolTable()
+        {
+            _ST_Int = new BinarySearchST<int, int>();
+            _OST_Int = new BinarySearchST<int, int>();
+        }
 
         [TestMethod]
         public void Test_Min_Max()
         {
-            _ST_Int.Init();
+            _OST_Int.Init();
 
             int count = 50_000;
             int[] source = Util.GenerateRandomArray(0, count);
             for (int i = 0; i < source.Length; i++)
-                _ST_Int.Put(source[i], source[i]);
+                _OST_Int.Put(source[i], source[i]);
 
             int currentMin = -1;
             int currentMax = int.MaxValue;
-            while (!_ST_Int.IsEmpty)
+            while (!_OST_Int.IsEmpty)
             {
-                Assert.IsTrue(currentMin < _ST_Int.Min);
-                currentMin = _ST_Int.Min;
-                _ST_Int.DeleteMin();
+                Assert.IsTrue(currentMin < _OST_Int.Min);
+                currentMin = _OST_Int.Min;
+                _OST_Int.DeleteMin();
 
-                Assert.IsTrue(currentMax > _ST_Int.Max);
-                currentMax = _ST_Int.Max;
-                _ST_Int.DeleteMax();
+                Assert.IsTrue(currentMax > _OST_Int.Max);
+                currentMax = _OST_Int.Max;
+                _OST_Int.DeleteMax();
             }
         }
 
         [TestMethod]
         public void Test_Floor_Ceiling()
         {
-            _ST_Int.Init();
+            _OST_Int.Init();
 
             int count = 50_000;
             int[] source = Util.GenerateRandomArray(0, count);
             for (int i = 0; i < source.Length; i++)
-                _ST_Int.Put(source[i] * 2, source[i] * 2);
+                _OST_Int.Put(source[i] * 2, source[i] * 2);
 
             for (int i = 1; i < count * 2 - 1; i += 2)
             {
-                Assert.AreEqual(i - 1, _ST_Int.Floor(i));
-                Assert.AreEqual(i + 1, _ST_Int.Ceiling(i));
+                Assert.AreEqual(i - 1, _OST_Int.Floor(i));
+                Assert.AreEqual(i + 1, _OST_Int.Ceiling(i));
             }
         }
 
         [TestMethod]
         public void Test_Keys()
         {
-            _ST_Int.Init();
+            _OST_Int.Init();
 
             int count = 50_000;
             int[] source = Util.GenerateRandomArray(0, count);
             for (int i = 0; i < source.Length; i++)
-                _ST_Int.Put(i, source[i]);
+                _OST_Int.Put(i, source[i]);
 
             int end = _ran.Next(0, count);
             int start = end - _ran.Next(0, end);
-            foreach (int n in _ST_Int.Keys(start, end))
-                Assert.AreEqual(source[n], _ST_Int.Get(n));
+            foreach (int n in _OST_Int.Keys(start, end))
+                Assert.AreEqual(source[n], _OST_Int.Get(n));
         }
 
         [TestMethod]
         public void Test_Rank_Select()
         {
-            _ST_Int.Init();
+            _OST_Int.Init();
 
             int count = 50_000;
             int[] source = Util.GenerateRandomArray(0, count);
             for (int i = 0; i < source.Length; i++)
-                _ST_Int.Put(i, source[i]);
+                _OST_Int.Put(i, source[i]);
 
             for (int i = 0; i < 10_000; i++)
             {
-                Assert.AreEqual(i, _ST_Int.Rank(_ST_Int.Select(i)));
-                Assert.AreEqual(i, _ST_Int.Select(_ST_Int.Rank(i)));
+                Assert.AreEqual(i, _OST_Int.Rank(_OST_Int.Select(i)));
+                Assert.AreEqual(i, _OST_Int.Select(_OST_Int.Rank(i)));
             }
         }
     }

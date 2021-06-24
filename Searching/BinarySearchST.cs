@@ -5,18 +5,11 @@ namespace Searching
 {
     public class BinarySearchST<K, V> : IOrderedSymbolTable<K, V> where K : IComparable
     {
-        private K[] _keys;
-        private V[] _values;
-        private int _count;
-        private bool _DoCertificate = false;
+        protected K[] _keys;
+        protected V[] _values;
+        protected int _count;
 
         public BinarySearchST() => Init();
-
-        public BinarySearchST(bool doCertificate)
-        {
-            Init();
-            _DoCertificate = doCertificate;
-        }
 
         public void Init()
         {
@@ -31,7 +24,7 @@ namespace Searching
             set => Put(key, value);
         }
 
-        public void Put(K key, V value)
+        public virtual void Put(K key, V value)
         {
             if (_count == 0 || key.CompareTo(_keys[_count - 1]) > 0)
             {
@@ -61,9 +54,6 @@ namespace Searching
             _count++;
             if (_count >= _keys.Length)
                 Resize(_keys.Length * 2);
-
-            if (_DoCertificate)
-                Certificate();
         }
 
         public V Get(K key)
@@ -75,7 +65,7 @@ namespace Searching
                 return default(V);
         }
 
-        public bool Delete(K key)
+        public virtual bool Delete(K key)
         {
             int index = Rank(key);
             if (KeyEquals(index, key))
@@ -91,17 +81,10 @@ namespace Searching
                 _count--;
                 if (_count < _keys.Length / 4)
                     Resize(_keys.Length / 2);
-
-                if (_DoCertificate)
-                    Certificate();
-
                 return true;
             }
             else
             {
-                if (_DoCertificate)
-                    Certificate();
-
                 return false;
             }
         }
@@ -150,7 +133,7 @@ namespace Searching
 
         public K Select(int index) => _keys[index];
 
-        public void DeleteMin()
+        public virtual void DeleteMin()
         {
             _count--;
             for (int i = 0; i <= _count - 1; i++)
@@ -160,12 +143,9 @@ namespace Searching
             }
             _keys[_count] = default(K);
             _values[_count] = default(V);
-
-            if (_DoCertificate)
-                Certificate();
         }
 
-        public void DeleteMax()
+        public virtual void DeleteMax()
         {
             _count--;
             if (_count < _keys.Length / 4)
@@ -175,9 +155,6 @@ namespace Searching
                 _keys[_count] = default(K);
                 _values[_count] = default(V);
             }
-
-            if (_DoCertificate)
-                Certificate();
         }
 
         public int Size(K lo, K hi)
@@ -219,22 +196,6 @@ namespace Searching
             V[] newValues = new V[size];
             Array.Copy(_values, newValues, _count);
             _values = newValues;
-        }
-
-        private void Certificate()
-        {
-            K current = _keys[0];
-            for (int i = 1; i < _count; i++)
-            {
-                K key = _keys[i];
-                if (current.CompareTo(key) >= 0 ||
-                    i != Rank(Select(i)) ||
-                    key.CompareTo(Select(Rank(key))) != 0)
-                {
-                    throw new Exception("Inconsistant");
-                }
-                current = key;
-            }
         }
     }
 }
