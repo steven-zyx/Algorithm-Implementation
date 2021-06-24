@@ -19,7 +19,7 @@ namespace Searching
 
         bool Contains(K key);
 
-        bool IsEmpty();
+        bool IsEmpty { get; }
 
         int Size();
 
