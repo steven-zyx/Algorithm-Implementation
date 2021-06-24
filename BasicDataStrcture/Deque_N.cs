@@ -7,8 +7,8 @@ namespace BasicDataStrcture
     public class Deque_N<T> : IDeque<T>
     {
         private int _count;
-        private Node2<T> _mostLeft;
-        private Node2<T> _mostRight;
+        private Node_D<T> _mostLeft;
+        private Node_D<T> _mostRight;
 
         public Deque_N()
         {
@@ -22,7 +22,7 @@ namespace BasicDataStrcture
         public void PushLeft(T t)
         {
             _count++;
-            Node2<T> data = new Node2<T>(t);
+            Node_D<T> data = new Node_D<T>(t);
             if (_mostLeft == null)
             {
                 _mostLeft = data;
@@ -39,7 +39,7 @@ namespace BasicDataStrcture
         public void PushRight(T t)
         {
             _count++;
-            Node2<T> data = new Node2<T>(t);
+            Node_D<T> data = new Node_D<T>(t);
             if (_mostRight == null)
             {
                 _mostRight = data;

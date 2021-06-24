@@ -4,13 +4,13 @@ using System.Text;
 
 namespace BasicDataStrcture
 {
-    public class Node2<T>
+    public class Node_D<T>
     {
         public T Value;
-        public Node2<T> Previous;
-        public Node2<T> Next;
+        public Node_D<T> Previous;
+        public Node_D<T> Next;
 
-        public Node2(T t)
+        public Node_D(T t)
         {
             Value = t;
         }
