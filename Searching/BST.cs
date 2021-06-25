@@ -183,9 +183,20 @@ namespace Searching
             throw new NotImplementedException();
         }
 
-        public int Rank(K key)
+        public int Rank(K key) => Rank(_root, key);
+
+        protected int Rank(TreeNode<K, V> x, K key)
         {
-            throw new NotImplementedException();
+            if (x == null)
+                return 0;
+
+            int result = key.CompareTo(x.Key);
+            if (result == 0)
+                return Size(x.Left);
+            else if (result < 0)
+                return Rank(x.Left, key);
+            else
+                return Size(x.Left) + 1 + Rank(x.Right, key);
         }
 
         public K Select(int k)
