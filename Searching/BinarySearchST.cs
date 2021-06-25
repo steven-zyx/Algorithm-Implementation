@@ -90,22 +90,22 @@ namespace Searching
 
         public int Size() => _count;
 
-        public K Min => _keys[0];
+        public K Min() => _keys[0];
 
-        public K Max => _keys[_count - 1];
+        public K Max() => _keys[_count - 1];
 
-        public V Floor(K key)
+        public K Floor(K key)
         {
             int index = Rank(key);
             if (KeyEquals(index, key))
-                return _values[index];
+                return _keys[index];
             else if (index == 0)
-                return default(V);
+                return default(K);
             else
-                return _values[index - 1];
+                return _keys[index - 1];
         }
 
-        public V Ceiling(K key) => _values[Rank(key)];
+        public K Ceiling(K key) => _keys[Rank(key)];
 
         public virtual int Rank(K key)
         {

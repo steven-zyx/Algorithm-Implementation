@@ -129,12 +129,12 @@ namespace UnitTestProject1
             int currentMax = int.MaxValue;
             while (!_OST_Int.IsEmpty)
             {
-                Assert.IsTrue(currentMin < _OST_Int.Min);
-                currentMin = _OST_Int.Min;
+                Assert.IsTrue(currentMin < _OST_Int.Min());
+                currentMin = _OST_Int.Min();
                 _OST_Int.DeleteMin();
 
-                Assert.IsTrue(currentMax > _OST_Int.Max);
-                currentMax = _OST_Int.Max;
+                Assert.IsTrue(currentMax > _OST_Int.Max());
+                currentMax = _OST_Int.Max();
                 _OST_Int.DeleteMax();
             }
         }

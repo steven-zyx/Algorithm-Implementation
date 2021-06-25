@@ -249,7 +249,7 @@ namespace ConsoleApp1
             Console.WriteLine("The words occur in dictionary, ordered by their frequency:");
             while (!existWords.IsEmpty)
             {
-                int frquency = existWords.Max;
+                int frquency = existWords.Max();
                 Console.WriteLine($"{existWords.Get(frquency)}\t{frquency}");
                 existWords.DeleteMax();
             }

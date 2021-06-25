@@ -12,13 +12,13 @@ namespace Searching
             while (hi >= lo)
             {
                 int mid;
-                if (key >= Max)
+                if (key >= Max())
                     mid = hi;
-                else if (key <= Min)
+                else if (key <= Min())
                     mid = lo;
                 else
                 {
-                    float temp = (float)(key - Min) / (Max - Min) * (hi - lo) + lo;
+                    float temp = (float)(key - Min()) / (Max() - Min()) * (hi - lo) + lo;
                     mid = (int)temp;
                 }
 
