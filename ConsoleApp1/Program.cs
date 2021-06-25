@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using Utils;
+using Searching;
 
 namespace ConsoleApp1
 {
@@ -22,9 +23,10 @@ namespace ConsoleApp1
             //ShowSortByReverseDomain();
             //ShowSpamCampaign();
             //ShowCalifornia();
-            ShowCheckStability();
+            //ShowCheckStability();
             //ShowKendallTauDistance();
             //ShowIdleTime();
+            ShowFrequencyCountFromDictionary();
             Console.ReadLine();
         }
 
@@ -211,6 +213,46 @@ namespace ConsoleApp1
             var result = client.MaxIdleAndBusyDuration(tasks);
             Console.WriteLine($"Maximun idle duration: {result.Item1}");
             Console.WriteLine($"Maximun busy duration: {result.Item2}");
+        }
+
+        public static void ShowFrequencyCountFromDictionary()
+        {
+            BinarySearch_Cache<string, int> dict = new BinarySearch_Cache<string, int>();
+            dict.Put("hahaha!", 0);
+            dict.Put("a", 0);
+            dict.Put("can", 0);
+            dict.Put("hohhoho!", 0);
+
+            string[] words = { "can", "you", "can", "a", "can", "like", "a", "canner", "can", "can", "a", "can", "?" };
+            foreach (string word in words)
+            {
+                if (dict.Contains(word))
+                    dict.Put(word, dict.Get(word) + 1);
+            }
+
+            Console.WriteLine("The words occur in dictionary, ordered by their postion in the dictionary:");
+            foreach (string key in dict.Keys())
+            {
+                int frequency = dict.Get(key);
+                if (frequency > 0)
+                    Console.WriteLine($"{key}\t{frequency}");
+            }
+
+            OrderedInsertion<int, string> existWords = new OrderedInsertion<int, string>();
+            foreach (string key in dict.Keys())
+            {
+                int frequency = dict.Get(key);
+                if (frequency > 0)
+                    existWords.Put(frequency, key);
+            }
+
+            Console.WriteLine("The words occur in dictionary, ordered by their frequency:");
+            while (!existWords.IsEmpty)
+            {
+                int frquency = existWords.Max;
+                Console.WriteLine($"{existWords.Get(frquency)}\t{frquency}");
+                existWords.DeleteMax();
+            }
         }
     }
 }

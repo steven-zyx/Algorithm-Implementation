@@ -17,27 +17,28 @@ namespace UnitTestProject1
     {
         protected Random _ran;
         protected ISymbolTable<int, int> _ST_Int;
+        protected int _rowCount;
 
         public TestSymbolTable()
         {
             _ran = new Random(DateTime.Now.Second);
             _ST_Int = new SequentialSearchST<int, int>();
+            _rowCount = 15_000;
         }
 
         [TestMethod]
         public void Test_Get_Put_Delete_Resize()
         {
             _ST_Int.Init();
-            int count = 10_000;
-            int[] source = Util.GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, _rowCount);
 
             for (int j = 0; j < 2; j++)
             {
-                for (int i = 0; i < count; i++)
+                for (int i = 0; i < _rowCount; i++)
                     _ST_Int.Put(i, source[i]);
-                for (int i = 0; i < count; i++)
+                for (int i = 0; i < _rowCount; i++)
                     Assert.AreEqual(source[i], _ST_Int.Get(i));
-                for (int i = 0; i < count; i++)
+                for (int i = 0; i < _rowCount; i++)
                     Assert.IsTrue(_ST_Int.Delete(i));
             }
         }
@@ -46,8 +47,7 @@ namespace UnitTestProject1
         public void Test_Get_Put_Delete_Intermixed()
         {
             _ST_Int.Init();
-            int count = 10_000;
-            int[] source = Util.GenerateRandomArrayRepeat(0, count, 5);
+            int[] source = Util.GenerateRandomArrayRepeat(0, _rowCount, 5);
 
             HashSet<int> insertedKeys = new HashSet<int>();
             foreach (int i in source)
@@ -89,16 +89,14 @@ namespace UnitTestProject1
         public void Test_Contains()
         {
             _ST_Int.Init();
-
-            int count = 10_000;
-            int[] source = Util.GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, _rowCount);
             for (int i = 0; i < source.Length; i++)
                 _ST_Int.Put(i, source[i]);
 
-            for (int i = 0; i < 10_000; i++)
+            for (int i = 0; i < _rowCount; i++)
             {
-                int index = _ran.Next(0, count * 2);
-                if (index < count)
+                int index = _ran.Next(0, _rowCount * 2);
+                if (index < _rowCount)
                     Assert.IsTrue(_ST_Int.Contains(index));
                 else
                     Assert.IsFalse(_ST_Int.Contains(index));
@@ -109,12 +107,13 @@ namespace UnitTestProject1
     [TestClass]
     public class TestOrderedSymbolTable : TestSymbolTable
     {
-        private IOrderedSymbolTable<int, int> _OST_Int;
+        protected IOrderedSymbolTable<int, int> _OST_Int;
 
         public TestOrderedSymbolTable()
         {
             _ST_Int = new BinarySearchST<int, int>();
             _OST_Int = new BinarySearchST<int, int>();
+            _rowCount = 50_000;
         }
 
         [TestMethod]
@@ -122,8 +121,7 @@ namespace UnitTestProject1
         {
             _OST_Int.Init();
 
-            int count = 50_000;
-            int[] source = Util.GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, _rowCount);
             for (int i = 0; i < source.Length; i++)
                 _OST_Int.Put(source[i], source[i]);
 
@@ -146,12 +144,11 @@ namespace UnitTestProject1
         {
             _OST_Int.Init();
 
-            int count = 50_000;
-            int[] source = Util.GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, _rowCount);
             for (int i = 0; i < source.Length; i++)
                 _OST_Int.Put(source[i] * 2, source[i] * 2);
 
-            for (int i = 1; i < count * 2 - 1; i += 2)
+            for (int i = 1; i < _rowCount * 2 - 1; i += 2)
             {
                 Assert.AreEqual(i - 1, _OST_Int.Floor(i));
                 Assert.AreEqual(i + 1, _OST_Int.Ceiling(i));
@@ -163,12 +160,11 @@ namespace UnitTestProject1
         {
             _OST_Int.Init();
 
-            int count = 50_000;
-            int[] source = Util.GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, _rowCount);
             for (int i = 0; i < source.Length; i++)
                 _OST_Int.Put(i, source[i]);
 
-            int end = _ran.Next(0, count);
+            int end = _ran.Next(0, _rowCount);
             int start = end - _ran.Next(0, end);
             foreach (int n in _OST_Int.Keys(start, end))
                 Assert.AreEqual(source[n], _OST_Int.Get(n));
@@ -179,8 +175,7 @@ namespace UnitTestProject1
         {
             _OST_Int.Init();
 
-            int count = 50_000;
-            int[] source = Util.GenerateRandomArray(0, count);
+            int[] source = Util.GenerateRandomArray(0, _rowCount);
             for (int i = 0; i < source.Length; i++)
                 _OST_Int.Put(i, source[i]);
 
@@ -189,6 +184,54 @@ namespace UnitTestProject1
                 Assert.AreEqual(i, _OST_Int.Rank(_OST_Int.Select(i)));
                 Assert.AreEqual(i, _OST_Int.Select(_OST_Int.Rank(i)));
             }
+        }
+    }
+
+    [TestClass]
+    public class TestSymbolTable_Cache : TestSymbolTable
+    {
+        public TestSymbolTable_Cache()
+        {
+            _ST_Int = new SequentialSearchST_Cache<int, int>();
+        }
+    }
+
+    [TestClass]
+    public class TestSelfOrganizingSearch : TestSymbolTable
+    {
+        public TestSelfOrganizingSearch()
+        {
+            _ST_Int = new SelfOrganizingSearch<int, int>();
+        }
+    }
+
+    [TestClass]
+    public class TestOrderedInsertion : TestOrderedSymbolTable
+    {
+        public TestOrderedInsertion()
+        {
+            _ST_Int = new OrderedInsertion<int, int>();
+            _OST_Int = new OrderedInsertion<int, int>();
+        }
+    }
+
+    [TestClass]
+    public class TestBinarySearch_Cache : TestOrderedSymbolTable
+    {
+        public TestBinarySearch_Cache()
+        {
+            _ST_Int = new BinarySearch_Cache<int, int>();
+            _OST_Int = new BinarySearch_Cache<int, int>();
+        }
+    }
+
+    [TestClass]
+    public class TestInterpolationSearch : TestOrderedSymbolTable
+    {
+        public TestInterpolationSearch()
+        {
+            _ST_Int = new InterpolationSearch<int>();
+            _OST_Int = new InterpolationSearch<int>();
         }
     }
 }

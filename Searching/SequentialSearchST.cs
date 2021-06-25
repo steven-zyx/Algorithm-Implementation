@@ -8,8 +8,13 @@ namespace Searching
 {
     public class SequentialSearchST<K, V> : ISymbolTable<K, V> where K : IComparable
     {
-        private Node_P<K, V> _start;
-        private int _count = 0;
+        protected Node_P<K, V> _start;
+        protected int _count = 0;
+
+        public SequentialSearchST()
+        {
+            _count = 0;
+        }
 
         public void Init()
         {
@@ -23,29 +28,23 @@ namespace Searching
             set => Put(key, value);
         }
 
-        public void Put(K key, V value)
+        public virtual void Put(K key, V value)
         {
-            for (var c = _start; c != null; c = c.Next)
+            var result = SearchByKey(key);
+            if (result.isFound)
+                result.element.Value = value;
+            else
             {
-                if (c.Key.CompareTo(key) == 0)
-                {
-                    c.Value = value;
-                    return;
-                }
+                Node_P<K, V> newOne = new Node_P<K, V>(key, value, _start);
+                _start = newOne;
+                _count++;
             }
-            Node_P<K, V> newOne = new Node_P<K, V>(key, value, _start);
-            _start = newOne;
-            _count++;
         }
 
-        public V Get(K key)
+        public virtual V Get(K key)
         {
-            for (var c = _start; c != null; c = c.Next)
-            {
-                if (c.Key.CompareTo(key) == 0)
-                    return c.Value;
-            }
-            return default(V);
+            var result = SearchByKey(key);
+            return result.isFound ? result.element.Value : default(V);
         }
 
         public bool Delete(K key)
@@ -72,22 +71,23 @@ namespace Searching
         }
 
         public bool IsEmpty => _count == 0;
+
         public int Size() => _count;
 
-        public bool Contains(K key)
-        {
-            for (var c = _start; c != null; c = c.Next)
-            {
-                if (c.Key.CompareTo(key) == 0)
-                    return true;
-            }
-            return false;
-        }
+        public virtual bool Contains(K key) => SearchByKey(key).isFound;
 
         public IEnumerable Keys()
         {
             for (var c = _start; c != null; c = c.Next)
                 yield return c;
+        }
+
+        protected virtual (bool isFound, Node_P<K, V> element) SearchByKey(K key)
+        {
+            for (var c = _start; c != null; c = c.Next)
+                if (c.Key.CompareTo(key) == 0)
+                    return (true, c);
+            return (false, null);
         }
     }
 }

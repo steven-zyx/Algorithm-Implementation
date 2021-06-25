@@ -26,34 +26,25 @@ namespace Searching
 
         public virtual void Put(K key, V value)
         {
-            if (_count == 0 || key.CompareTo(_keys[_count - 1]) > 0)
+            int index = Rank(key);
+            if (KeyEquals(index, key))
             {
-                _keys[_count] = key;
-                _values[_count] = value;
+                _values[index] = value;
             }
             else
             {
-                int index = Rank(key);
-                if (KeyEquals(index, key))
+                for (int i = _count; i > index; i--)
                 {
-                    _values[index] = value;
-                    return;
+                    _keys[i] = _keys[i - 1];
+                    _values[i] = _values[i - 1];
                 }
-                else
-                {
-                    for (int i = _count; i > index; i--)
-                    {
-                        _keys[i] = _keys[i - 1];
-                        _values[i] = _values[i - 1];
-                    }
-                    _keys[index] = key;
-                    _values[index] = value;
-                }
-            }
+                _keys[index] = key;
+                _values[index] = value;
 
-            _count++;
-            if (_count >= _keys.Length)
-                Resize(_keys.Length * 2);
+                _count++;
+                if (_count >= _keys.Length)
+                    Resize(_keys.Length * 2);
+            }
         }
 
         public V Get(K key)
@@ -99,9 +90,9 @@ namespace Searching
 
         public int Size() => _count;
 
-        public V Min => _values[0];
+        public K Min => _keys[0];
 
-        public V Max => _values[_count - 1];
+        public K Max => _keys[_count - 1];
 
         public V Floor(K key)
         {
@@ -112,12 +103,11 @@ namespace Searching
                 return default(V);
             else
                 return _values[index - 1];
-
         }
 
         public V Ceiling(K key) => _values[Rank(key)];
 
-        public int Rank(K key)
+        public virtual int Rank(K key)
         {
             int lo = 0, hi = _count - 1;
             while (hi >= lo)
@@ -131,7 +121,7 @@ namespace Searching
             return lo;
         }
 
-        public K Select(int index) => _keys[index];
+        public virtual K Select(int index) => _keys[index];
 
         public virtual void DeleteMin()
         {
@@ -184,10 +174,10 @@ namespace Searching
                 yield return _keys[i];
         }
 
-        private bool KeyEquals(int index, K key) =>
+        protected bool KeyEquals(int index, K key) =>
             index < _count && _keys[index].CompareTo(key) == 0;
 
-        private void Resize(int size)
+        protected void Resize(int size)
         {
             K[] newKeys = new K[size];
             Array.Copy(_keys, newKeys, _count);

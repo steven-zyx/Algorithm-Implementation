@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Searching
 {
-    public class BinarySearchST_C<K, V> : BinarySearchST<K, V> where K : IComparable
+    public class BinarySearchST_Certificate<K, V> : BinarySearchST<K, V> where K : IComparable
     {
         public override void Put(K key, V value)
         {

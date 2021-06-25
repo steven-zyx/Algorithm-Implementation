@@ -7,9 +7,9 @@ namespace Searching
 {
     public interface IOrderedSymbolTable<K, V> : ISymbolTable<K, V> where K : IComparable
     {
-        V Min { get; }
+        K Min { get; }
 
-        V Max { get; }
+        K Max { get; }
 
         V Floor(K key);
 
