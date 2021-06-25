@@ -188,9 +188,27 @@ namespace Searching
             throw new NotImplementedException();
         }
 
-        public K Select(int index)
+        public K Select(int k)
         {
-            throw new NotImplementedException();
+            var node = Select(_root, k);
+            if (node == null)
+                return default(K);
+            else
+                return node.Key;
+        }
+
+        protected TreeNode<K, V> Select(TreeNode<K, V> x, int k)
+        {
+            if (x == null)
+                return null;
+
+            int t = Size(x.Left);
+            if (t > k)
+                return Select(x.Left, k);
+            else if (t < k)
+                return Select(x.Right, k - t - 1);
+            else
+                return x;
         }
 
         public int Size(K lo, K hi)
