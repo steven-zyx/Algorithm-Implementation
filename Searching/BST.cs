@@ -24,39 +24,49 @@ namespace Searching
             set => Put(key, value);
         }
 
-        public V Get(K key) => Get(_root, key);
-
-        protected V Get(TreeNode<K, V> root, K key)
+        public V Get(K key)
         {
-            if (root == null)
+            var node = Get(_root, key);
+            if (node == null)
                 return default(V);
-
-            int result = root.Key.CompareTo(key);
-            if (result < 0)
-                return Get(root.Left, key);
-            else if (result > 0)
-                return Get(root.Right, key);
             else
-                return root.Value;
+                return node.Value;
         }
 
-        public void Put(K key, V value) => Put(_root, key, value);
-
-        public TreeNode<K, V> Put(TreeNode<K, V> root, K key, V value)
+        protected TreeNode<K, V> Get(TreeNode<K, V> x, K key)
         {
-            if (root == null)
+            if (x == null)
+                return null;
+
+            int result = key.CompareTo(x.Key);
+            if (result < 0)
+                return Get(x.Left, key);
+            else if (result > 0)
+                return Get(x.Right, key);
+            else
+                return x;
+        }
+
+        public void Put(K key, V value)
+        {
+            _root = Put(_root, key, value);
+        }
+
+        public TreeNode<K, V> Put(TreeNode<K, V> x, K key, V value)
+        {
+            if (x == null)
                 return new TreeNode<K, V>(key, value, 1);
 
-            int result = root.Key.CompareTo(key);
+            int result = key.CompareTo(x.Key);
             if (result < 0)
-                root.Left = Put(root.Left, key, value);
+                x.Left = Put(x.Left, key, value);
             else if (result > 0)
-                root.Right = Put(root.Right, key, value);
+                x.Right = Put(x.Right, key, value);
             else
-                root.Value = value;
+                x.Value = value;
 
-            root.N = root.N + root.N + 1;
-            return root;
+            x.N = Size(x.Left) + Size(x.Right) + 1;
+            return x;
         }
 
         public bool IsEmpty => _root == null;
@@ -71,19 +81,58 @@ namespace Searching
                 return node.N;
         }
 
-        public bool Contains(K key)
-        {
-            throw new NotImplementedException();
-        }
+        public bool Contains(K key) => Get(_root, key) != null;
 
         public bool Delete(K key)
         {
-            throw new NotImplementedException();
+            if (_root == null)
+                return false;
+
+            int n = _root.N;
+            _root = Delete(_root, key);
+            return _root == null || _root.N != n;
+        }
+
+        protected TreeNode<K, V> Delete(TreeNode<K, V> x, K key)
+        {
+            if (x == null)
+                return null;
+            int result = key.CompareTo(x.Key);
+            if (result < 0)
+                x.Left = Delete(x.Left, key);
+            else if (result > 0)
+                x.Right = Delete(x.Right, key);
+            else
+            {
+                if (x.Right == null)
+                    return x.Left;
+                else if (x.Left == null)
+                    return x.Right;
+                else
+                {
+                    TreeNode<K, V> t = x;
+                    x = Min(x.Right);
+                    x.Right = DeleteMin(t.Right);
+                    x.Left = t.Left;
+                }
+            }
+            x.N = Size(x.Left) + Size(x.Right) + 1;
+            return x;
         }
 
         public IEnumerable Keys()
         {
-            throw new NotImplementedException();
+            List<K> output = new List<K>();
+            Print(_root, output);
+            return output;
+        }
+
+        protected void Print(TreeNode<K, V> x, List<K> output)
+        {
+            if (x == null) return;
+            Print(x.Left, output);
+            output.Add(x.Key);
+            Print(x.Right, output);
         }
     }
 
@@ -112,12 +161,30 @@ namespace Searching
 
         public void DeleteMax()
         {
-            throw new NotImplementedException();
+            _root = DeleteMax(_root);
+        }
+
+        protected TreeNode<K, V> DeleteMax(TreeNode<K, V> x)
+        {
+            if (x.Right == null)
+                return x.Left;
+            x.Right = DeleteMax(x.Right);
+            x.N = Size(x.Left) + Size(x.Right) + 1;
+            return x;
         }
 
         public void DeleteMin()
         {
-            throw new NotImplementedException();
+            _root = DeleteMin(_root);
+        }
+
+        protected TreeNode<K, V> DeleteMin(TreeNode<K, V> x)
+        {
+            if (x.Left == null)
+                return x.Right;
+            x.Left = DeleteMin(x.Left);
+            x.N = Size(x.Left) + Size(x.Right) + 1;
+            return x;
         }
 
         public K Floor(K key)
@@ -134,7 +201,7 @@ namespace Searching
             if (x == null)
                 return null;
 
-            int result = x.Key.CompareTo(key);
+            int result = key.CompareTo(x.Key);
             if (result == 0)
                 return x;
             else if (result < 0)
@@ -163,7 +230,7 @@ namespace Searching
             if (x == null)
                 return null;
 
-            int result = x.Key.CompareTo(key);
+            int result = key.CompareTo(x.Key);
             if (result == 0)
                 return x;
             else if (result > 0)
@@ -180,7 +247,23 @@ namespace Searching
 
         public IEnumerable Keys(K lo, K hi)
         {
-            throw new NotImplementedException();
+            List<K> output = new List<K>();
+            Print(_root, lo, hi, output);
+            return output;
+        }
+
+        protected void Print(TreeNode<K, V> x, K lo, K hi, List<K> output)
+        {
+            if (x == null)
+                return;
+            int loResult = x.Key.CompareTo(lo);
+            int hiResult = x.Key.CompareTo(hi);
+            if (loResult > 0)
+                Print(x.Left, lo, hi, output);
+            if (loResult >= 0 && hiResult <= 0)
+                output.Add(x.Key);
+            if (hiResult < 0)
+                Print(x.Right, lo, hi, output);
         }
 
         public int Rank(K key) => Rank(_root, key);
@@ -224,7 +307,22 @@ namespace Searching
 
         public int Size(K lo, K hi)
         {
-            throw new NotImplementedException();
+            int count = 0;
+            Size(_root, lo, hi, ref count);
+            return count;
+        }
+
+        protected void Size(TreeNode<K, V> x, K lo, K hi, ref int count)
+        {
+            if (x == null) return;
+            int loResult = x.Key.CompareTo(lo);
+            int hiResult = x.Key.CompareTo(hi);
+            if (loResult > 0)
+                Size(x.Left, lo, hi, ref count);
+            if (loResult >= 0 && hiResult <= 0)
+                count++;
+            if (hiResult < 0)
+                Size(x.Right, lo, hi, ref count);
         }
     }
 }

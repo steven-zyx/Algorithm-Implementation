@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using Utils;
+using System.Collections;
 using Searching;
 
 namespace ConsoleApp1
@@ -26,7 +27,7 @@ namespace ConsoleApp1
             //ShowCheckStability();
             //ShowKendallTauDistance();
             //ShowIdleTime();
-            ShowFrequencyCountFromDictionary();
+            //ShowFrequencyCountFromDictionary();
             Console.ReadLine();
         }
 

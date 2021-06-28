@@ -35,11 +35,11 @@ namespace UnitTestProject1
             for (int j = 0; j < 2; j++)
             {
                 for (int i = 0; i < _rowCount; i++)
-                    _ST_Int.Put(i, source[i]);
+                    _ST_Int.Put(source[i], i);
                 for (int i = 0; i < _rowCount; i++)
-                    Assert.AreEqual(source[i], _ST_Int.Get(i));
+                    Assert.AreEqual(i, _ST_Int.Get(source[i]));
                 for (int i = 0; i < _rowCount; i++)
-                    Assert.IsTrue(_ST_Int.Delete(i));
+                    Assert.IsTrue(_ST_Int.Delete(source[i]));
             }
         }
 
@@ -91,7 +91,7 @@ namespace UnitTestProject1
             _ST_Int.Init();
             int[] source = Util.GenerateRandomArray(0, _rowCount);
             for (int i = 0; i < source.Length; i++)
-                _ST_Int.Put(i, source[i]);
+                _ST_Int.Put(source[i], i);
 
             for (int i = 0; i < _rowCount; i++)
             {
@@ -162,12 +162,14 @@ namespace UnitTestProject1
 
             int[] source = Util.GenerateRandomArray(0, _rowCount);
             for (int i = 0; i < source.Length; i++)
-                _OST_Int.Put(i, source[i]);
+                _OST_Int.Put(source[i], i);
 
             int end = _ran.Next(0, _rowCount);
             int start = end - _ran.Next(0, end);
             foreach (int n in _OST_Int.Keys(start, end))
-                Assert.AreEqual(source[n], _OST_Int.Get(n));
+            {
+                Assert.AreEqual(n, source[_OST_Int.Get(n)]);
+            }
         }
 
         [TestMethod]
@@ -177,7 +179,7 @@ namespace UnitTestProject1
 
             int[] source = Util.GenerateRandomArray(0, _rowCount);
             for (int i = 0; i < source.Length; i++)
-                _OST_Int.Put(i, source[i]);
+                _OST_Int.Put(source[i], i);
 
             for (int i = 0; i < 10_000; i++)
             {
@@ -233,5 +235,19 @@ namespace UnitTestProject1
             _ST_Int = new InterpolationSearch<int>();
             _OST_Int = new InterpolationSearch<int>();
         }
+    }
+
+    [TestClass]
+    public class TestBST : TestOrderedSymbolTable
+    {
+        public TestBST()
+        {
+            _ST_Int = new BST<int, int>();
+            _OST_Int = new BST<int, int>();
+        }
+
+
+
+
     }
 }
