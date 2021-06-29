@@ -24,7 +24,7 @@ namespace Searching
             set => Put(key, value);
         }
 
-        public V Get(K key)
+        public virtual V Get(K key)
         {
             var node = Get(_root, key);
             if (node == null)
@@ -47,12 +47,12 @@ namespace Searching
                 return x;
         }
 
-        public void Put(K key, V value)
+        public virtual void Put(K key, V value)
         {
             _root = Put(_root, key, value);
         }
 
-        public TreeNode<K, V> Put(TreeNode<K, V> x, K key, V value)
+        public virtual TreeNode<K, V> Put(TreeNode<K, V> x, K key, V value)
         {
             if (x == null)
                 return new TreeNode<K, V>(key, value, 1);
@@ -81,7 +81,7 @@ namespace Searching
                 return node.N;
         }
 
-        public bool Contains(K key) => Get(_root, key) != null;
+        public virtual bool Contains(K key) => Get(_root, key) != null;
 
         public bool Delete(K key)
         {
@@ -187,7 +187,7 @@ namespace Searching
             return x;
         }
 
-        public K Floor(K key)
+        public virtual K Floor(K key)
         {
             var node = Floor(_root, key);
             if (node == null)
@@ -216,7 +216,7 @@ namespace Searching
             }
         }
 
-        public K Ceiling(K key)
+        public virtual K Ceiling(K key)
         {
             var node = Ceiling(_root, key);
             if (node == null)
@@ -268,7 +268,7 @@ namespace Searching
 
         public int Rank(K key) => Rank(_root, key);
 
-        protected int Rank(TreeNode<K, V> x, K key)
+        protected virtual int Rank(TreeNode<K, V> x, K key)
         {
             if (x == null)
                 return 0;
@@ -282,7 +282,7 @@ namespace Searching
                 return Size(x.Left) + 1 + Rank(x.Right, key);
         }
 
-        public K Select(int k)
+        public virtual K Select(int k)
         {
             var node = Select(_root, k);
             if (node == null)

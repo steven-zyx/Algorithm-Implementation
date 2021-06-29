@@ -250,4 +250,14 @@ namespace UnitTestProject1
 
 
     }
+
+    [TestClass]
+    public class TestBST_Cache : TestOrderedSymbolTable
+    {
+        public TestBST_Cache()
+        {
+            _ST_Int = new BST_Cache<int, int>();
+            _OST_Int = new BST_Cache<int, int>();
+        }
+    }
 }
