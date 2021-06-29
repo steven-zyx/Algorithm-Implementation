@@ -25,6 +25,6 @@ namespace Searching
 
         int Size(K lo, K hi);
 
-        IEnumerable Keys(K lo, K hi);
+        IEnumerable<K> Keys(K lo, K hi);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Searching
 {
@@ -157,7 +158,7 @@ namespace Searching
             return hiRank - loRank;
         }
 
-        public IEnumerable Keys(K lo, K hi)
+        public IEnumerable<K> Keys(K lo, K hi)
         {
             int loRank = Rank(lo);
             int hiRank = Rank(hi);
@@ -168,7 +169,7 @@ namespace Searching
                 yield return _keys[hiRank];
         }
 
-        public IEnumerable Keys()
+        public IEnumerable<K> Keys()
         {
             for (int i = 0; i < _count; i++)
                 yield return _keys[i];

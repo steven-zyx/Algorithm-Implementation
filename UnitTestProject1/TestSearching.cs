@@ -178,10 +178,10 @@ namespace UnitTestProject1
             _OST_Int.Init();
 
             int[] source = Util.GenerateRandomArray(0, _rowCount);
-            for (int i = 0; i < source.Length; i++)
+            for (int i = 0; i < _rowCount; i++)
                 _OST_Int.Put(source[i], i);
 
-            for (int i = 0; i < 10_000; i++)
+            for (int i = 0; i < _rowCount; i++)
             {
                 Assert.AreEqual(i, _OST_Int.Rank(_OST_Int.Select(i)));
                 Assert.AreEqual(i, _OST_Int.Select(_OST_Int.Rank(i)));
@@ -245,10 +245,6 @@ namespace UnitTestProject1
             _ST_Int = new BST<int, int>();
             _OST_Int = new BST<int, int>();
         }
-
-
-
-
     }
 
     [TestClass]
@@ -258,6 +254,17 @@ namespace UnitTestProject1
         {
             _ST_Int = new BST_Cache<int, int>();
             _OST_Int = new BST_Cache<int, int>();
+        }
+    }
+
+    [TestClass]
+    public class TestBST_Certificate : TestOrderedSymbolTable
+    {
+        public TestBST_Certificate()
+        {
+            _ST_Int = new BST_Certificate<int, int>();
+            _OST_Int = new BST_Certificate<int, int>();
+            _rowCount = 1_000;
         }
     }
 }

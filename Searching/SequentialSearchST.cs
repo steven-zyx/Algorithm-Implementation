@@ -76,10 +76,10 @@ namespace Searching
 
         public virtual bool Contains(K key) => SearchByKey(key).isFound;
 
-        public IEnumerable Keys()
+        public IEnumerable<K> Keys()
         {
             for (var c = _start; c != null; c = c.Next)
-                yield return c;
+                yield return c.Key;
         }
 
         protected virtual (bool isFound, Node_P<K, V> element) SearchByKey(K key)

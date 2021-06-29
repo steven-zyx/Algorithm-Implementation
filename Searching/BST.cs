@@ -83,7 +83,7 @@ namespace Searching
 
         public virtual bool Contains(K key) => Get(_root, key) != null;
 
-        public bool Delete(K key)
+        public virtual bool Delete(K key)
         {
             if (_root == null)
                 return false;
@@ -120,7 +120,7 @@ namespace Searching
             return x;
         }
 
-        public IEnumerable Keys()
+        public IEnumerable<K> Keys()
         {
             List<K> output = new List<K>();
             Print(_root, output);
@@ -139,7 +139,13 @@ namespace Searching
     //Ordered symbol table functions
     public partial class BST<K, V>
     {
-        public K Min() => Min(_root).Key;
+        public K Min()
+        {
+            if (_root == null)
+                return default(K);
+            else
+                return Min(_root).Key;
+        }
 
         protected TreeNode<K, V> Min(TreeNode<K, V> x)
         {
@@ -149,7 +155,13 @@ namespace Searching
                 return Min(x.Left);
         }
 
-        public K Max() => Max(_root).Key;
+        public K Max()
+        {
+            if (_root == null)
+                return default(K);
+            else
+                return Max(_root).Key;
+        }
 
         protected TreeNode<K, V> Max(TreeNode<K, V> x)
         {
@@ -159,7 +171,7 @@ namespace Searching
                 return Max(x.Right);
         }
 
-        public void DeleteMax()
+        public virtual void DeleteMax()
         {
             _root = DeleteMax(_root);
         }
@@ -173,7 +185,7 @@ namespace Searching
             return x;
         }
 
-        public void DeleteMin()
+        public virtual void DeleteMin()
         {
             _root = DeleteMin(_root);
         }
@@ -245,7 +257,7 @@ namespace Searching
             }
         }
 
-        public IEnumerable Keys(K lo, K hi)
+        public IEnumerable<K> Keys(K lo, K hi)
         {
             List<K> output = new List<K>();
             Print(_root, lo, hi, output);

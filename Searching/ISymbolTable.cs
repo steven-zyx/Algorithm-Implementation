@@ -23,6 +23,6 @@ namespace Searching
 
         int Size();
 
-        IEnumerable Keys();
+        IEnumerable<K> Keys();
     }
 }
