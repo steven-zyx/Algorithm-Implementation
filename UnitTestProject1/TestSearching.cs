@@ -3,13 +3,38 @@ using Searching;
 using System;
 using System.Collections.Generic;
 using Utils;
+using System.Linq;
 
 namespace UnitTestProject1
 {
     [TestClass]
     public class TestSearching
     {
+        [TestMethod]
+        public void TestPerfectbalance()
+        {
+            BST_CountGet<int, int> bst = new BST_CountGet<int, int>();
 
+            Queue<List<int>> sourceList = new Queue<List<int>>();
+            int count = 7;
+            sourceList.Enqueue(Enumerable.Range(0, count).ToList());
+
+            while (sourceList.Count > 0)
+            {
+                List<int> source = sourceList.Dequeue();
+                int mid = source.Count() / 2;
+
+                bst.Put(source[mid], mid);
+
+                var left = source.GetRange(0, mid);
+                if (left.Count() > 0)
+                    sourceList.Enqueue(left);
+
+                var right = source.GetRange(mid + 1, source.Count - mid - 1);
+                if (right.Count() > 0)
+                    sourceList.Enqueue(right);
+            }
+        }
     }
 
     [TestClass]
@@ -156,7 +181,7 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
-        public void Test_Keys()
+        public void Test_Keys2()
         {
             _OST_Int.Init();
 
@@ -169,6 +194,22 @@ namespace UnitTestProject1
             foreach (int n in _OST_Int.Keys(start, end))
             {
                 Assert.AreEqual(n, source[_OST_Int.Get(n)]);
+            }
+        }
+
+        [TestMethod]
+        public void Test_Keys()
+        {
+            _OST_Int.Init();
+            int[] source = Util.GenerateRandomArray(0, _rowCount);
+            for (int i = 0; i < source.Length; i++)
+                _OST_Int.Put(source[i], i);
+
+            int previous = int.MinValue;
+            foreach (int n in _OST_Int.Keys())
+            {
+                Assert.IsTrue(previous < n);
+                previous = n;
             }
         }
 
@@ -265,6 +306,16 @@ namespace UnitTestProject1
             _ST_Int = new BST_Certificate<int, int>();
             _OST_Int = new BST_Certificate<int, int>();
             _rowCount = 1_000;
+        }
+    }
+
+    [TestClass]
+    public class TestBST_Iterator : TestOrderedSymbolTable
+    {
+        public TestBST_Iterator()
+        {
+            _ST_Int = new BST_Iterator<int, int>();
+            _OST_Int = new BST_Iterator<int, int>();
         }
     }
 }

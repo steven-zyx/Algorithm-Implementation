@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using Utils;
 using System.Collections;
+using System.Collections.Generic;
 using Searching;
 
 namespace ConsoleApp1
@@ -28,6 +29,10 @@ namespace ConsoleApp1
             //ShowKendallTauDistance();
             //ShowIdleTime();
             //ShowFrequencyCountFromDictionary();
+            //ShowPerfectbalance();
+            //LevelOrderTraversal();
+            //ExactProbabilities();
+            //TreeDrawing();
             Console.ReadLine();
         }
 
@@ -253,6 +258,117 @@ namespace ConsoleApp1
                 int frquency = existWords.Max();
                 Console.WriteLine($"{existWords.Get(frquency)}\t{frquency}");
                 existWords.DeleteMax();
+            }
+        }
+
+        private static void PopulateBSTwithPerfectBalance(IOrderedSymbolTable<int, int> BST, List<int> data)
+        {
+            Queue<List<int>> sourceList = new Queue<List<int>>();
+            sourceList.Enqueue(data);
+
+            while (sourceList.Count > 0)
+            {
+                List<int> source = sourceList.Dequeue();
+                int mid = source.Count() / 2;
+
+                BST.Put(source[mid], mid);
+
+                var left = source.GetRange(0, mid);
+                if (left.Count() > 0)
+                    sourceList.Enqueue(left);
+
+                var right = source.GetRange(mid + 1, source.Count - mid - 1);
+                if (right.Count() > 0)
+                    sourceList.Enqueue(right);
+            }
+        }
+
+        public static void ShowPerfectbalance()
+        {
+            BST_CountGet<int, int> bst = new BST_CountGet<int, int>();
+            int count = 1_000;
+            List<int> source = Enumerable.Range(0, count).ToList();
+            PopulateBSTwithPerfectBalance(bst, source);
+
+            for (int i = 0; i < count; i++)
+            {
+                bst.Get(i);
+                Console.WriteLine($"{i}\t{bst.CountGet}");
+            }
+            DrawBST(bst);
+        }
+
+        public static void LevelOrderTraversal()
+        {
+            BST_CountGet<int, int> bst = new BST_CountGet<int, int>();
+            int count = 1_000;
+            List<int> source = Enumerable.Range(0, count).ToList();
+            PopulateBSTwithPerfectBalance(bst, source);
+
+            foreach (int key in bst.PrintLevel())
+                Console.WriteLine(key);
+        }
+
+        public static void ExactProbabilities()
+        {
+            Dictionary<BST<int, int>, int> treeCount = new Dictionary<BST<int, int>, int>();
+            for (int i = 0; i < 10_000_000; i++)
+            {
+                BST<int, int> bst = new BST<int, int>();
+
+                int[] source = Util.GenerateRandomArray(2, 5);
+                foreach (int x in source)
+                    bst.Put(x, x);
+
+                if (treeCount.ContainsKey(bst))
+                    treeCount[bst]++;
+                else
+                    treeCount[bst] = 1;
+
+                if (i % 200000 == 0)
+                {
+                    Console.WriteLine("Shape number:");
+                    for (int j = 1; j <= treeCount.Count; j++)
+                        Console.Write($"{j}\t");
+                    Console.WriteLine();
+
+
+                    Console.WriteLine("Probability:");
+                    foreach (var pair in treeCount)
+                    {
+                        double prob = (double)pair.Value / i * 100;
+                        prob = Math.Round(prob, 2);
+                        Console.Write($"{prob}\t");
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
+            }
+        }
+
+        public static void TreeDrawing()
+        {
+            BST<int, int> bst = new BST<int, int>();
+
+            int count = 1_00;
+            int[] source = Util.GenerateRandomArray(0, count);
+            foreach (int n in source)
+                bst.Put(n, n);
+
+            DrawBST(bst);
+        }
+
+        private static void DrawBST(BST<int, int> bst)
+        {
+            int level = 1;
+            foreach (var nl in bst.TraverseByLevel())
+            {
+                if (nl.Level != level)
+                {
+                    Console.WriteLine();
+                    level = nl.Level;
+                }
+                Console.Write($"{nl.Node.Key} ");
             }
         }
     }

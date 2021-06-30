@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using BasicDataStrcture;
+using System.Linq;
 
 namespace Searching
 {
@@ -33,7 +34,7 @@ namespace Searching
                 return node.Value;
         }
 
-        protected TreeNode<K, V> Get(TreeNode<K, V> x, K key)
+        protected virtual TreeNode<K, V> Get(TreeNode<K, V> x, K key)
         {
             if (x == null)
                 return null;
@@ -120,7 +121,7 @@ namespace Searching
             return x;
         }
 
-        public IEnumerable<K> Keys()
+        public virtual IEnumerable<K> Keys()
         {
             List<K> output = new List<K>();
             Print(_root, output);
@@ -257,7 +258,7 @@ namespace Searching
             }
         }
 
-        public IEnumerable<K> Keys(K lo, K hi)
+        public virtual IEnumerable<K> Keys(K lo, K hi)
         {
             List<K> output = new List<K>();
             Print(_root, lo, hi, output);
@@ -317,7 +318,7 @@ namespace Searching
                 return x;
         }
 
-        public int Size(K lo, K hi)
+        public virtual int Size(K lo, K hi)
         {
             int count = 0;
             Size(_root, lo, hi, ref count);
@@ -335,6 +336,56 @@ namespace Searching
                 count++;
             if (hiResult < 0)
                 Size(x.Right, lo, hi, ref count);
+        }
+    }
+
+    //BST dedicated funcions
+    public partial class BST<K, V>
+    {
+        public IEnumerable<K> PrintLevel() => TraverseByLevel().Select(x => x.Node.Key);
+
+        public override bool Equals(object obj)
+        {
+            BST<K, V> other = obj as BST<K, V>;
+            if (other._root.N != _root.N)
+                return false;
+
+            var otherIterator = other.TraverseByLevel().GetEnumerator();
+            foreach (var n in TraverseByLevel())
+            {
+                otherIterator.MoveNext();
+                var otherN = otherIterator.Current;
+                if (n.Node.Key.CompareTo(otherN.Node.Key) != 0 || n.Level != otherN.Level)
+                    return false;
+            }
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            int code = 0;
+            foreach (var n in TraverseByLevel())
+            {
+                code = (code + n.Node.Key.GetHashCode()) * 31;
+                code = (code + n.Level) * 31;
+            }
+            return code;
+        }
+
+        public IEnumerable<(TreeNode<K, V> Node, int Level)> TraverseByLevel()
+        {
+            Queue<(TreeNode<K, V> Node, int level)> nodeQ = new Queue<(TreeNode<K, V> Node, int level)>();
+            nodeQ.Enqueue((_root, 1));
+
+            while (nodeQ.Count > 0)
+            {
+                var n = nodeQ.Dequeue();
+                yield return n;
+                if (n.Node.Left != null)
+                    nodeQ.Enqueue((n.Node.Left, n.level + 1));
+                if (n.Node.Right != null)
+                    nodeQ.Enqueue((n.Node.Right, n.level + 1));
+            }
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Utils
         private static void Shuffle(int[] source)
         {
             int count = source.Length;
-            Random ran = new Random(DateTime.Now.Second);
+            Random ran = new Random((int)DateTime.Now.Ticks);
             for (int i = 0; i < count; i++)
             {
                 int randomIndex = ran.Next(0, count);
