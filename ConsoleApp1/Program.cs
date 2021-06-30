@@ -33,6 +33,7 @@ namespace ConsoleApp1
             //LevelOrderTraversal();
             //ExactProbabilities();
             //TreeDrawing();
+            TestConstructor();
             Console.ReadLine();
         }
 
@@ -370,6 +371,12 @@ namespace ConsoleApp1
                 }
                 Console.Write($"{nl.Node.Key} ");
             }
+        }
+
+        public static void TestConstructor()
+        {
+            TreeNode_T<int, int> a = new TreeNode_T<int, int>(1, 1, 1);
+            a.Right = a;
         }
     }
 }
