@@ -53,7 +53,7 @@ namespace Searching
             _root = Put(_root, key, value);
         }
 
-        public virtual TreeNode<K, V> Put(TreeNode<K, V> x, K key, V value)
+        protected virtual TreeNode<K, V> Put(TreeNode<K, V> x, K key, V value)
         {
             if (x == null)
                 return new TreeNode<K, V>(key, value, 1);
@@ -94,7 +94,7 @@ namespace Searching
             return _root == null || _root.N != n;
         }
 
-        protected TreeNode<K, V> Delete(TreeNode<K, V> x, K key)
+        protected virtual TreeNode<K, V> Delete(TreeNode<K, V> x, K key)
         {
             if (x == null)
                 return null;
@@ -177,7 +177,7 @@ namespace Searching
             _root = DeleteMax(_root);
         }
 
-        protected TreeNode<K, V> DeleteMax(TreeNode<K, V> x)
+        protected virtual TreeNode<K, V> DeleteMax(TreeNode<K, V> x)
         {
             if (x.Right == null)
                 return x.Left;
@@ -191,7 +191,7 @@ namespace Searching
             _root = DeleteMin(_root);
         }
 
-        protected TreeNode<K, V> DeleteMin(TreeNode<K, V> x)
+        protected virtual TreeNode<K, V> DeleteMin(TreeNode<K, V> x)
         {
             if (x.Left == null)
                 return x.Right;

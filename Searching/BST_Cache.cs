@@ -37,7 +37,7 @@ namespace Searching
             _root = Put(_root, key, value);
         }
 
-        public override TreeNode<K, V> Put(TreeNode<K, V> x, K key, V value)
+        protected override TreeNode<K, V> Put(TreeNode<K, V> x, K key, V value)
         {
             if (x == null)
             {

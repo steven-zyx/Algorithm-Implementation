@@ -318,4 +318,34 @@ namespace UnitTestProject1
             _OST_Int = new BST_Iterator<int, int>();
         }
     }
+
+    [TestClass]
+    public class TestBST_Threading : TestOrderedSymbolTable
+    {
+        private BST_Threading<int, int> bst;
+
+        public TestBST_Threading()
+        {
+            bst = new BST_Threading<int, int>();
+            _ST_Int = bst;
+            _OST_Int = bst;
+            _rowCount = 1000;
+        }
+
+        [TestMethod]
+        public void TestPrevNext()
+        {
+            bst.Init();
+
+            int[] source = Util.GenerateRandomArray(0, _rowCount);
+            foreach (int n in source)
+                _OST_Int.Put(n, n);
+
+            for (int i = 1; i < _rowCount - 1; i++)
+            {
+                Assert.AreEqual(i - 1, bst.Prev(i));
+                Assert.AreEqual(i + 1, bst.Next(i));
+            }
+        }
+    }
 }
