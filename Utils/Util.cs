@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BasicDataStrcture;
+using static System.Math;
 
 namespace Utils
 {
@@ -51,6 +52,28 @@ namespace Utils
                 current = item;
             }
             return start;
+        }
+
+        public static int PrimeCeiling(int n)
+        {
+            while (true)
+            {
+                if (IsPrimeNumber(n))
+                    return n;
+                else
+                    n++;
+            }
+        }
+
+        private static bool IsPrimeNumber(int n)
+        {
+            int maxFactor = (int)Floor(Sqrt(n));
+            for (int i = 2; i <= maxFactor; i++)
+            {
+                if (n % i == 0)
+                    return false;
+            }
+            return true;
         }
     }
 }
