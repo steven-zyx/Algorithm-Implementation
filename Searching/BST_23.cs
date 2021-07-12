@@ -8,6 +8,12 @@ namespace Searching
     //For overwriting BST functions
     public partial class BST_23<K, V> : BST<K, V> where K : IComparable
     {
+        public override void Put(K key, V value)
+        {
+            _root = Put(_root, key, value);
+            Root.Color = BLACK;
+        }
+
         protected override TreeNode<K, V> Put(TreeNode<K, V> x, K key, V value)
         {
             TreeNode_C<K, V> h = x as TreeNode_C<K, V>;
@@ -131,6 +137,7 @@ namespace Searching
     {
         protected const bool RED = true;
         protected const bool BLACK = false;
+
         protected TreeNode_C<K, V> Root => _root as TreeNode_C<K, V>;
 
         protected bool IsRed(TreeNode_C<K, V> x)
@@ -139,6 +146,7 @@ namespace Searching
                 return false;
 
             return x.Color == RED;
+
         }
 
         protected bool IsBlack(TreeNode_C<K, V> x)

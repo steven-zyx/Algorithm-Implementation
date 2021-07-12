@@ -33,7 +33,6 @@ namespace ConsoleApp1
             //LevelOrderTraversal();
             //ExactProbabilities();
             //TreeDrawing();
-            TestModularHashing();
             Console.ReadLine();
         }
 
@@ -371,20 +370,6 @@ namespace ConsoleApp1
                 }
                 Console.Write($"{nl.Node.Key} ");
             }
-        }
-
-        private static void TestModularHashing()
-        {
-            int hash = 0;
-
-            string text = "steven";
-            for (int i = 0; i < text.Length; i++)
-            {
-                hash = (hash * 65536 + text[i]) % 97;
-            }
-            hash %= 97;
-
-            Console.WriteLine(hash);
         }
     }
 }

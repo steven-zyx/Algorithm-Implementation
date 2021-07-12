@@ -392,34 +392,36 @@ namespace Searching
     //Functions for Certification
     public partial class BST<K, V>
     {
-        protected bool IsBinaryTree(TreeNode<K, V> x)
+        protected void IsBinaryTree(TreeNode<K, V> x)
         {
-            if (x == null)
-                return true;
+            if (x == null) return;
 
             int n = Size(x.Left) + Size(x.Right) + 1;
-            if (x.N == n)
-                return IsBinaryTree(x.Left) && IsBinaryTree(x.Right);
-            else
-                return false;
+            if (x.N != n)
+                throw new Exception("False N");
+
+            IsBinaryTree(x.Left);
+            IsBinaryTree(x.Right);
         }
 
-        protected bool IsOrdered(TreeNode<K, V> x, K min, K max)
+        protected void IsOrdered(TreeNode<K, V> x, K min, K max)
         {
-            if (x == null)
-                return true;
-            if (x.Key.CompareTo(min) >= 0 && x.Key.CompareTo(max) <= 0)
-            {
-                if (x.Left == null || x.Key.CompareTo(x.Left.Key) > 0)
-                {
-                    if (x.Right == null || x.Key.CompareTo(x.Right.Key) < 0)
-                        return IsOrdered(x.Left, min, max) && IsOrdered(x.Right, min, max);
-                }
-            }
-            return false;
+            if (x == null) return;
+
+            if (x.Key.CompareTo(min) < 0)
+                throw new Exception("Wrong order: lower than min");
+            if (x.Key.CompareTo(max) > 0)
+                throw new Exception("Wrong order: greater than max");
+            if (x.Left != null && x.Key.CompareTo(x.Left.Key) <= 0)
+                throw new Exception("Wrong order: lower than left child");
+            if (x.Right != null && x.Key.CompareTo(x.Right.Key) >= 0)
+                throw new Exception("Wrong order: greater that right child");
+
+            IsOrdered(x.Left, min, max);
+            IsOrdered(x.Right, min, max);
         }
 
-        protected bool HasNoDuplicates()
+        protected void HasNoDuplicates()
         {
             IEnumerator<K> iterator = Keys().GetEnumerator();
             if (iterator.MoveNext())
@@ -428,40 +430,31 @@ namespace Searching
                 while (iterator.MoveNext())
                 {
                     if (iterator.Current.CompareTo(previous) <= 0)
-                        return false;
-                    else
-                        previous = iterator.Current;
+                        throw new Exception("Duplicate");
+
+                    previous = iterator.Current;
                 }
             }
-            return true;
         }
 
-        protected bool SelectRankCheck()
+        protected void SelectRankCheck()
         {
-            if (_root == null)
-                return true;
+            if (_root == null) return;
 
             for (int i = 0; i < _root.N; i++)
                 if (i != Rank(Select(i)))
-                    return false;
+                    throw new Exception("i != Rank(Select(i))");
             foreach (K key in Keys())
                 if (Select(Rank(key)).CompareTo(key) != 0)
-                    return false;
-            return true;
+                    throw new Exception("key != Select(Rank(key))");
         }
 
-        protected bool IsBST()
+        protected void IsBST()
         {
-            if (!IsBinaryTree(_root))
-                throw new Exception("False N");
-            if (!IsOrdered(_root, Min(), Max()))
-                throw new Exception("Wrong order");
-            if (!HasNoDuplicates())
-                throw new Exception("Duplicate");
-            if (!SelectRankCheck())
-                throw new Exception("Select() != Rank()");
-
-            return true;
+            IsBinaryTree(_root);
+            IsOrdered(_root, Min(), Max());
+            HasNoDuplicates();
+            SelectRankCheck();
         }
     }
 }
