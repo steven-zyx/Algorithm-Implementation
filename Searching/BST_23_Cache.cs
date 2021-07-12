@@ -6,13 +6,13 @@ using BasicDataStrcture;
 namespace Searching
 {
     //Override common symbel table functions
-    public partial class BST_Cache<K, V> : BST<K, V> where K : IComparable
+    public partial class BST_23_Cache<K, V> : BST_23<K, V> where K : IComparable
     {
         protected TreeNode<K, V> _cache;
 
         public override V Get(K key)
         {
-            if (CacheHit(key))
+            if (_cache != null && key.CompareTo(_cache.Key) == 0)
                 return _cache.Value;
 
 
@@ -28,7 +28,7 @@ namespace Searching
 
         public override void Put(K key, V value)
         {
-            if (CacheHit(key))
+            if (_cache != null && key.CompareTo(_cache.Key) == 0)
             {
                 _cache.Value = value;
                 return;
@@ -39,25 +39,28 @@ namespace Searching
 
         protected override TreeNode<K, V> Put(TreeNode<K, V> x, K key, V value)
         {
-            if (x == null)
+            TreeNode_C<K, V> h = x as TreeNode_C<K, V>;
+
+            //Reach bottom, attach new node
+            if (h == null)
             {
-                _cache = new TreeNode<K, V>(key, value, 1);
+                _cache = new TreeNode_C<K, V>(key, value, 1, RED);
                 return _cache;
             }
 
-            int result = key.CompareTo(x.Key);
+            //Check go left or right
+            int result = key.CompareTo(h.Key);
             if (result < 0)
-                x.Left = Put(x.Left, key, value);
+                h.Left = Put(h.Left, key, value);
             else if (result > 0)
-                x.Right = Put(x.Right, key, value);
+                h.Right = Put(h.Right, key, value);
             else
             {
-                x.Value = value;
-                _cache = x;
+                h.Value = value;
+                _cache = h;
             }
 
-            x.N = Size(x.Left) + Size(x.Right) + 1;
-            return x;
+            return Balance(h);
         }
 
         public override bool Contains(K key)
@@ -82,7 +85,7 @@ namespace Searching
     }
 
     //Override ordered symbol table function
-    public partial class BST_Cache<K, V>
+    public partial class BST_23_Cache<K, V>
     {
         public override K Floor(K key)
         {
@@ -137,35 +140,45 @@ namespace Searching
             }
         }
 
-        protected override TreeNode<K, V> DeleteMax(TreeNode<K, V> x)
-        {
-            if (x.Right == null)
-            {
-                if (CacheHit(x.Key))
-                    _cache = null;
-                return x.Left;
-            }
-            x.Right = DeleteMax(x.Right);
-            x.N = Size(x.Left) + Size(x.Right) + 1;
-            return x;
-        }
-
         protected override TreeNode<K, V> DeleteMin(TreeNode<K, V> x)
         {
-            if (x.Left == null)
+            TreeNode_C<K, V> h = x as TreeNode_C<K, V>;
+            if (h.Left == null)
             {
-                if (CacheHit(x.Key))
+                if (CacheHit(h.Key))
                     _cache = null;
-                return x.Right;
+                return null;
             }
-            x.Left = DeleteMin(x.Left);
-            x.N = Size(x.Left) + Size(x.Right) + 1;
-            return x;
+
+            if (IsBlack(h.Left_C) && IsBlack(h.Left_C.Left_C))
+                h = MoveRedLeft(h);
+
+            h.Left = DeleteMin(h.Left);
+            return Balance(h);
+        }
+
+        protected override TreeNode<K, V> DeleteMax(TreeNode<K, V> x)
+        {
+            TreeNode_C<K, V> h = x as TreeNode_C<K, V>;
+            if (IsRed(h.Left_C))
+                h = RotateRight(h);
+            else if (h.Right == null)
+            {
+                if (CacheHit(h.Key))
+                    _cache = null;
+                return null;
+            }
+
+            if (IsBlack(h.Right_C) && IsBlack(h.Right_C.Left_C))
+                h = MoveRedRight(h);
+
+            h.Right = DeleteMax(h.Right);
+            return Balance(h);
         }
     }
 
     //Functions for caching
-    public partial class BST_Cache<K, V>
+    public partial class BST_23_Cache<K, V>
     {
         protected bool CacheHit(K key) => _cache != null && _cache.Key.CompareTo(key) == 0;
     }

@@ -402,4 +402,43 @@ namespace UnitTestProject1
             base.Test_Get_Put_Delete_Resize();
         }
     }
+
+    [TestClass]
+    public class TestBST_23_Cache : TestOrderedSymbolTable
+    {
+        public TestBST_23_Cache()
+        {
+            _ST_Int = new BST_23_Cache<int, int>();
+            _OST_Int = new BST_23_Cache<int, int>();
+        }
+
+        [TestMethod]
+        public override void Test_Get_Put_Delete_Resize()
+        {
+            _ST_Int.Init();
+            int[] source = Util.GenerateRandomArray(0, _rowCount);
+
+            for (int j = 0; j < 2; j++)
+            {
+                for (int i = 0; i < _rowCount; i++)
+                {
+                    if (i == 49999)
+                    {
+
+                    }
+                    _ST_Int.Put(source[i], i);
+                }
+                for (int i = 0; i < _rowCount; i++)
+                {
+                    if (i == 49999)
+                    {
+
+                    }
+                    Assert.AreEqual(i, _ST_Int.Get(source[i]));
+                }
+                for (int i = 0; i < _rowCount; i++)
+                    Assert.IsTrue(_ST_Int.Delete(source[i]));
+            }
+        }
+    }
 }
