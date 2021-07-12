@@ -123,10 +123,19 @@ namespace Searching
                 {
                     TreeNode<K, V> t = x;
                     x = Min(x.Right);
-                    x.Right = DeleteMin(t.Right);
+                    x.Right = DeleteMinWithoutPredSucc(t.Right);
                     x.Left = t.Left;
                 }
             }
+            x.N = Size(x.Left) + Size(x.Right) + 1;
+            return x;
+        }
+
+        protected TreeNode<K,V> DeleteMinWithoutPredSucc(TreeNode<K,V> x)
+        {
+            if (x.Left == null)
+                return x.Right;
+            x.Left = DeleteMinWithoutPredSucc(x.Left);
             x.N = Size(x.Left) + Size(x.Right) + 1;
             return x;
         }

@@ -33,7 +33,7 @@ namespace ConsoleApp1
             //LevelOrderTraversal();
             //ExactProbabilities();
             //TreeDrawing();
-            TestConstructor();
+            TestModularHashing();
             Console.ReadLine();
         }
 
@@ -359,7 +359,7 @@ namespace ConsoleApp1
             DrawBST(bst);
         }
 
-        private static void DrawBST(BST<int, int> bst)
+        public static void DrawBST(BST<int, int> bst)
         {
             int level = 1;
             foreach (var nl in bst.TraverseByLevel())
@@ -373,10 +373,18 @@ namespace ConsoleApp1
             }
         }
 
-        public static void TestConstructor()
+        private static void TestModularHashing()
         {
-            TreeNode_T<int, int> a = new TreeNode_T<int, int>(1, 1, 1);
-            a.Right = a;
+            int hash = 0;
+
+            string text = "steven";
+            for (int i = 0; i < text.Length; i++)
+            {
+                hash = (hash * 65536 + text[i]) % 97;
+            }
+            hash %= 97;
+
+            Console.WriteLine(hash);
         }
     }
 }

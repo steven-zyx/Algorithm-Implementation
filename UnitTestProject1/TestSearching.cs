@@ -46,13 +46,13 @@ namespace UnitTestProject1
 
         public TestSymbolTable()
         {
-            _ran = new Random(DateTime.Now.Second);
+            _ran = new Random((int)DateTime.Now.Ticks);
             _ST_Int = new SequentialSearchST<int, int>();
             _rowCount = 15_000;
         }
 
         [TestMethod]
-        public void Test_Get_Put_Delete_Resize()
+        public virtual void Test_Get_Put_Delete_Resize()
         {
             _ST_Int.Init();
             int[] source = Util.GenerateRandomArray(0, _rowCount);
@@ -69,7 +69,7 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
-        public void Test_Get_Put_Delete_Intermixed()
+        public virtual void Test_Get_Put_Delete_Intermixed()
         {
             _ST_Int.Init();
             int[] source = Util.GenerateRandomArrayRepeat(0, _rowCount, 5);
@@ -111,7 +111,7 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
-        public void Test_Contains()
+        public virtual void Test_Contains()
         {
             _ST_Int.Init();
             int[] source = Util.GenerateRandomArray(0, _rowCount);
@@ -142,7 +142,7 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
-        public void Test_Min_Max()
+        public virtual void Test_Min_Max()
         {
             _OST_Int.Init();
 
@@ -165,7 +165,7 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
-        public void Test_Floor_Ceiling()
+        public virtual void Test_Floor_Ceiling()
         {
             _OST_Int.Init();
 
@@ -181,7 +181,7 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
-        public void Test_Keys2()
+        public virtual void Test_Keys2()
         {
             _OST_Int.Init();
 
@@ -198,7 +198,7 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
-        public void Test_Keys()
+        public virtual void Test_Keys()
         {
             _OST_Int.Init();
             int[] source = Util.GenerateRandomArray(0, _rowCount);
@@ -214,7 +214,7 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
-        public void Test_Rank_Select()
+        public virtual void Test_Rank_Select()
         {
             _OST_Int.Init();
 
@@ -329,7 +329,6 @@ namespace UnitTestProject1
             bst = new BST_Threading<int, int>();
             _ST_Int = bst;
             _OST_Int = bst;
-            _rowCount = 1000;
         }
 
         [TestMethod]
@@ -346,6 +345,61 @@ namespace UnitTestProject1
                 Assert.AreEqual(i - 1, bst.Prev(i));
                 Assert.AreEqual(i + 1, bst.Next(i));
             }
+
+            for (int i = 0; i < _rowCount / 2; i++)
+            {
+                int key = _ran.Next(0, _rowCount);
+                bst.Delete(key);
+            }
+
+            int current = bst.Min();
+            foreach (int k in bst.Keys())
+            {
+                Assert.AreEqual(k, current);
+                current = bst.Next(current);
+            }
+
+            bst.DeleteMin();
+            bst.DeleteMax();
+            bst.DeleteMin();
+            bst.DeleteMax();
+
+            current = bst.Max();
+            foreach (int k in bst.Keys().Reverse())
+            {
+                Assert.AreEqual(k, current);
+                current = bst.Prev(current);
+            }
+        }
+    }
+
+    [TestClass]
+    public class TestBST_23 : TestOrderedSymbolTable
+    {
+        public TestBST_23()
+        {
+            _OST_Int = new BST_23<int, int>();
+            _ST_Int = new BST_23<int, int>();
+        }
+    }
+
+    [TestClass]
+    public class TestBST_234 : TestOrderedSymbolTable
+    {
+        public TestBST_234()
+        {
+            _OST_Int = new BST_234<int, int>();
+            _ST_Int = new BST_234<int, int>();
+        }
+
+        public override void Test_Get_Put_Delete_Intermixed()
+        {
+            base.Test_Get_Put_Delete_Intermixed();
+        }
+
+        public override void Test_Get_Put_Delete_Resize()
+        {
+            base.Test_Get_Put_Delete_Resize();
         }
     }
 }
