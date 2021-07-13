@@ -33,6 +33,7 @@ namespace ConsoleApp1
             //LevelOrderTraversal();
             //ExactProbabilities();
             //TreeDrawing();
+            ShowAvgPathLength();
             Console.ReadLine();
         }
 
@@ -370,6 +371,39 @@ namespace ConsoleApp1
                 }
                 Console.Write($"{nl.Node.Key} ");
             }
+        }
+
+        public static void ShowAvgPathLength()
+        {
+            int count = 1_000_000;
+            Console.WriteLine($"Generating BST with {count.ToString("N0")} keys. Check average path length.");
+
+            for (int i = 1; i <= 3; i++)
+            {
+                Console.WriteLine($"\r\nRound: {i}");
+                int[] source = Util.GenerateRandomArray(0, count);
+                List<int> pathLengths;
+
+                pathLengths = PopulateIntoBST<BST<int, bool>>(source).PathLengths();
+                Console.WriteLine($"BST Avg: {pathLengths.Average()}");
+                Console.WriteLine($"BST StDev: {pathLengths.StDev()}");
+
+                pathLengths = PopulateIntoBST<BST_23<int, bool>>(source).PathLengths();
+                Console.WriteLine($"BST_23 Avg: {pathLengths.Average()}");
+                Console.WriteLine($"BST_23 StDev: {pathLengths.StDev()}");
+
+                pathLengths = PopulateIntoBST<BST_23_WithoutBalance<int, bool>>(source).PathLengths();
+                Console.WriteLine($"BST_23_WithoutBalance Avg: {pathLengths.Average()}");
+                Console.WriteLine($"BST_23_WithoutBalance StDev: {pathLengths.StDev()}");
+            }
+        }
+
+        private static BST<int, bool> PopulateIntoBST<T>(int[] source) where T : BST<int, bool>, new()
+        {
+            BST<int, bool> bst = new T();
+            foreach (int n in source)
+                bst.Put(n, false);
+            return bst;
         }
     }
 }

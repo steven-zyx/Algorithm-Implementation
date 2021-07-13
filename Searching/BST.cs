@@ -111,10 +111,10 @@ namespace Searching
                     return x.Right;
                 else
                 {
-                    TreeNode<K, V> t = x;
-                    x = Min(x.Right);
-                    x.Right = DeleteMin(t.Right);
-                    x.Left = t.Left;
+                    TreeNode<K, V> succ = Min(x.Right);
+                    x.Key = succ.Key;
+                    x.Value = succ.Value;
+                    x.Right = DeleteMin(x.Right);
                 }
             }
             x.N = Size(x.Left) + Size(x.Right) + 1;
@@ -375,7 +375,7 @@ namespace Searching
         public IEnumerable<(TreeNode<K, V> Node, int Level)> TraverseByLevel()
         {
             Queue<(TreeNode<K, V> Node, int level)> nodeQ = new Queue<(TreeNode<K, V> Node, int level)>();
-            nodeQ.Enqueue((_root, 1));
+            nodeQ.Enqueue((_root, 0));
 
             while (nodeQ.Count > 0)
             {
@@ -387,12 +387,25 @@ namespace Searching
                     nodeQ.Enqueue((n.Node.Right, n.level + 1));
             }
         }
+
+        public List<int> PathLengths()
+        {
+            List<int> pathLengths = new List<int>();
+            foreach (var x in TraverseByLevel())
+            {
+                if (x.Node.Left == null)
+                    pathLengths.Add(x.Level);
+                if (x.Node.Right == null)
+                    pathLengths.Add(x.Level);
+            }
+            return pathLengths;
+        }
     }
 
     //Functions for Certification
     public partial class BST<K, V>
     {
-        protected void IsBinaryTree(TreeNode<K, V> x)
+        protected void CorrectN(TreeNode<K, V> x)
         {
             if (x == null) return;
 
@@ -400,8 +413,8 @@ namespace Searching
             if (x.N != n)
                 throw new Exception("False N");
 
-            IsBinaryTree(x.Left);
-            IsBinaryTree(x.Right);
+            CorrectN(x.Left);
+            CorrectN(x.Right);
         }
 
         protected void IsOrdered(TreeNode<K, V> x, K min, K max)
@@ -451,7 +464,7 @@ namespace Searching
 
         protected void IsBST()
         {
-            IsBinaryTree(_root);
+            CorrectN(_root);
             IsOrdered(_root, Min(), Max());
             HasNoDuplicates();
             SelectRankCheck();

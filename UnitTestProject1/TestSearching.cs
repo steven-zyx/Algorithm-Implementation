@@ -433,4 +433,14 @@ namespace UnitTestProject1
             _rowCount = 800;
         }
     }
+
+    [TestClass]
+    public class TestBST_23_WithoutBalance : TestOrderedSymbolTable
+    {
+        public TestBST_23_WithoutBalance()
+        {
+            _ST_Int = new BST_23_WithoutBalance<int, int>();
+            _OST_Int = new BST_23_WithoutBalance<int, int>();
+        }
+    }
 }

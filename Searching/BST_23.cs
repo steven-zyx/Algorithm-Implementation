@@ -6,7 +6,7 @@ using BasicDataStrcture;
 namespace Searching
 {
     //For overwriting BST functions
-    public partial class BST_23<K, V> : BST<K, V> where K : IComparable
+    public partial class BST_23<K, V> : RedBlackTree<K, V> where K : IComparable
     {
         public override void Put(K key, V value)
         {
@@ -135,27 +135,6 @@ namespace Searching
     //For red-black tree functions
     public partial class BST_23<K, V>
     {
-        protected const bool RED = true;
-        protected const bool BLACK = false;
-
-        protected TreeNode_C<K, V> Root => _root as TreeNode_C<K, V>;
-
-        protected bool IsRed(TreeNode_C<K, V> x)
-        {
-            if (x == null)
-                return false;
-
-            return x.Color == RED;
-
-        }
-
-        protected bool IsBlack(TreeNode_C<K, V> x)
-        {
-            if (x == null)
-                return true;
-
-            return x.Color == BLACK;
-        }
 
         protected void FlipColor(TreeNode_C<K, V> h)
         {

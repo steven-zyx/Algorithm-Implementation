@@ -7,7 +7,7 @@ using static System.Math;
 
 namespace Utils
 {
-    public class Util
+    public static class Util
     {
         public static int[] GenerateRandomArray(int start, int count)
         {
@@ -74,6 +74,13 @@ namespace Utils
                     return false;
             }
             return true;
+        }
+
+        public static double StDev(this IEnumerable<int> numbers)
+        {
+            double avg = numbers.Average();
+            double sum = numbers.Sum(x => Pow(x - avg, 2));
+            return Sqrt(sum / numbers.Count() - 1);
         }
     }
 }

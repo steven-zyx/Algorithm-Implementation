@@ -17,7 +17,6 @@ namespace Searching
         public override bool Delete(K key)
         {
             bool result = base.Delete(key);
-            IsRedBlackBST();
             return result;
         }
 
@@ -39,15 +38,15 @@ namespace Searching
     {
         private int _blackLevel;
 
-        protected void Is23(TreeNode_C<K, V> h)
+        protected void SingleRedLink(TreeNode_C<K, V> h)
         {
             if (h == null) return;
 
             if (IsRed(h) && IsRed(h.Left_C))
                 throw new Exception("A node connected with 2 red links");
 
-            Is23(h.Left_C);
-            Is23(h.Right_C);
+            SingleRedLink(h.Left_C);
+            SingleRedLink(h.Right_C);
         }
 
         protected void RedLinkLeanLeft(TreeNode_C<K, V> h)
@@ -93,7 +92,7 @@ namespace Searching
         protected void IsRedBlackBST()
         {
             IsBST();
-            Is23(Root);
+            SingleRedLink(Root);
             RedLinkLeanLeft(Root);
             IsBalanced(Root);
         }
