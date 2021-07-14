@@ -4,19 +4,17 @@ using System.Text;
 
 namespace Searching
 {
-    public class SeperateChainingHashST<K, V> : ISymbolTable<K, V> where K : IComparable
+    public class SeperateChainingHashST<K, V> : HashST<K, V> where K : IComparable
     {
-        protected int M;
         protected int _count;
         protected SequentialSearchST<K, V>[] _st;
 
-        public SeperateChainingHashST(int m)
+        public SeperateChainingHashST(int m) : base(m)
         {
-            M = m;
             Init();
         }
 
-        public void Init()
+        public override void Init()
         {
             _count = 0;
             _st = new SequentialSearchST<K, V>[M];
@@ -24,31 +22,23 @@ namespace Searching
                 _st[i] = new SequentialSearchST<K, V>();
         }
 
-        public V this[K key]
-        {
-            get => Get(key);
-            set => Put(key, value);
-        }
+        public override V Get(K key) => _st[Hash(key)].Get(key);
 
-        public V Get(K key) => _st[Hash(key)].Get(key);
+        public override void Put(K key, V value) => _st[Hash(key)].Put(key, value);
 
-        public void Put(K key, V value) => _st[Hash(key)].Put(key, value);
+        public override bool Contains(K key) => _st[Hash(key)].Contains(key);
 
-        public bool Contains(K key) => _st[Hash(key)].Contains(key);
+        public override bool Delete(K key) => _st[Hash(key)].Delete(key);
 
-        public bool Delete(K key) => _st[Hash(key)].Delete(key);
-
-        public IEnumerable<K> Keys()
+        public override IEnumerable<K> Keys()
         {
             foreach (SequentialSearchST<K, V> st in _st)
                 foreach (K key in st.Keys())
                     yield return key;
         }
 
-        public int Size() => _count;
+        public override int Size() => _count;
 
-        public bool IsEmpty => _count == 0;
-
-        protected int Hash(K key) => (key.GetHashCode() & 0x7fff_ffff) % M;
+        public override bool IsEmpty => _count == 0;
     }
 }

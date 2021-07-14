@@ -405,5 +405,10 @@ namespace ConsoleApp1
                 bst.Put(n, false);
             return bst;
         }
+
+        private static void TestNullable()
+        {
+
+        }
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using BasicDataStrcture;
-using static BasicDataStrcture.TreeNode_C<int, int>;
 
 namespace Searching
 {

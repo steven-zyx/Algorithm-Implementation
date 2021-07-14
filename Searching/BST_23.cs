@@ -135,7 +135,6 @@ namespace Searching
     //For red-black tree functions
     public partial class BST_23<K, V>
     {
-
         protected void FlipColor(TreeNode_C<K, V> h)
         {
             h.Left_C.Color = !h.Left_C.Color;
