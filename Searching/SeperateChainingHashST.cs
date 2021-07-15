@@ -9,10 +9,9 @@ namespace Searching
         protected int _count;
         protected SequentialSearchST<K, V>[] _st;
 
-        public SeperateChainingHashST(int m) : base(m)
-        {
-            Init();
-        }
+        public SeperateChainingHashST(int m) : base(m) => Init();
+
+        public SeperateChainingHashST() : this(17) { }
 
         public override void Init()
         {
@@ -24,11 +23,19 @@ namespace Searching
 
         public override V Get(K key) => _st[Hash(key)].Get(key);
 
-        public override void Put(K key, V value) => _st[Hash(key)].Put(key, value);
+        public override void Put(K key, V value)
+        {
+            _st[Hash(key)].Put(key, value);
+            if (_count > M / 8) Resize(M * 2);
+        }
 
         public override bool Contains(K key) => _st[Hash(key)].Contains(key);
 
-        public override bool Delete(K key) => _st[Hash(key)].Delete(key);
+        public override bool Delete(K key)
+        {
+            if (_count < M * 2 && M > 17) Resize(M / 2);
+            return _st[Hash(key)].Delete(key);
+        }
 
         public override IEnumerable<K> Keys()
         {
@@ -40,5 +47,16 @@ namespace Searching
         public override int Size() => _count;
 
         public override bool IsEmpty => _count == 0;
+
+        protected void Resize(int size)
+        {
+            SeperateChainingHashST<K, V> newST = new SeperateChainingHashST<K, V>(size);
+            foreach (SequentialSearchST<K, V> st in _st)
+                foreach (var p in st.Pairs())
+                    newST.Put(p.key, p.value);
+
+            _st = newST._st;
+            M = newST.M;
+        }
     }
 }

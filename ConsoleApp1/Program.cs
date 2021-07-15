@@ -33,7 +33,7 @@ namespace ConsoleApp1
             //LevelOrderTraversal();
             //ExactProbabilities();
             //TreeDrawing();
-            ShowAvgPathLength();
+            //ShowAvgPathLength();
             Console.ReadLine();
         }
 
@@ -404,11 +404,6 @@ namespace ConsoleApp1
             foreach (int n in source)
                 bst.Put(n, false);
             return bst;
-        }
-
-        private static void TestNullable()
-        {
-
         }
     }
 }

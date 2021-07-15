@@ -414,16 +414,6 @@ namespace UnitTestProject1
     }
 
     [TestClass]
-    public class TestSeperateChainingHashST : TestSymbolTable
-    {
-        public TestSeperateChainingHashST()
-        {
-            int primeCeiling = Util.PrimeCeiling(_rowCount);
-            _ST_Int = new SeperateChainingHashST<int, int>(primeCeiling);
-        }
-    }
-
-    [TestClass]
     public class TestBST_23_Certificate : TestOrderedSymbolTable
     {
         public TestBST_23_Certificate()
@@ -441,6 +431,25 @@ namespace UnitTestProject1
         {
             _ST_Int = new BST_23_WithoutBalance<int, int>();
             _OST_Int = new BST_23_WithoutBalance<int, int>();
+        }
+    }
+
+    [TestClass]
+    public class TestSeperateChainingHashST : TestSymbolTable
+    {
+        public TestSeperateChainingHashST()
+        {
+            int primeCeiling = Util.PrimeCeiling(_rowCount);
+            _ST_Int = new SeperateChainingHashST<int, int>(primeCeiling);
+        }
+    }
+
+    [TestClass]
+    public class TestLinearProbingHashST : TestSymbolTable
+    {
+        public TestLinearProbingHashST()
+        {
+            _ST_Int = new LinearProbingHashST<int, int>();
         }
     }
 }

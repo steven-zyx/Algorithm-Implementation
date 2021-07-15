@@ -82,6 +82,12 @@ namespace Searching
                 yield return c.Key;
         }
 
+        public IEnumerable<(K key, V value)> Pairs()
+        {
+            for (var c = _start; c != null; c = c.Next)
+                yield return (c.Key, c.Value);
+        }
+
         protected virtual (bool isFound, Node_P<K, V> element) SearchByKey(K key)
         {
             for (var c = _start; c != null; c = c.Next)
