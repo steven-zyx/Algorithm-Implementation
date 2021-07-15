@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Searching
 {
-    public class SeperateChainingHashST<K, V> : HashST<K, V> where K : IComparable
+    public class SeperateChainingHashST<K, V> : HashST<K, V>
     {
         protected int _count;
         protected SequentialSearchST<K, V>[] _st;

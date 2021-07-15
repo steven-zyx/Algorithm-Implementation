@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Searching
 {
-    public class SequentialSearchST_Cache<K, V> : SequentialSearchST<K, V> where K : IComparable
+    public class SequentialSearchST_Cache<K, V> : SequentialSearchST<K, V>
     {
         private Node_P<K, V> _cache;
 
@@ -56,7 +56,7 @@ namespace Searching
 
         protected override (bool isFound, Node_P<K, V> element) SearchByKey(K key)
         {
-            if (_cache != null && _cache.Key.CompareTo(key) == 0)
+            if (_cache != null && _cache.Key.Equals(key))
                 return (true, _cache);
             else
                 return base.SearchByKey(key);

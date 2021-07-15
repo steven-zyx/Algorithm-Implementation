@@ -5,7 +5,7 @@ using System.Text;
 namespace Searching
 {
     //Hast symbol table dedicated functions and fields
-    public abstract partial class HashST<K, V> : ISymbolTable<K, V> where K : IComparable
+    public abstract partial class HashST<K, V> : ISymbolTable<K, V>
     {
         protected int M;
 

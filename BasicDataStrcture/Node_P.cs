@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BasicDataStrcture
 {
-    public class Node_P<K, V> where K : IComparable
+    public class Node_P<K, V>
     {
         public K Key { get; set; }
         public V Value { get; set; }

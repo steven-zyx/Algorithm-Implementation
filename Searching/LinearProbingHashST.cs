@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Searching
 {
-    public class LinearProbingHashST<K, V> : HashST<K, V> where K : IComparable
+    public class LinearProbingHashST<K, V> : HashST<K, V>
     {
         protected int _count;
         protected K[] _keys;
@@ -27,7 +27,7 @@ namespace Searching
         {
             int i;
             for (i = Hash(key); _isOccupied[i]; Increment(ref i))
-                if (key.CompareTo(_keys[i]) == 0)
+                if (key.Equals(_keys[i]))
                 {
                     _values[i] = value;
                     return;
@@ -43,7 +43,7 @@ namespace Searching
         public override V Get(K key)
         {
             for (int i = Hash(key); _isOccupied[i]; Increment(ref i))
-                if (key.CompareTo(_keys[i]) == 0)
+                if (key.Equals(_keys[i]))
                     return _values[i];
             return default(V);
         }
@@ -52,7 +52,7 @@ namespace Searching
         public override bool Contains(K key)
         {
             for (int i = Hash(key); _isOccupied[i]; Increment(ref i))
-                if (key.CompareTo(_keys[i]) == 0)
+                if (key.Equals(_keys[i]))
                     return true;
             return false;
         }
@@ -62,7 +62,7 @@ namespace Searching
             if (!Contains(key)) return false;
 
             int i = Hash(key);
-            while (key.CompareTo(_keys[i]) != 0)
+            while (!key.Equals(_keys[i]))
                 Increment(ref i);
             Clear(i);
 

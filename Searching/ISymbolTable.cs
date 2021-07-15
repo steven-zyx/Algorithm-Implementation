@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Searching
 {
-    public interface ISymbolTable<K, V> where K : IComparable
+    public interface ISymbolTable<K, V>
     {
         void Init();
 

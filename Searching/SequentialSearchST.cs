@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Searching
 {
-    public class SequentialSearchST<K, V> : ISymbolTable<K, V> where K : IComparable
+    public class SequentialSearchST<K, V> : ISymbolTable<K, V>
     {
         protected Node_P<K, V> _start;
         protected int _count = 0;
@@ -51,7 +51,8 @@ namespace Searching
         {
             if (_start == null)
                 return false;
-            else if (_start.Key.CompareTo(key) == 0)
+            
+            else if (key.Equals(_start.Key))
             {
                 _start = _start.Next;
                 _count--;
@@ -60,7 +61,7 @@ namespace Searching
 
             for (var c = _start; c.Next != null; c = c.Next)
             {
-                if (c.Next.Key.CompareTo(key) == 0)
+                if (key.Equals(c.Next))
                 {
                     c.Next = c.Next.Next;
                     _count--;
@@ -91,7 +92,7 @@ namespace Searching
         protected virtual (bool isFound, Node_P<K, V> element) SearchByKey(K key)
         {
             for (var c = _start; c != null; c = c.Next)
-                if (c.Key.CompareTo(key) == 0)
+                if(key.Equals(c.Key))
                     return (true, c);
             return (false, null);
         }
