@@ -20,12 +20,6 @@ namespace Searching
     //Implement the Interface, most abstractly
     public abstract partial class HashST<K, V>
     {
-        public V this[K key]
-        {
-            get => Get(key);
-            set => Put(key, value);
-        }
-
         public abstract bool IsEmpty { get; }
 
         public abstract bool Contains(K key);
@@ -33,8 +27,6 @@ namespace Searching
         public abstract bool Delete(K key);
 
         public abstract V Get(K key);
-
-        public abstract void Init();
 
         public abstract IEnumerable<K> Keys();
 

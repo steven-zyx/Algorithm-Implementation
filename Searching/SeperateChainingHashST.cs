@@ -9,17 +9,15 @@ namespace Searching
         protected int _count;
         protected SequentialSearchST<K, V>[] _st;
 
-        public SeperateChainingHashST(int m) : base(m) => Init();
-
-        public SeperateChainingHashST() : this(17) { }
-
-        public override void Init()
+        public SeperateChainingHashST(int m) : base(m)
         {
             _count = 0;
             _st = new SequentialSearchST<K, V>[M];
             for (int i = 0; i < M; i++)
                 _st[i] = new SequentialSearchST<K, V>();
         }
+
+        public SeperateChainingHashST() : this(17) { }
 
         public override V Get(K key) => _st[Hash(key)].Get(key);
 

@@ -12,17 +12,9 @@ namespace Searching
     {
         protected TreeNode<K, V> _root;
 
-        public BST() => Init();
-
-        public void Init()
+        public BST()
         {
             _root = null;
-        }
-
-        public V this[K key]
-        {
-            get => Get(key);
-            set => Put(key, value);
         }
 
         public virtual V Get(K key)

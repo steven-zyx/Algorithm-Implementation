@@ -7,10 +7,6 @@ namespace Searching
 {
     public interface ISymbolTable<K, V>
     {
-        void Init();
-
-        V this[K key] { get; set; }
-
         V Get(K key);
 
         void Put(K key, V value);

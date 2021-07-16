@@ -13,19 +13,8 @@ namespace Searching
 
         public SequentialSearchST()
         {
-            _count = 0;
-        }
-
-        public void Init()
-        {
             _start = null;
             _count = 0;
-        }
-
-        public V this[K key]
-        {
-            get => Get(key);
-            set => Put(key, value);
         }
 
         public virtual void Put(K key, V value)

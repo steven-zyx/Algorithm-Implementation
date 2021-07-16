@@ -4,25 +4,18 @@ using System.Collections.Generic;
 
 namespace Searching
 {
-    public class BinarySearchST<K, V> : IOrderedSymbolTable<K, V> where K : IComparable
+    //Basic Symbol table ope
+    public partial class BinarySearchST<K, V> : IOrderedSymbolTable<K, V> where K : IComparable
     {
         protected K[] _keys;
         protected V[] _values;
         protected int _count;
 
-        public BinarySearchST() => Init();
-
-        public void Init()
+        public BinarySearchST()
         {
             _keys = new K[16];
             _values = new V[16];
             _count = 0;
-        }
-
-        public V this[K key]
-        {
-            get => Get(key);
-            set => Put(key, value);
         }
 
         public virtual void Put(K key, V value)
@@ -91,6 +84,17 @@ namespace Searching
 
         public int Size() => _count;
 
+        public IEnumerable<K> Keys()
+        {
+            for (int i = 0; i < _count; i++)
+                yield return _keys[i];
+        }
+    }
+
+
+    //Ordered symbol table operation
+    public partial class BinarySearchST<K, V>
+    {
         public K Min() => _keys[0];
 
         public K Max() => _keys[_count - 1];
@@ -168,13 +172,11 @@ namespace Searching
             if (KeyEquals(hiRank, hi))
                 yield return _keys[hiRank];
         }
+    }
 
-        public IEnumerable<K> Keys()
-        {
-            for (int i = 0; i < _count; i++)
-                yield return _keys[i];
-        }
-
+    //Dedicated funtions
+    public partial class BinarySearchST<K, V>
+    {
         protected bool KeyEquals(int index, K key) =>
             index < _count && _keys[index].CompareTo(key) == 0;
 

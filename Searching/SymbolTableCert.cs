@@ -14,12 +14,6 @@ namespace Searching
             _st = st;
         }
 
-        public V this[K key]
-        {
-            get => _st[key];
-            set => _st[key] = value;
-        }
-
         public bool IsEmpty => _st.IsEmpty;
 
         public bool Contains(K key) => _st.Contains(key);
@@ -32,8 +26,6 @@ namespace Searching
         }
 
         public V Get(K key) => _st.Get(key);
-
-        public void Init() => _st.Init();
 
         public IEnumerable<K> Keys() => _st.Keys();
 

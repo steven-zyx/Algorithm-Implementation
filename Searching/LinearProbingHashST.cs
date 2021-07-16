@@ -13,9 +13,7 @@ namespace Searching
 
         public LinearProbingHashST() : this(16) { }
 
-        protected LinearProbingHashST(int size) : base(size) => Init();
-
-        public override void Init()
+        protected LinearProbingHashST(int size) : base(size)
         {
             _count = 0;
             _keys = new K[M];
