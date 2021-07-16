@@ -403,7 +403,7 @@ namespace Searching
     }
 
     //Functions for Certification
-    public partial class BST<K, V>
+    public partial class BST<K, V> : ICertificate
     {
         protected void CorrectN(TreeNode<K, V> x)
         {
@@ -462,7 +462,7 @@ namespace Searching
                     throw new Exception("key != Select(Rank(key))");
         }
 
-        protected void IsBST()
+        public void Certificate()
         {
             CorrectN(_root);
             IsOrdered(_root, Min(), Max());

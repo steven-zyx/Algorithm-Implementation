@@ -6,26 +6,35 @@ namespace BasicDataStrcture
 {
     public class Trasaction
     {
-        private readonly string _who;
-        private readonly DateTime _when;
-        private readonly double _amount;
+        public string Who { get; }
+        public DateTime When { get; }
+        public double Amount { get; }
+
+        private readonly int _hash;
 
         public Trasaction(string who, DateTime when, double amount)
         {
-            _who = who;
-            _when = when;
-            _amount = amount;
+            Who = who;
+            When = when;
+            Amount = amount;
+            _hash = Hash();
         }
 
-        public override int GetHashCode()
+        protected int Hash()
         {
             int hash = 17;
-            hash = hash * 31 + _who.GetHashCode();
-            hash = hash * 31 + _when.GetHashCode();
-            hash = hash * 31 + _amount.GetHashCode();
+            hash = hash * 31 + Who.GetHashCode();
+            hash = hash * 31 + When.GetHashCode();
+            hash = hash * 31 + Amount.GetHashCode();
             return hash;
         }
 
+        public override int GetHashCode() => _hash;
 
+        public override bool Equals(object obj)
+        {
+            Trasaction o = obj as Trasaction;
+            return o.Who.Equals(Who) && o.When.Equals(When) && o.Amount.Equals(Amount);
+        }
     }
 }

@@ -166,7 +166,7 @@ namespace Searching
             return x;
         }
 
-        protected TreeNode_C<K, V> MoveRedLeft(TreeNode_C<K, V> h)
+        protected virtual TreeNode_C<K, V> MoveRedLeft(TreeNode_C<K, V> h)
         {
             FlipColor(h);
             if (IsRed(h.Right_C.Left_C))
@@ -178,7 +178,7 @@ namespace Searching
             return h;
         }
 
-        protected TreeNode_C<K, V> MoveRedRight(TreeNode_C<K, V> h)
+        protected virtual TreeNode_C<K, V> MoveRedRight(TreeNode_C<K, V> h)
         {
             FlipColor(h);
             if (IsRed(h.Left_C.Left_C))

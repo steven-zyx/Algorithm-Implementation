@@ -61,7 +61,7 @@ namespace Searching
 
             for (var c = _start; c.Next != null; c = c.Next)
             {
-                if (key.Equals(c.Next))
+                if (key.Equals(c.Next.Key))
                 {
                     c.Next = c.Next.Next;
                     _count--;

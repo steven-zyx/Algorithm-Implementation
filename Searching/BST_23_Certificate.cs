@@ -91,7 +91,7 @@ namespace Searching
 
         protected void IsRedBlackBST()
         {
-            IsBST();
+            Certificate();
             SingleRedLink(Root);
             RedLinkLeanLeft(Root);
             IsBalanced(Root);
