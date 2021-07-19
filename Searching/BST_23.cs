@@ -206,4 +206,62 @@ namespace Searching
             return h;
         }
     }
+
+    //For Certification
+    public partial class BST_23<K, V>
+    {
+        private int _blackLevel;
+
+        protected void RedLinkLeanLeft(TreeNode_C<K, V> h)
+        {
+            if (h == null) return;
+
+            if (IsRed(h.Right_C))
+                throw new Exception("A right-leaing red link");
+
+            RedLinkLeanLeft(h.Left_C);
+            RedLinkLeanLeft(h.Right_C);
+        }
+
+        protected void IsBalanced(TreeNode_C<K, V> h)
+        {
+            _blackLevel = -1;
+            IsBalanced(h, 0);
+        }
+
+        private void IsBalanced(TreeNode_C<K, V> h, int level)
+        {
+            if (h == null)
+            {
+                CheckBlackLevel(level);
+                return;
+            }
+
+            if (IsRed(h.Left_C))
+                IsBalanced(h.Left_C, level);
+            else
+                IsBalanced(h.Left_C, level + 1);
+
+            if (IsRed(h.Right_C))
+                IsBalanced(h.Right_C, level);
+            else
+                IsBalanced(h.Right_C, level + 1);
+        }
+
+        private void CheckBlackLevel(int level)
+        {
+            if (_blackLevel == -1)
+                _blackLevel = level;
+            else if (level != _blackLevel)
+                throw new Exception("Different black level");
+        }
+
+        public override void Certificate()
+        {
+            base.Certificate();
+            SingleRedLink(Root);
+            RedLinkLeanLeft(Root);
+            IsBalanced(Root);
+        }
+    }
 }

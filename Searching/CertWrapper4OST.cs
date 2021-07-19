@@ -4,14 +4,14 @@ using System.Text;
 
 namespace Searching
 {
-    public class OrderedSymbolTableCert<T, K, V>
-        : SymbolTableCert<T, K, V>, IOrderedSymbolTable<K, V>
+    public class CertWrapper4OST<T, K, V>
+        : CertWrapper4ST<T, K, V>, IOrderedSymbolTable<K, V>
         where T : IOrderedSymbolTable<K, V>
         where K : IComparable
     {
         protected IOrderedSymbolTable<K, V> _ost;
 
-        public OrderedSymbolTableCert(T ost) : base(ost)
+        public CertWrapper4OST(T ost) : base(ost)
         {
             _ost = ost;
         }

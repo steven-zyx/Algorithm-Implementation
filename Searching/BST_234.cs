@@ -70,4 +70,33 @@ namespace Searching
             return h;
         }
     }
+
+    public partial class BST_234<K, V>
+    {
+        protected void CorrectRedLink(TreeNode_C<K, V> h)
+        {
+            if (h == null) return;
+
+            if (IsRed(h))
+                if (IsRed(h.Left_C) || IsRed(h.Right_C))
+                    throw new Exception("Red child under a red parent");
+
+            if (IsBlack(h))
+                if (IsBlack(h.Left_C) && IsRed(h.Right_C))
+                    throw new Exception("A single right-leaing red link");
+
+            CorrectRedLink(h.Left_C);
+            CorrectRedLink(h.Right_C);
+        }
+
+        public override void Certificate()
+        {
+            CorrectN(_root);
+            IsOrdered(_root, Min(), Max());
+            HasNoDuplicates();
+            SelectRankCheck();
+            CorrectRedLink(Root);
+            IsBalanced(Root);
+        }
+    }
 }

@@ -191,4 +191,24 @@ namespace Searching
             _values = newValues;
         }
     }
+
+    //For certification
+    public partial class BinarySearchST<K, V> : ICertificate
+    {
+        public void Certificate()
+        {
+            K current = _keys[0];
+            for (int i = 1; i < _count; i++)
+            {
+                K key = _keys[i];
+                if (current.CompareTo(key) >= 0 ||
+                    i != Rank(Select(i)) ||
+                    key.CompareTo(Select(Rank(key))) != 0)
+                {
+                    throw new Exception("Inconsistant");
+                }
+                current = key;
+            }
+        }
+    }
 }

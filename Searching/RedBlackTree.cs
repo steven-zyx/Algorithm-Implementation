@@ -5,7 +5,8 @@ using BasicDataStrcture;
 
 namespace Searching
 {
-    public abstract class RedBlackTree<K, V> : BST<K, V> where K : IComparable
+    //Basic operation
+    public abstract partial class RedBlackTree<K, V> : BST<K, V> where K : IComparable
     {
         protected const bool RED = true;
         protected const bool BLACK = false;
@@ -27,6 +28,21 @@ namespace Searching
                 return true;
 
             return x.Color == BLACK;
+        }
+    }
+
+    //For certification
+    public abstract partial class RedBlackTree<K, V>
+    {
+        protected void SingleRedLink(TreeNode_C<K, V> h)
+        {
+            if (h == null) return;
+
+            if (IsRed(h) && IsRed(h.Left_C))
+                throw new Exception("A node connected with 2 red links");
+
+            SingleRedLink(h.Left_C);
+            SingleRedLink(h.Right_C);
         }
     }
 }

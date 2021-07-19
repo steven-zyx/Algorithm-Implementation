@@ -90,5 +90,11 @@ namespace Searching
                 h.Color = BLACK;
             return h;
         }
+
+        public override void Certificate()
+        {
+            base.Certificate();
+            SingleRedLink(Root);
+        }
     }
 }

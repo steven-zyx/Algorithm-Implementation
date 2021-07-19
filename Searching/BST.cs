@@ -454,7 +454,7 @@ namespace Searching
                     throw new Exception("key != Select(Rank(key))");
         }
 
-        public void Certificate()
+        public virtual void Certificate()
         {
             CorrectN(_root);
             IsOrdered(_root, Min(), Max());

@@ -39,6 +39,7 @@ namespace UnitTestProject1
         }
 
     }
+
     [TestClass]
     public class TestSymbolTable
     {
@@ -143,6 +144,9 @@ namespace UnitTestProject1
         [TestMethod]
         public virtual void Test_Min_Max()
         {
+            //_rowCount = 10;
+            //_ran = new Random(4);
+
             int[] source = Util.GenerateRandomArray(0, _rowCount);
             for (int i = 0; i < source.Length; i++)
                 _OST_Int.Put(source[i], source[i]);
@@ -150,11 +154,8 @@ namespace UnitTestProject1
             int currentMin = -1;
             int currentMax = int.MaxValue;
 
-            int count = 0;
             while (!_OST_Int.IsEmpty)
             {
-                //Trace.WriteLine(++count);
-
                 Assert.IsTrue(currentMin < _OST_Int.Min());
                 currentMin = _OST_Int.Min();
                 _OST_Int.DeleteMin();
@@ -233,7 +234,7 @@ namespace UnitTestProject1
         public virtual void Test_Get_Put_Delete_Resize_Cert()
         {
             _rowCount = RowCount4Cert;
-            _ST_Int = new SymbolTableCert<ISymbolTable<int, int>, int, int>(_ST_Int);
+            _ST_Int = new CertWrapper4ST<ISymbolTable<int, int>, int, int>(_ST_Int);
             Test_Get_Put_Delete_Resize();
         }
 
@@ -241,7 +242,7 @@ namespace UnitTestProject1
         public virtual void Test_Get_Put_Delete_Intermixed_Cert()
         {
             _rowCount = RowCount4Cert;
-            _ST_Int = new SymbolTableCert<ISymbolTable<int, int>, int, int>(_ST_Int);
+            _ST_Int = new CertWrapper4ST<ISymbolTable<int, int>, int, int>(_ST_Int);
             Test_Get_Put_Delete_Intermixed();
         }
 
@@ -249,8 +250,8 @@ namespace UnitTestProject1
         public virtual void Test_Min_Max_Cert()
         {
             _rowCount = RowCount4Cert;
-            _OST_Int = new OrderedSymbolTableCert<IOrderedSymbolTable<int, int>, int, int>(_OST_Int);
-            Test_Get_Put_Delete_Intermixed();
+            _OST_Int = new CertWrapper4OST<IOrderedSymbolTable<int, int>, int, int>(_OST_Int);
+            Test_Min_Max();
         }
     }
 
@@ -273,7 +274,7 @@ namespace UnitTestProject1
     }
 
     [TestClass]
-    public class TestOrderedInsertion : TestOrderedSymbolTable
+    public class TestOrderedInsertion : TestOrderedSymbolTableCert
     {
         public TestOrderedInsertion()
         {
@@ -283,7 +284,7 @@ namespace UnitTestProject1
     }
 
     [TestClass]
-    public class TestBinarySearch_Cache : TestOrderedSymbolTable
+    public class TestBinarySearch_Cache : TestOrderedSymbolTableCert
     {
         public TestBinarySearch_Cache()
         {
@@ -323,7 +324,7 @@ namespace UnitTestProject1
     }
 
     [TestClass]
-    public class TestBST_Iterator : TestOrderedSymbolTable
+    public class TestBST_Iterator : TestOrderedSymbolTableCert
     {
         public TestBST_Iterator()
         {
@@ -333,7 +334,7 @@ namespace UnitTestProject1
     }
 
     [TestClass]
-    public class TestBST_Threading : TestOrderedSymbolTable
+    public class TestBST_Threading : TestOrderedSymbolTableCert
     {
         private BST_Threading<int, int> bst;
 
@@ -385,7 +386,7 @@ namespace UnitTestProject1
     }
 
     [TestClass]
-    public class TestBST_23 : TestOrderedSymbolTable
+    public class TestBST_23 : TestOrderedSymbolTableCert
     {
         public TestBST_23()
         {
@@ -395,7 +396,27 @@ namespace UnitTestProject1
     }
 
     [TestClass]
-    public class TestBST_234 : TestOrderedSymbolTable
+    public class TestBST_23_Cache : TestOrderedSymbolTableCert
+    {
+        public TestBST_23_Cache()
+        {
+            _ST_Int = new BST_23_Cache<int, int>();
+            _OST_Int = new BST_23_Cache<int, int>();
+        }
+    }
+
+    [TestClass]
+    public class TestBST_23_WithoutBalance : TestOrderedSymbolTableCert
+    {
+        public TestBST_23_WithoutBalance()
+        {
+            _ST_Int = new BST_23_WithoutBalance<int, int>();
+            _OST_Int = new BST_23_WithoutBalance<int, int>();
+        }
+    }
+
+    [TestClass]
+    public class TestBST_234 : TestOrderedSymbolTableCert
     {
         public TestBST_234()
         {
@@ -413,44 +434,13 @@ namespace UnitTestProject1
         //    base.Test_Get_Put_Delete_Resize();
         //}
 
-        [TestMethod]
-        public override void Test_Min_Max()
-        {
-            //_rowCount = 20;
-            while (true)
-                base.Test_Min_Max();
-        }
-    }
-
-    [TestClass]
-    public class TestBST_23_Cache : TestOrderedSymbolTable
-    {
-        public TestBST_23_Cache()
-        {
-            _ST_Int = new BST_23_Cache<int, int>();
-            _OST_Int = new BST_23_Cache<int, int>();
-        }
-    }
-
-    [TestClass]
-    public class TestBST_23_Certificate : TestOrderedSymbolTable
-    {
-        public TestBST_23_Certificate()
-        {
-            _ST_Int = new BST_23_Certificate<int, int>();
-            _OST_Int = new BST_23_Certificate<int, int>();
-            _rowCount = 800;
-        }
-    }
-
-    [TestClass]
-    public class TestBST_23_WithoutBalance : TestOrderedSymbolTable
-    {
-        public TestBST_23_WithoutBalance()
-        {
-            _ST_Int = new BST_23_WithoutBalance<int, int>();
-            _OST_Int = new BST_23_WithoutBalance<int, int>();
-        }
+        //[TestMethod]
+        //public override void Test_Min_Max()
+        //{
+        //    //_rowCount = 20;
+        //    while (true)
+        //        base.Test_Min_Max();
+        //}
     }
 
     public abstract class TestHashST : TestSymbolTable

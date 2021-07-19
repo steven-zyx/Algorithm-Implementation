@@ -34,7 +34,7 @@ namespace Searching
                 return;
             }
 
-            _root = Put(_root, key, value);
+            base.Put(key, value);
         }
 
         protected override TreeNode<K, V> Put(TreeNode<K, V> x, K key, V value)

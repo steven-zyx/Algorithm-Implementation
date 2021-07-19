@@ -4,12 +4,12 @@ using System.Text;
 
 namespace Searching
 {
-    public class SymbolTableCert<T, K, V> : ISymbolTable<K, V> where T : ISymbolTable<K, V>
+    public class CertWrapper4ST<T, K, V> : ISymbolTable<K, V> where T : ISymbolTable<K, V>
     {
         protected ISymbolTable<K, V> _st;
         protected ICertificate Cert => _st as ICertificate;
 
-        public SymbolTableCert(T st)
+        public CertWrapper4ST(T st)
         {
             _st = st;
         }

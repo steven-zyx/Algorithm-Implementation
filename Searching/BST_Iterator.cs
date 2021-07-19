@@ -10,6 +10,9 @@ namespace Searching
     {
         public override IEnumerable<K> Keys()
         {
+            if (_root == null)
+                yield break;
+
             Stack<TreeNode<K, V>> route = new Stack<TreeNode<K, V>>();
             route.Push(_root);
 
