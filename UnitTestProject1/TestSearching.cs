@@ -43,13 +43,11 @@ namespace UnitTestProject1
     [TestClass]
     public class TestSymbolTable
     {
-        protected Random _ran;
         protected ISymbolTable<int, int> _ST_Int;
         protected int _rowCount;
 
         public TestSymbolTable()
         {
-            _ran = new Random((int)DateTime.Now.Ticks);
             _ST_Int = new SequentialSearchST<int, int>();
             _rowCount = 15_000;
         }
@@ -78,7 +76,7 @@ namespace UnitTestProject1
             HashSet<int> insertedKeys = new HashSet<int>();
             foreach (int i in source)
             {
-                int choice = _ran.Next(0, 3);
+                int choice = Util.Ran.Next(0, 3);
                 switch (choice)
                 {
                     case 0:
@@ -120,7 +118,7 @@ namespace UnitTestProject1
 
             for (int i = 0; i < _rowCount; i++)
             {
-                int index = _ran.Next(0, _rowCount * 2);
+                int index = Util.Ran.Next(0, _rowCount * 2);
                 if (index < _rowCount)
                     Assert.IsTrue(_ST_Int.Contains(index));
                 else
@@ -145,7 +143,6 @@ namespace UnitTestProject1
         public virtual void Test_Min_Max()
         {
             //_rowCount = 10;
-            //_ran = new Random(4);
 
             int[] source = Util.GenerateRandomArray(0, _rowCount);
             for (int i = 0; i < source.Length; i++)
@@ -187,8 +184,8 @@ namespace UnitTestProject1
             for (int i = 0; i < source.Length; i++)
                 _OST_Int.Put(source[i], i);
 
-            int end = _ran.Next(0, _rowCount);
-            int start = end - _ran.Next(0, end);
+            int end = Util.Ran.Next(0, _rowCount);
+            int start = end - Util.Ran.Next(0, end);
             foreach (int n in _OST_Int.Keys(start, end))
             {
                 Assert.AreEqual(n, source[_OST_Int.Get(n)]);
@@ -360,7 +357,7 @@ namespace UnitTestProject1
 
             for (int i = 0; i < _rowCount / 2; i++)
             {
-                int key = _ran.Next(0, _rowCount);
+                int key = Util.Ran.Next(0, _rowCount);
                 bst.Delete(key);
             }
 

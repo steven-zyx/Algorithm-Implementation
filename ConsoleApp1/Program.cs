@@ -7,6 +7,7 @@ using Utils;
 using System.Collections;
 using System.Collections.Generic;
 using Searching;
+using System.IO;
 
 namespace ConsoleApp1
 {
@@ -34,6 +35,9 @@ namespace ConsoleApp1
             //ExactProbabilities();
             //TreeDrawing();
             //ShowAvgPathLength();
+            TestDrawTree<BST<int, bool>>("bst");
+            TestDrawTree<BST_23<int, bool>>("BST_23");
+            TestDrawTree<BST_234<int, bool>>("BST_234");
             Console.ReadLine();
         }
 
@@ -404,6 +408,23 @@ namespace ConsoleApp1
             foreach (int n in source)
                 bst.Put(n, false);
             return bst;
+        }
+
+        private static void TestDrawTree<Tree>(string name) where Tree : BST<int, bool>, new()
+        {
+            Util.Ran = new Random(3);
+
+            int count = (int)Math.Pow(2, 5) - 2;
+            int[] source = Util.GenerateRandomArray(0, count);
+            Tree tree = new Tree();
+            foreach (int x in source)
+                tree.Put(x, false);
+
+
+            string diagram = tree.DrawTree().ToString();
+            string fileName = $@"C:\Users\v-yuzhu\Desktop\{name}.txt";
+            File.WriteAllText(fileName, diagram);
+            Console.WriteLine("finish");
         }
     }
 }

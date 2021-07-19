@@ -462,4 +462,61 @@ namespace Searching
             SelectRankCheck();
         }
     }
+
+    //Function sFor drawing tree
+    public partial class BST<K, V>
+    {
+        private List<(K Key, bool Color, int level, double position)> ShowDiagram()
+        {
+            var result = new List<(K Key, bool Color, int level, double position)>();
+            var nodeToProcess = new Queue<(TreeNode<K, V> node, int level, double position)>();
+            nodeToProcess.Enqueue((_root, 1, 0.5));
+            while (nodeToProcess.Count > 0)
+            {
+                var ntp = nodeToProcess.Dequeue();
+                var h = ntp.node;
+                bool color = false;
+                if (h is TreeNode_C<K, V>)
+                    color = (h as TreeNode_C<K, V>).Color;
+                result.Add((h.Key, color, ntp.level, ntp.position));
+
+                int level = ntp.level + 1;
+                double interval = 1 / Math.Pow(2, level);
+                if (h.Left != null)
+                    nodeToProcess.Enqueue((h.Left, level, ntp.position - interval));
+                if (h.Right != null)
+                    nodeToProcess.Enqueue((h.Right, level, ntp.position + interval));
+            }
+            return result;
+        }
+
+        public StringBuilder DrawTree()
+        {
+            List<(K Key, bool Color, int level, double position)> diagram = ShowDiagram();
+            int maxCountInLine = (int)Math.Pow(2, diagram[diagram.Count - 1].level - 2);
+            int maxNodeLength = Math.Max(Min().ToString().Count(), Max().ToString().Count());
+            int width = (maxNodeLength + 1) * maxCountInLine;
+
+            StringBuilder sb = new StringBuilder();
+            int level = 0;
+            string line = "";
+            foreach (var h in diagram)
+            {
+                if (h.level > level)
+                {
+                    sb.AppendLine(line);
+                    line = new string(Enumerable.Repeat(' ', width + 10).ToArray());
+                    level = h.level;
+                }
+
+                string key = h.Key.ToString();
+                if (h.Color)
+                    key += "^";
+
+                int position = (int)(width * h.position);
+                line = line.Remove(position, key.Count()).Insert(position, key);
+            }
+            return sb;
+        }
+    }
 }

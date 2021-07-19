@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using BasicDataStrcture;
+using System.Linq;
 
 namespace Searching
 {
+    //Overwriting base class
     public partial class BST_234<K, V> : BST_23<K, V> where K : IComparable
     {
         protected override TreeNode<K, V> Put(TreeNode<K, V> x, K key, V value)
@@ -41,6 +43,7 @@ namespace Searching
         }
     }
 
+    //Dedicated operation
     public partial class BST_234<K, V>
     {
         protected override TreeNode_C<K, V> MoveRedLeft(TreeNode_C<K, V> h)
@@ -71,6 +74,7 @@ namespace Searching
         }
     }
 
+    //Certification operation
     public partial class BST_234<K, V>
     {
         protected void CorrectRedLink(TreeNode_C<K, V> h)

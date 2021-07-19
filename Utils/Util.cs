@@ -9,6 +9,8 @@ namespace Utils
 {
     public static class Util
     {
+        public static Random Ran = new Random((int)DateTime.Now.Ticks);
+
         public static int[] GenerateRandomArray(int start, int count)
         {
             int[] source = Enumerable.Range(start, count).ToArray();
@@ -31,10 +33,9 @@ namespace Utils
         private static void Shuffle(int[] source)
         {
             int count = source.Length;
-            Random ran = new Random((int)DateTime.Now.Ticks);
             for (int i = 0; i < count; i++)
             {
-                int randomIndex = ran.Next(0, count);
+                int randomIndex = Ran.Next(0, count);
                 int temp = source[i];
                 source[i] = source[randomIndex];
                 source[randomIndex] = temp;
