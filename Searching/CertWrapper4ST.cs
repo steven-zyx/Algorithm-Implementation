@@ -18,7 +18,7 @@ namespace Searching
 
         public bool Contains(K key) => _st.Contains(key);
 
-        public bool Delete(K key)
+        public virtual bool Delete(K key)
         {
             bool result = _st.Delete(key);
             Cert.Certificate();
@@ -29,7 +29,7 @@ namespace Searching
 
         public IEnumerable<K> Keys() => _st.Keys();
 
-        public void Put(K key, V value)
+        public virtual void Put(K key, V value)
         {
             _st.Put(key, value);
             Cert.Certificate();

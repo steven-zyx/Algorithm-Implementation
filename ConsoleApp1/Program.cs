@@ -35,9 +35,8 @@ namespace ConsoleApp1
             //ExactProbabilities();
             //TreeDrawing();
             //ShowAvgPathLength();
-            TestDrawTree<BST<int, bool>>("bst");
-            TestDrawTree<BST_23<int, bool>>("BST_23");
-            TestDrawTree<BST_234<int, bool>>("BST_234");
+            //DrawBST();
+            All23Trees();
             Console.ReadLine();
         }
 
@@ -410,11 +409,19 @@ namespace ConsoleApp1
             return bst;
         }
 
+        public static void DrawBST()
+        {
+            TestDrawTree<BST<int, bool>>("bst");
+            TestDrawTree<BST_23<int, bool>>("BST_23");
+            TestDrawTree<BST_234<int, bool>>("BST_234");
+            Console.WriteLine("Finish drawing.");
+        }
+
         private static void TestDrawTree<Tree>(string name) where Tree : BST<int, bool>, new()
         {
             Util.Ran = new Random(3);
 
-            int count = (int)Math.Pow(2, 5) - 2;
+            int count = 15;
             int[] source = Util.GenerateRandomArray(0, count);
             Tree tree = new Tree();
             foreach (int x in source)
@@ -422,9 +429,17 @@ namespace ConsoleApp1
 
 
             string diagram = tree.DrawTree().ToString();
-            string fileName = $@"C:\Users\v-yuzhu\Desktop\{name}.txt";
+            string fileName = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + $@"\{name}.txt";
             File.WriteAllText(fileName, diagram);
-            Console.WriteLine("finish");
+        }
+
+        public static void All23Trees()
+        {
+            string fileName = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"/{0}.txt";
+            //new BST_23_GenerateAll(2, string.Format(fileName, "23Tree_height2"));
+            //new BST_23_GenerateAll(3, string.Format(fileName, "23Tree_height3"));
+            new BST_23_GenerateAll(4, string.Format(fileName, "23Tree_height4"));
+            Console.WriteLine("Finish drawing");
         }
     }
 }

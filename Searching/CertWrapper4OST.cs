@@ -20,13 +20,13 @@ namespace Searching
 
         public K Floor(K key) => _ost.Floor(key);
 
-        public void DeleteMax()
+        public virtual void DeleteMax()
         {
             _ost.DeleteMax();
             Cert.Certificate();
         }
 
-        public void DeleteMin()
+        public virtual void DeleteMin()
         {
             _ost.DeleteMin();
             Cert.Certificate();

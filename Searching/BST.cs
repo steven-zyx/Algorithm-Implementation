@@ -463,14 +463,15 @@ namespace Searching
         }
     }
 
-    //Function sFor drawing tree
+    //Functions for drawing tree
     public partial class BST<K, V>
     {
         private List<(K Key, bool Color, int level, double position)> ShowDiagram()
         {
             var result = new List<(K Key, bool Color, int level, double position)>();
             var nodeToProcess = new Queue<(TreeNode<K, V> node, int level, double position)>();
-            nodeToProcess.Enqueue((_root, 1, 0.5));
+            if (_root != null)
+                nodeToProcess.Enqueue((_root, 1, 0.5));
             while (nodeToProcess.Count > 0)
             {
                 var ntp = nodeToProcess.Dequeue();
@@ -490,21 +491,24 @@ namespace Searching
             return result;
         }
 
-        public StringBuilder DrawTree()
+        public string DrawTree()
         {
+            if (_root == null)
+                return string.Empty;
+
             List<(K Key, bool Color, int level, double position)> diagram = ShowDiagram();
-            int maxCountInLine = (int)Math.Pow(2, diagram[diagram.Count - 1].level - 2);
+            int maxCountInLine = (int)Math.Pow(2, diagram[diagram.Count - 1].level - 1);
             int maxNodeLength = Math.Max(Min().ToString().Count(), Max().ToString().Count());
             int width = (maxNodeLength + 1) * maxCountInLine;
 
-            StringBuilder sb = new StringBuilder();
+            StringBuilder text = new StringBuilder();
             int level = 0;
             string line = "";
             foreach (var h in diagram)
             {
                 if (h.level > level)
                 {
-                    sb.AppendLine(line);
+                    text.AppendLine(line);
                     line = new string(Enumerable.Repeat(' ', width + 10).ToArray());
                     level = h.level;
                 }
@@ -516,7 +520,9 @@ namespace Searching
                 int position = (int)(width * h.position);
                 line = line.Remove(position, key.Count()).Insert(position, key);
             }
-            return sb;
+            text.AppendLine(line);
+
+            return text.ToString();
         }
     }
 }

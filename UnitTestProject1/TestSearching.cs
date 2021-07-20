@@ -142,8 +142,6 @@ namespace UnitTestProject1
         [TestMethod]
         public virtual void Test_Min_Max()
         {
-            //_rowCount = 10;
-
             int[] source = Util.GenerateRandomArray(0, _rowCount);
             for (int i = 0; i < source.Length; i++)
                 _OST_Int.Put(source[i], source[i]);

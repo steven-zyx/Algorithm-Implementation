@@ -68,7 +68,7 @@ namespace Searching
         protected override TreeNode<K, V> DeleteMax(TreeNode<K, V> x)
         {
             TreeNode_C<K, V> h = x as TreeNode_C<K, V>;
-            if (IsRed(h.Left_C))
+            if (IsRed(h.Left_C) && IsBlack(h.Right_C))
                 h = RotateRight(h);
             else if (h.Right == null)
                 return null;
@@ -112,7 +112,7 @@ namespace Searching
             }
             else
             {
-                if (IsRed(h.Left_C))
+                if (IsRed(h.Left_C) && IsBlack(h.Right_C))
                     h = RotateRight(h);
                 else if (key.CompareTo(h.Key) == 0 && h.Right_C == null)
                     return null;
