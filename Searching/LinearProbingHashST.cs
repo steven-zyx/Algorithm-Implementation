@@ -46,7 +46,6 @@ namespace Searching
             return default(V);
         }
 
-
         public override bool Contains(K key)
         {
             for (int i = Hash(key); _isOccupied[i]; Increment(ref i))
