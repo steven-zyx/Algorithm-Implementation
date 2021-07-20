@@ -475,5 +475,15 @@ namespace UnitTestProject1
             _ST_Trans = new LinearProbingHashST<Trasaction, int>();
         }
     }
+
+    [TestClass]
+    public class TestLazyDeleteLinearProbing : TestHashST
+    {
+        public TestLazyDeleteLinearProbing()
+        {
+            _ST_Int = new LazyDeleteLinearProbing<int, int>();
+            _ST_Trans = new LazyDeleteLinearProbing<Trasaction, int>();
+        }
+    }
 }
 

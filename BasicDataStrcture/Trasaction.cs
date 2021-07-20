@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BasicDataStrcture
 {
-    public class Trasaction
+    public struct Trasaction
     {
         public string Who { get; }
         public DateTime When { get; }
@@ -17,10 +17,11 @@ namespace BasicDataStrcture
             Who = who;
             When = when;
             Amount = amount;
+            _hash = 0;
             _hash = Hash();
         }
 
-        protected int Hash()
+        private int Hash()
         {
             int hash = 17;
             hash = hash * 31 + Who.GetHashCode();
@@ -33,7 +34,7 @@ namespace BasicDataStrcture
 
         public override bool Equals(object obj)
         {
-            Trasaction o = obj as Trasaction;
+            Trasaction o = (Trasaction)obj;
             return o.Who.Equals(Who) && o.When.Equals(When) && o.Amount.Equals(Amount);
         }
     }

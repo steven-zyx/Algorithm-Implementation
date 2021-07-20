@@ -36,7 +36,8 @@ namespace ConsoleApp1
             //TreeDrawing();
             //ShowAvgPathLength();
             //DrawBST();
-            All23Trees();
+            //All23Trees();
+            TestNullable();
             Console.ReadLine();
         }
 
@@ -436,8 +437,8 @@ namespace ConsoleApp1
         public static void All23Trees()
         {
             string fileName = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"/{0}.txt";
-            //new BST_23_GenerateAll(2, string.Format(fileName, "23Tree_height2"));
-            //new BST_23_GenerateAll(3, string.Format(fileName, "23Tree_height3"));
+            new BST_23_GenerateAll(2, string.Format(fileName, "23Tree_height2"));
+            new BST_23_GenerateAll(3, string.Format(fileName, "23Tree_height3"));
             new BST_23_GenerateAll(4, string.Format(fileName, "23Tree_height4"));
             Console.WriteLine("Finish drawing");
         }
