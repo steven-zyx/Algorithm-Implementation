@@ -17,7 +17,9 @@ namespace Searching
             _count = 0;
         }
 
-        public virtual void Put(K key, V value)
+        public virtual void Put(K key, V value) => PutAndCheck(key, value);
+
+        public bool PutAndCheck(K key, V value)
         {
             var result = SearchByKey(key);
             if (result.isFound)
@@ -28,6 +30,7 @@ namespace Searching
                 _start = newOne;
                 _count++;
             }
+            return !result.isFound;
         }
 
         public virtual V Get(K key)
@@ -40,7 +43,7 @@ namespace Searching
         {
             if (_start == null)
                 return false;
-            
+
             else if (key.Equals(_start.Key))
             {
                 _start = _start.Next;
@@ -81,7 +84,7 @@ namespace Searching
         protected virtual (bool isFound, Node_P<K, V> element) SearchByKey(K key)
         {
             for (var c = _start; c != null; c = c.Next)
-                if(key.Equals(c.Key))
+                if (key.Equals(c.Key))
                     return (true, c);
             return (false, null);
         }

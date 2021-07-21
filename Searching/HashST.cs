@@ -14,7 +14,7 @@ namespace Searching
             M = m;
         }
 
-        protected int Hash(K key) => (key.GetHashCode() & 0x7fff_ffff) % M;
+        protected virtual int Hash(K key) => (key.GetHashCode() & 0x7fff_ffff) % M;
     }
 
     //Implement the Interface, most abstractly

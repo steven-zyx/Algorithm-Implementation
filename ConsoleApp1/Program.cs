@@ -37,7 +37,6 @@ namespace ConsoleApp1
             //ShowAvgPathLength();
             //DrawBST();
             //All23Trees();
-            TestNullable();
             Console.ReadLine();
         }
 

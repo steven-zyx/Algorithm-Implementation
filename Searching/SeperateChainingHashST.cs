@@ -23,16 +23,17 @@ namespace Searching
 
         public override void Put(K key, V value)
         {
-            _st[Hash(key)].Put(key, value);
-            if (_count > M / 8) Resize(M * 2);
+            bool result = _st[Hash(key)].PutAndCheck(key, value);
+            if (result && ++_count > M * 8) Resize(M * 2);
         }
 
         public override bool Contains(K key) => _st[Hash(key)].Contains(key);
 
         public override bool Delete(K key)
         {
-            if (_count < M * 2 && M > 17) Resize(M / 2);
-            return _st[Hash(key)].Delete(key);
+            bool result = _st[Hash(key)].Delete(key);
+            if (result && --_count < M * 2 && M > 1) Resize(M / 2);
+            return result;
         }
 
         public override IEnumerable<K> Keys()
@@ -46,7 +47,7 @@ namespace Searching
 
         public override bool IsEmpty => _count == 0;
 
-        protected void Resize(int size)
+        protected virtual void Resize(int size)
         {
             SeperateChainingHashST<K, V> newST = new SeperateChainingHashST<K, V>(size);
             foreach (SequentialSearchST<K, V> st in _st)
