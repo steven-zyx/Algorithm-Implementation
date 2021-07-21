@@ -495,5 +495,15 @@ namespace UnitTestProject1
             _ST_Trans = new DoubleProbing<Trasaction, int>();
         }
     }
+
+    [TestClass]
+    public class TestDoubleHashing : TestSeperateChainingHashST
+    {
+        public TestDoubleHashing()
+        {
+            _ST_Int = new DoubleHashing<int, int>();
+            _ST_Trans = new DoubleHashing<Trasaction, int>();
+        }
+    }
 }
 

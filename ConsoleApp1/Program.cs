@@ -37,6 +37,7 @@ namespace ConsoleApp1
             //ShowAvgPathLength();
             //DrawBST();
             //All23Trees();
+            DisplayChiSquare();
             Console.ReadLine();
         }
 
@@ -440,6 +441,23 @@ namespace ConsoleApp1
             new BST_23_GenerateAll(3, string.Format(fileName, "23Tree_height3"));
             new BST_23_GenerateAll(4, string.Format(fileName, "23Tree_height4"));
             Console.WriteLine("Finish drawing");
+        }
+
+        public static void DisplayChiSquare()
+        {
+            SeperateChainingHashST<int, bool> st = new SeperateChainingHashST<int, bool>();
+            int count = 1_000_000;
+            int[] source = Util.GenerateRandomArray(0, count);
+            for (int i = 1; i < source.Length; i++)
+            {
+                st.Put(source[i], false);
+                if (i % 100_00 == 0)
+                {
+                    var r = st.ChiSquare();
+                    bool isRandom = r.ChiSquare > r.Min && r.ChiSquare < r.Max;
+                    Console.WriteLine($"ChiSquare: {r.ChiSquare}\tMin: {r.Min}\tMax: {r.Max}\tProbability: {r.Probability}\tIsRandom: {isRandom}");
+                }
+            }
         }
     }
 }

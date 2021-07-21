@@ -57,5 +57,17 @@ namespace Searching
             _st = newST._st;
             M = newST.M;
         }
+
+        public (double ChiSquare, double Min, double Max, double Probability) ChiSquare()
+        {
+            double sum = 0;
+            foreach (ISymbolTable<K, V> st in _st)
+                sum += Math.Pow(st.Size() - (double)_count / M, 2);
+            double chiSquare = sum * M / _count;
+            double min = M - Math.Sqrt(M);
+            double max = M + Math.Sqrt(M);
+            double prob = 1 - 1 / ((double)_count / M);
+            return (chiSquare, min, max, prob);
+        }
     }
 }

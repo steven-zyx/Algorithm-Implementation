@@ -64,16 +64,12 @@ namespace Searching
 
             _keys[i] = key;
             _values[i] = value;
-            _count++;
-
-            if (_count + _tombStone > M / 2)
-                Resize(M * 2);
+            if (++_count + _tombStone > M / 2) Resize(M * 2);
         }
 
         protected override void Resize(int size)
         {
             LazyDeleteLinearProbing<K, V> newST = new LazyDeleteLinearProbing<K, V>(size);
-
             for (int i = 0; i < M; i++)
                 if (_keys[i].HasValue && _values[i].HasValue)
                     newST.Put(_keys[i].Value, _values[i].Value);
