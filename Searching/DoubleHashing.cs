@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Utils;
 
 namespace Searching
 {
     public class DoubleHashing<K, V> : LinearProbingHashST<K, V> where K : struct where V : struct
     {
         protected int _tombStone;
-        protected readonly int[] _primes = {
-            7, 13, 31, 61, 127, 251, 509, 1021, 2039, 4093, 8191, 16381, 32749, 65521, 131071, 262139, 524287, 1048573, 2097143, 4194301,
-            8388593, 16777213, 33554393, 67108859, 134217689, 268435399, 536870909, 1073741789, 2147483647 };
 
         public DoubleHashing() : this(31) { }
 
@@ -86,14 +84,14 @@ namespace Searching
 
         protected void Resize(bool doIncrease)
         {
-            for (int i = 0; i < _primes.Length; i++)
+            for (int i = 0; i < Util.Primes.Length; i++)
             {
-                if (_primes[i] == M)
+                if (Util.Primes[i] == M)
                 {
                     if (doIncrease)
-                        Resize(_primes[i + 1]);
+                        Resize(Util.Primes[i + 1]);
                     else
-                        Resize(_primes[i - 1]);
+                        Resize(Util.Primes[i - 1]);
                     return;
                 }
             }

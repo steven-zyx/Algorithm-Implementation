@@ -463,14 +463,15 @@ namespace ConsoleApp1
 
         private static void TestHashing()
         {
-            Random ran = new Random(3);
-            int c1 = ran.Next(0, int.MaxValue);
-            int c2 = ran.Next(0, int.MaxValue);
+            int _rowCount = 1_000_000;
+            ISymbolTable<int, int> _ST_Int = new CuckooHashing<int, int>();
 
-            int num = ran.Next(0, int.MaxValue);
-            int upper = num >> 16;
-            int lower = num & 0xffff;
-            int reult = (upper * c1 + lower * c2 & 0x7fff_ffff) % 97;
+            int[] source = Util.GenerateRandomArray(0, _rowCount);
+            for (int i = 0; i < _rowCount; i++)
+            {
+                _ST_Int.Put(source[i], i);
+                //Assert.AreEqual(i, _ST_Int.Get(source[i]));
+            }
         }
     }
 }

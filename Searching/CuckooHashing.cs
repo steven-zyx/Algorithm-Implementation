@@ -12,16 +12,8 @@ namespace Searching
         private List<K?[]> _keys;
         private List<V?[]> _values;
         private int[] _ranNumbers;
-        protected readonly int[] _primes = {
-            3, 7, 13, 31, 61, 127, 251, 509, 1021, 2039, 4093, 8191, 16381, 32749, 65521, 131071, 262139, 524287, 1048573, 2097143, 4194301,
-            8388593, 16777213, 33554393, 67108859, 134217689, 268435399, 536870909, 1073741789, 2147483647 };
 
         public CuckooHashing(int size) : base(size)
-        {
-            Init();
-        }
-
-        private void Init()
         {
             _count = 0;
             _ranNumbers = new int[] {
@@ -73,8 +65,7 @@ namespace Searching
                 {
                     _keys[i][index] = null;
                     _values[i][index] = null;
-                    if (--_count < M / 8)
-                        Resize(NextSize(false));
+                    if (--_count < M / 4) Resize(NextSize(false));
                     return true;
                 }
             }
@@ -86,14 +77,7 @@ namespace Searching
             for (int i = 0; i < 2; i++)
             {
                 int index = Hash(key, i);
-                if (!_keys[i][index].HasValue)
-                {
-                    _keys[i][index] = key;
-                    _values[i][index] = value;
-                    if (++_count > M / 2) Resize(NextSize(true));
-                    return;
-                }
-                else if (_keys[i][index].Equals(key))
+                if (_keys[i][index].Equals(key))
                 {
                     _values[i][index] = value;
                     return;
@@ -117,7 +101,7 @@ namespace Searching
                 {
                     _keys[tId][index] = key;
                     _values[tId][index] = value;
-                    if (++_count > M / 2) Resize(NextSize(true));
+                    if (++_count > M) Resize(NextSize(true));
                     return;
                 }
             }
@@ -139,36 +123,28 @@ namespace Searching
 
         private void Resize(int size)
         {
-            K[] tempKeys = new K[_count];
-            V[] tempValues = new V[_count];
-            int index = 0;
-
+            CuckooHashing<K, V> ST = new CuckooHashing<K, V>(size);
             for (int i = 0; i < 2; i++)
                 for (int j = 0; j < M; j++)
                     if (_keys[i][j].HasValue)
-                    {
-                        tempKeys[index] = _keys[i][j].Value;
-                        tempValues[index] = _values[i][j].Value;
-                        index++;
-                    }
+                        ST.Put(_keys[i][j].Value, _values[i][j].Value);
 
-            M = size;
-            Init();
-
-            for (int n = 0; n < tempKeys.Length; n++)
-                Put(tempKeys[n], tempValues[n]);
+            _keys = ST._keys;
+            _values = ST._values;
+            _ranNumbers = ST._ranNumbers;
+            M = ST.M;
         }
 
         private int NextSize(bool doIncrease)
         {
-            for (int i = 0; i < _primes.Length; i++)
+            for (int i = 0; i < Util.Primes.Length; i++)
             {
-                if (_primes[i] == M)
+                if (Util.Primes[i] == M)
                 {
                     if (doIncrease)
-                        return _primes[i + 1];
+                        return Util.Primes[i + 1];
                     else
-                        return _primes[i - 1];
+                        return Util.Primes[i - 1];
                 }
             }
             return -1;
