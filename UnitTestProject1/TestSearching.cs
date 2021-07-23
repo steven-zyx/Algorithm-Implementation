@@ -53,6 +53,33 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
+        public virtual void Test_PutOne_GetOne()
+        {
+            int[] source = Util.GenerateRandomArray(0, _rowCount);
+            for (int i = 0; i < _rowCount; i++)
+            {
+                _ST_Int.Put(source[i], i);
+                Assert.AreEqual(i, _ST_Int.Get(source[i]));
+            }
+        }
+
+        [TestMethod]
+        public virtual void Test_PutOne_GetAll()
+        {
+            _rowCount = _rowCount / 10;
+            Util.Ran = new Random(3);
+            int[] source = Util.GenerateRandomArray(0, _rowCount);
+            for (int i = 0; i < _rowCount; i++)
+            {
+                _ST_Int.Put(source[i], i);
+                for (int j = 0; j <= i; j++)
+                {
+                    Assert.AreEqual(j, _ST_Int.Get(source[j]));
+                }
+            }
+        }
+
+        [TestMethod]
         public virtual void Test_Get_Put_Delete_Resize()
         {
             int[] source = Util.GenerateRandomArray(0, _rowCount);
@@ -503,6 +530,16 @@ namespace UnitTestProject1
         {
             _ST_Int = new DoubleHashing<int, int>();
             _ST_Trans = new DoubleHashing<Trasaction, int>();
+        }
+    }
+
+    [TestClass]
+    public class TestCuckooHashing : TestSeperateChainingHashST
+    {
+        public TestCuckooHashing()
+        {
+            _ST_Int = new CuckooHashing<int, int>();
+            _ST_Trans = new CuckooHashing<Trasaction, int>();
         }
     }
 }

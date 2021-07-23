@@ -37,7 +37,8 @@ namespace ConsoleApp1
             //ShowAvgPathLength();
             //DrawBST();
             //All23Trees();
-            DisplayChiSquare();
+            //DisplayChiSquare();
+            TestHashing();
             Console.ReadLine();
         }
 
@@ -458,6 +459,18 @@ namespace ConsoleApp1
                     Console.WriteLine($"ChiSquare: {r.ChiSquare}\tMin: {r.Min}\tMax: {r.Max}\tProbability: {r.Probability}\tIsRandom: {isRandom}");
                 }
             }
+        }
+
+        private static void TestHashing()
+        {
+            Random ran = new Random(3);
+            int c1 = ran.Next(0, int.MaxValue);
+            int c2 = ran.Next(0, int.MaxValue);
+
+            int num = ran.Next(0, int.MaxValue);
+            int upper = num >> 16;
+            int lower = num & 0xffff;
+            int reult = (upper * c1 + lower * c2 & 0x7fff_ffff) % 97;
         }
     }
 }
