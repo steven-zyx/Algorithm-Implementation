@@ -67,7 +67,6 @@ namespace UnitTestProject1
         public virtual void Test_PutOne_GetAll()
         {
             _rowCount = _rowCount / 10;
-            Util.Ran = new Random(3);
             int[] source = Util.GenerateRandomArray(0, _rowCount);
             for (int i = 0; i < _rowCount; i++)
             {

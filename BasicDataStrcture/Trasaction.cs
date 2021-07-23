@@ -34,6 +34,9 @@ namespace BasicDataStrcture
 
         public override bool Equals(object obj)
         {
+            if (obj == null)
+                return false;
+
             Trasaction o = (Trasaction)obj;
             return o.Who.Equals(Who) && o.When.Equals(When) && o.Amount.Equals(Amount);
         }
