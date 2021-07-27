@@ -38,6 +38,27 @@ namespace UnitTestProject1
             }
         }
 
+
+        [TestMethod]
+        public void TestAll()
+        {
+            MathSet<int> ms = new MathSet<int>(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+            ms.Add(1);
+            ms.Add(2);
+            Assert.IsTrue(ms.Contains(1));
+            Assert.IsTrue(ms.Contains(2));
+            Assert.AreEqual(8, ms.Complement().Count());
+
+            ms.Union(new int[] { 2, 3, 4 });
+            Assert.AreEqual(4, ms.Keys().Count());
+
+            ms.Delete(2);
+            Assert.AreEqual(3, ms.Keys().Count());
+
+            ms.Intersection(new int[] { 3, 4, 5, 6 });
+            Assert.AreEqual(2, ms.Keys().Count());
+        }
+
     }
 
     [TestClass]
@@ -156,12 +177,12 @@ namespace UnitTestProject1
     [TestClass]
     public class TestOrderedSymbolTable : TestSymbolTable
     {
-        protected IOrderedSymbolTable<int, int> _OST_Int;
+        protected IOrderedSymbolTable<int, int> OST_Int => _ST_Int as IOrderedSymbolTable<int, int>;
 
         public TestOrderedSymbolTable()
         {
             _ST_Int = new BinarySearchST<int, int>();
-            _OST_Int = new BinarySearchST<int, int>();
+            OST_Int = new BinarySearchST<int, int>();
             _rowCount = 50_000;
         }
 
@@ -170,20 +191,20 @@ namespace UnitTestProject1
         {
             int[] source = Util.GenerateRandomArray(0, _rowCount);
             for (int i = 0; i < source.Length; i++)
-                _OST_Int.Put(source[i], source[i]);
+                OST_Int.Put(source[i], source[i]);
 
             int currentMin = -1;
             int currentMax = int.MaxValue;
 
-            while (!_OST_Int.IsEmpty)
+            while (!OST_Int.IsEmpty)
             {
-                Assert.IsTrue(currentMin < _OST_Int.Min());
-                currentMin = _OST_Int.Min();
-                _OST_Int.DeleteMin();
+                Assert.IsTrue(currentMin < OST_Int.Min());
+                currentMin = OST_Int.Min();
+                OST_Int.DeleteMin();
 
-                Assert.IsTrue(currentMax > _OST_Int.Max());
-                currentMax = _OST_Int.Max();
-                _OST_Int.DeleteMax();
+                Assert.IsTrue(currentMax > OST_Int.Max());
+                currentMax = OST_Int.Max();
+                OST_Int.DeleteMax();
             }
         }
 
@@ -192,12 +213,12 @@ namespace UnitTestProject1
         {
             int[] source = Util.GenerateRandomArray(0, _rowCount);
             for (int i = 0; i < source.Length; i++)
-                _OST_Int.Put(source[i] * 2, source[i] * 2);
+                OST_Int.Put(source[i] * 2, source[i] * 2);
 
             for (int i = 1; i < _rowCount * 2 - 1; i += 2)
             {
-                Assert.AreEqual(i - 1, _OST_Int.Floor(i));
-                Assert.AreEqual(i + 1, _OST_Int.Ceiling(i));
+                Assert.AreEqual(i - 1, OST_Int.Floor(i));
+                Assert.AreEqual(i + 1, OST_Int.Ceiling(i));
             }
         }
 
@@ -206,13 +227,13 @@ namespace UnitTestProject1
         {
             int[] source = Util.GenerateRandomArray(0, _rowCount);
             for (int i = 0; i < source.Length; i++)
-                _OST_Int.Put(source[i], i);
+                OST_Int.Put(source[i], i);
 
             int end = Util.Ran.Next(0, _rowCount);
             int start = end - Util.Ran.Next(0, end);
-            foreach (int n in _OST_Int.Keys(start, end))
+            foreach (int n in OST_Int.Keys(start, end))
             {
-                Assert.AreEqual(n, source[_OST_Int.Get(n)]);
+                Assert.AreEqual(n, source[OST_Int.Get(n)]);
             }
         }
 
@@ -221,10 +242,10 @@ namespace UnitTestProject1
         {
             int[] source = Util.GenerateRandomArray(0, _rowCount);
             for (int i = 0; i < source.Length; i++)
-                _OST_Int.Put(source[i], i);
+                OST_Int.Put(source[i], i);
 
             int previous = int.MinValue;
-            foreach (int n in _OST_Int.Keys())
+            foreach (int n in OST_Int.Keys())
             {
                 Assert.IsTrue(previous < n);
                 previous = n;
@@ -236,12 +257,12 @@ namespace UnitTestProject1
         {
             int[] source = Util.GenerateRandomArray(0, _rowCount);
             for (int i = 0; i < _rowCount; i++)
-                _OST_Int.Put(source[i], i);
+                OST_Int.Put(source[i], i);
 
             for (int i = 0; i < _rowCount; i++)
             {
-                Assert.AreEqual(i, _OST_Int.Rank(_OST_Int.Select(i)));
-                Assert.AreEqual(i, _OST_Int.Select(_OST_Int.Rank(i)));
+                Assert.AreEqual(i, OST_Int.Rank(OST_Int.Select(i)));
+                Assert.AreEqual(i, OST_Int.Select(OST_Int.Rank(i)));
             }
         }
     }
@@ -271,7 +292,7 @@ namespace UnitTestProject1
         public virtual void Test_Min_Max_Cert()
         {
             _rowCount = RowCount4Cert;
-            _OST_Int = new CertWrapper4OST<IOrderedSymbolTable<int, int>, int, int>(_OST_Int);
+            OST_Int = new CertWrapper4OST<IOrderedSymbolTable<int, int>, int, int>(OST_Int);
             Test_Min_Max();
         }
     }
@@ -300,7 +321,7 @@ namespace UnitTestProject1
         public TestOrderedInsertion()
         {
             _ST_Int = new OrderedInsertion<int, int>();
-            _OST_Int = new OrderedInsertion<int, int>();
+            OST_Int = new OrderedInsertion<int, int>();
         }
     }
 
@@ -310,7 +331,7 @@ namespace UnitTestProject1
         public TestBinarySearch_Cache()
         {
             _ST_Int = new BinarySearch_Cache<int, int>();
-            _OST_Int = new BinarySearch_Cache<int, int>();
+            OST_Int = new BinarySearch_Cache<int, int>();
         }
     }
 
@@ -320,7 +341,7 @@ namespace UnitTestProject1
         public TestInterpolationSearch()
         {
             _ST_Int = new InterpolationSearch<int>();
-            _OST_Int = new InterpolationSearch<int>();
+            OST_Int = new InterpolationSearch<int>();
         }
     }
 
@@ -330,7 +351,7 @@ namespace UnitTestProject1
         public TestBST()
         {
             _ST_Int = new BST<int, int>();
-            _OST_Int = new BST<int, int>();
+            OST_Int = new BST<int, int>();
         }
     }
 
@@ -340,7 +361,7 @@ namespace UnitTestProject1
         public TestBST_Cache()
         {
             _ST_Int = new BST_Cache<int, int>();
-            _OST_Int = new BST_Cache<int, int>();
+            OST_Int = new BST_Cache<int, int>();
         }
     }
 
@@ -350,7 +371,7 @@ namespace UnitTestProject1
         public TestBST_Iterator()
         {
             _ST_Int = new BST_Iterator<int, int>();
-            _OST_Int = new BST_Iterator<int, int>();
+            OST_Int = new BST_Iterator<int, int>();
         }
     }
 
@@ -363,7 +384,7 @@ namespace UnitTestProject1
         {
             bst = new BST_Threading<int, int>();
             _ST_Int = bst;
-            _OST_Int = bst;
+            OST_Int = bst;
         }
 
         [TestMethod]
@@ -371,7 +392,7 @@ namespace UnitTestProject1
         {
             int[] source = Util.GenerateRandomArray(0, _rowCount);
             foreach (int n in source)
-                _OST_Int.Put(n, n);
+                OST_Int.Put(n, n);
 
             for (int i = 1; i < _rowCount - 1; i++)
             {
@@ -411,7 +432,7 @@ namespace UnitTestProject1
     {
         public TestBST_23()
         {
-            _OST_Int = new BST_23<int, int>();
+            OST_Int = new BST_23<int, int>();
             _ST_Int = new BST_23<int, int>();
         }
     }
@@ -422,7 +443,7 @@ namespace UnitTestProject1
         public TestBST_23_Cache()
         {
             _ST_Int = new BST_23_Cache<int, int>();
-            _OST_Int = new BST_23_Cache<int, int>();
+            OST_Int = new BST_23_Cache<int, int>();
         }
     }
 
@@ -432,7 +453,7 @@ namespace UnitTestProject1
         public TestBST_23_WithoutBalance()
         {
             _ST_Int = new BST_23_WithoutBalance<int, int>();
-            _OST_Int = new BST_23_WithoutBalance<int, int>();
+            OST_Int = new BST_23_WithoutBalance<int, int>();
         }
     }
 
@@ -441,7 +462,7 @@ namespace UnitTestProject1
     {
         public TestBST_234()
         {
-            _OST_Int = new BST_234<int, int>();
+            OST_Int = new BST_234<int, int>();
             _ST_Int = new BST_234<int, int>();
         }
 
