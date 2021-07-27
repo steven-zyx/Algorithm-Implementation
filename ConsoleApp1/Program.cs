@@ -38,7 +38,8 @@ namespace ConsoleApp1
             //DrawBST();
             //All23Trees();
             //DisplayChiSquare();
-            TestHashing();
+            //HashAttach();
+            HashAttack();
             Console.ReadLine();
         }
 
@@ -461,17 +462,38 @@ namespace ConsoleApp1
             }
         }
 
-        private static void TestHashing()
+        public static void HashAttack()
         {
-            int _rowCount = 1_000_000;
-            ISymbolTable<int, int> _ST_Int = new CuckooHashing<int, int>();
-
-            int[] source = Util.GenerateRandomArray(0, _rowCount);
-            for (int i = 0; i < _rowCount; i++)
+            Func<string, int> hashCode = x =>
             {
-                _ST_Int.Put(source[i], i);
-                //Assert.AreEqual(i, _ST_Int.Get(source[i]));
-            }
+                int hash = 0;
+                for (int i = 0; i < x.Length; i++)
+                    hash = hash * 31 + x[i];
+                return hash;
+            };
+            Action<string> output = x =>
+            {
+                Console.WriteLine($"{x}\t{hashCode(x)}");
+            };
+
+            HashAttack client = new HashAttack(1000, 100, output);
+            foreach (string x in client.GenerateText())
+                output(x);
+        }
+
+        public static double Divide(long a, long b)
+        {
+            if (b == 0)
+                return -1;
+            else
+                return (double)a / b;
+        }
+        public static double Divide(decimal a, long b)
+        {
+            if (b == 0)
+                return -1;
+            else
+                return (double)a / b;
         }
     }
 }
