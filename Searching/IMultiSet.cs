@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Searching
 {
-    public interface IMultiSymbolTable<K, V> : ISymbolTable<K, V>
+    public interface IMultiSet<K> : ISet<K>
     {
-        IEnumerable<V> GetAll(K key);
+        int Count(K key);
 
         int DeleteAll(K key);
     }

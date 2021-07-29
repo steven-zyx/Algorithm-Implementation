@@ -9,9 +9,14 @@ namespace Searching
         protected int _count;
         protected SequentialSearchST<K, V>[] _st;
 
-        public SeperateChainingHashST(int m) : base(m)
+        protected SeperateChainingHashST(int m) : base(m)
         {
             _count = 0;
+            Init();
+        }
+
+        protected virtual void Init()
+        {
             _st = new SequentialSearchST<K, V>[M];
             for (int i = 0; i < M; i++)
                 _st[i] = new SequentialSearchST<K, V>();

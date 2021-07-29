@@ -13,5 +13,11 @@ namespace BasicDataStrcture
         {
             Value = t;
         }
+
+        public Node(T t, Node<T> next)
+        {
+            Value = t;
+            Next = next;
+        }
     }
 }

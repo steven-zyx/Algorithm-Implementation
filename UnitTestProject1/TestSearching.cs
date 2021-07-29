@@ -66,7 +66,7 @@ namespace UnitTestProject1
 
         public TestSymbolTable()
         {
-            _rowCount = 15_000;
+            _rowCount = 10_000;
         }
 
         [TestMethod]
@@ -172,17 +172,7 @@ namespace UnitTestProject1
 
     public class TestSymbolTableCert : TestSymbolTable
     {
-        protected int _rowCount4Cert;
-
-        internal TestSymbolTableCert(int rowCount4Cert)
-        {
-            _rowCount4Cert = rowCount4Cert;
-        }
-
-        public TestSymbolTableCert() : this(300)
-        {
-
-        }
+        protected int _rowCount4Cert = 300;
 
         [TestMethod]
         public virtual void Test_Get_Put_Delete_Resize_Cert()
@@ -205,6 +195,8 @@ namespace UnitTestProject1
     {
         protected IMultiSymbolTable<int, int> MST_Int => _ST_Int as IMultiSymbolTable<int, int>;
 
+        internal void SetTestObj(ISymbolTable<int, int> st) => _ST_Int = st;
+
         [TestMethod]
         public virtual void TestMultipleKey()
         {
@@ -215,7 +207,7 @@ namespace UnitTestProject1
             MST_Int.Put(3, 0);
 
             Assert.AreEqual(5, MST_Int.Size());
-            Assert.IsTrue(MST_Int.Delete(2));
+            Assert.IsTrue(MST_Int.Delete(1));
             Assert.IsFalse(MST_Int.Delete(4));
 
             List<int> values = MST_Int.GetAll(2).ToList();
@@ -225,7 +217,12 @@ namespace UnitTestProject1
 
             Assert.IsTrue(MST_Int.Delete(2));
             Assert.AreEqual(2, MST_Int.GetAll(2).Count());
+
+            Assert.AreEqual(2, MST_Int.DeleteAll(2));
+            Assert.AreEqual(0, MST_Int.GetAll(2).Count());
         }
+
+        public override void Test_Get_Put_Delete_Intermixed() { }
     }
 
     public class TestHashST : TestSymbolTable
@@ -338,22 +335,23 @@ namespace UnitTestProject1
 
     public class TestOrderedSymbolTableCert : TestOrderedSymbolTable
     {
-        protected TestSymbolTableCert _certTestClient;
-        protected int _rowCount4Cert;
+        protected int _rowCount4Cert = 800;
 
-        public TestOrderedSymbolTableCert()
+        [TestMethod]
+        public virtual void Test_Get_Put_Delete_Resize_Cert()
         {
-            _rowCount4Cert = 800;
-            _certTestClient = new TestSymbolTableCert(_rowCount4Cert);
+            _rowCount = _rowCount4Cert;
+            _ST_Int = new CertWrapper4ST<ISymbolTable<int, int>, int, int>(_ST_Int);
+            Test_Get_Put_Delete_Resize();
         }
 
         [TestMethod]
-        public virtual void Test_Get_Put_Delete_Resize_Cert() =>
-            _certTestClient.Test_Get_Put_Delete_Resize_Cert();
-
-        [TestMethod]
-        public virtual void Test_Get_Put_Delete_Intermixed_Cert() =>
-            _certTestClient.Test_Get_Put_Delete_Intermixed_Cert();
+        public virtual void Test_Get_Put_Delete_Intermixed_Cert()
+        {
+            _rowCount = _rowCount4Cert;
+            _ST_Int = new CertWrapper4ST<ISymbolTable<int, int>, int, int>(_ST_Int);
+            Test_Get_Put_Delete_Intermixed();
+        }
 
         [TestMethod]
         public virtual void Test_Min_Max_Cert()
@@ -376,10 +374,10 @@ namespace UnitTestProject1
         [TestMethod]
         public virtual void TestMultipleKey()
         {
+            _testClient.SetTestObj(_ST_Int);
             _testClient.TestMultipleKey();
         }
     }
-
 
     [TestClass]
     public class TestBinarySearchST : TestOrderedSymbolTable
@@ -615,6 +613,24 @@ namespace UnitTestProject1
         {
             _ST_Int = new CuckooHashing<int, int>();
             _ST_Trans = new CuckooHashing<Trasaction, int>();
+        }
+    }
+
+    [TestClass]
+    public class TestSequentialSearchMultiST : TestMultiSymbolTable
+    {
+        public TestSequentialSearchMultiST()
+        {
+            _ST_Int = new SequentialSearchMultiST<int, int>();
+        }
+    }
+
+    [TestClass]
+    public class TestSeperateChainingMultiST : TestMultiSymbolTable
+    {
+        public TestSeperateChainingMultiST()
+        {
+            _ST_Int = new SeperateChainingMultiST<int, int>();
         }
     }
 }

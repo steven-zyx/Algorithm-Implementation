@@ -41,25 +41,15 @@ namespace Searching
 
         public bool Delete(K key)
         {
-            if (_start == null)
-                return false;
-
-            else if (key.Equals(_start.Key))
-            {
-                _start = _start.Next;
-                _count--;
-                return true;
-            }
-
-            for (var c = _start; c.Next != null; c = c.Next)
-            {
-                if (key.Equals(c.Next.Key))
+            Node_P<K, V> beforeStart = new Node_P<K, V>(default(K), default(V), _start);
+            for (var p = beforeStart; p.Next != null; p = p.Next)
+                if (p.Next.Key.Equals(key))
                 {
-                    c.Next = c.Next.Next;
+                    p.Next = p.Next.Next;
+                    _start = beforeStart.Next;
                     _count--;
                     return true;
                 }
-            }
             return false;
         }
 
