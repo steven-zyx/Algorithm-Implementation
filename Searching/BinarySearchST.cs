@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Searching
 {
-    //Basic Symbol table ope
+    //Basic Symbol table operation
     public partial class BinarySearchST<K, V> : IOrderedSymbolTable<K, V> where K : IComparable
     {
         protected K[] _keys;
@@ -22,9 +22,7 @@ namespace Searching
         {
             int index = Rank(key);
             if (KeyEquals(index, key))
-            {
                 _values[index] = value;
-            }
             else
             {
                 for (int i = _count; i > index; i--)
@@ -35,8 +33,7 @@ namespace Searching
                 _keys[index] = key;
                 _values[index] = value;
 
-                _count++;
-                if (_count >= _keys.Length)
+                if (++_count >= _keys.Length)
                     Resize(_keys.Length * 2);
             }
         }
@@ -52,10 +49,10 @@ namespace Searching
 
         public virtual bool Delete(K key)
         {
-            int index = Rank(key);
-            if (KeyEquals(index, key))
+            int i = Rank(key);
+            if (KeyEquals(i, key))
             {
-                for (int i = index; i <= _count - 2; i++)
+                for (; i < _count - 1; i++)
                 {
                     _keys[i] = _keys[i + 1];
                     _values[i] = _values[i + 1];
@@ -63,15 +60,11 @@ namespace Searching
                 _keys[_count - 1] = default(K);
                 _values[_count - 1] = default(V);
 
-                _count--;
-                if (_count < _keys.Length / 4)
-                    Resize(_keys.Length / 2);
+                if (--_count < _keys.Length / 4) Resize(_keys.Length / 2);
                 return true;
             }
             else
-            {
                 return false;
-            }
         }
 
         public bool Contains(K key)
@@ -90,7 +83,6 @@ namespace Searching
                 yield return _keys[i];
         }
     }
-
 
     //Ordered symbol table operation
     public partial class BinarySearchST<K, V>
@@ -195,7 +187,7 @@ namespace Searching
     //For certification
     public partial class BinarySearchST<K, V> : ICertificate
     {
-        public void Certificate()
+        public virtual void Certificate()
         {
             K current = _keys[0];
             for (int i = 1; i < _count; i++)

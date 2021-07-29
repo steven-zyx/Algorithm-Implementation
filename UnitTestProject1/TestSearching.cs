@@ -195,8 +195,6 @@ namespace UnitTestProject1
     {
         protected IMultiSymbolTable<int, int> MST_Int => _ST_Int as IMultiSymbolTable<int, int>;
 
-        internal void SetTestObj(ISymbolTable<int, int> st) => _ST_Int = st;
-
         [TestMethod]
         public virtual void TestMultipleKey()
         {
@@ -359,23 +357,6 @@ namespace UnitTestProject1
             _rowCount = _rowCount4Cert;
             _ST_Int = new CertWrapper4OST<IOrderedSymbolTable<int, int>, int, int>(OST_Int);
             Test_Min_Max();
-        }
-    }
-
-    public class TestMultiOrderedSymbolTable : TestOrderedSymbolTable
-    {
-        protected TestMultiSymbolTable _testClient;
-
-        public TestMultiOrderedSymbolTable()
-        {
-            _testClient = new TestMultiSymbolTable();
-        }
-
-        [TestMethod]
-        public virtual void TestMultipleKey()
-        {
-            _testClient.SetTestObj(_ST_Int);
-            _testClient.TestMultipleKey();
         }
     }
 
@@ -631,6 +612,32 @@ namespace UnitTestProject1
         public TestSeperateChainingMultiST()
         {
             _ST_Int = new SeperateChainingMultiST<int, int>();
+        }
+    }
+
+    [TestClass]
+    public class TestBinarySearchMultiST
+    {
+        [TestClass]
+        public class OrderedSTOperation : TestOrderedSymbolTableCert
+        {
+            public OrderedSTOperation()
+            {
+                _ST_Int = new BinarySearchMultiST<int, int>();
+            }
+
+            public override void Test_Get_Put_Delete_Intermixed() { }
+
+            public override void Test_Get_Put_Delete_Intermixed_Cert() { }
+        }
+
+        [TestClass]
+        public class MultiSTOperation : TestMultiSymbolTable
+        {
+            public MultiSTOperation()
+            {
+                _ST_Int = new BinarySearchMultiST<int, int>();
+            }
         }
     }
 }
