@@ -1,0 +1,29 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Searching
+{
+    public interface IOrderedSET<K> : ISet<K> where K : IComparable
+    {
+        K Min();
+
+        K Max();
+
+        K Floor(K key);
+
+        K Ceiling(K key);
+
+        int Rank(K key);
+
+        K Select(int index);
+
+        void DeleteMin();
+
+        void DeleteMax();
+
+        int Size(K lo, K hi);
+
+        IEnumerable<K> Keys(K lo, K hi);
+    }
+}

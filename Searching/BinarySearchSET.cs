@@ -1,64 +1,43 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Searching
 {
-    //Basic Symbol table operation
-    public partial class BinarySearchST<K, V> : IOrderedSymbolTable<K, V> where K : IComparable
+    //Basic SET operation
+    public partial class BinarySearchSET<K> : IOrderedSET<K> where K : IComparable
     {
         protected K[] _keys;
-        protected V[] _values;
         protected int _count;
 
-        public BinarySearchST()
+        public BinarySearchSET()
         {
             _keys = new K[16];
-            _values = new V[16];
             _count = 0;
         }
 
-        public virtual void Put(K key, V value)
+        public virtual void Put(K key)
         {
             int index = Rank(key);
-            if (KeyEquals(index, key))
-                _values[index] = value;
-            else
+            if (!KeyEquals(index, key))
             {
                 for (int i = _count; i > index; i--)
-                {
                     _keys[i] = _keys[i - 1];
-                    _values[i] = _values[i - 1];
-                }
                 _keys[index] = key;
-                _values[index] = value;
 
                 if (++_count >= _keys.Length)
                     Resize(_keys.Length * 2);
             }
         }
 
-        public V Get(K key)
-        {
-            int index = Rank(key);
-            if (KeyEquals(index, key))
-                return _values[index];
-            else
-                return default(V);
-        }
-
-        public virtual bool Delete(K key)
+        public bool Delete(K key)
         {
             int i = Rank(key);
             if (KeyEquals(i, key))
             {
                 for (; i < _count - 1; i++)
-                {
                     _keys[i] = _keys[i + 1];
-                    _values[i] = _values[i + 1];
-                }
                 _keys[_count - 1] = default(K);
-                _values[_count - 1] = default(V);
 
                 if (--_count < _keys.Length / 4) Resize(_keys.Length / 2);
                 return true;
@@ -77,15 +56,11 @@ namespace Searching
 
         public int Size() => _count;
 
-        public IEnumerable<K> Keys()
-        {
-            for (int i = 0; i < _count; i++)
-                yield return _keys[i];
-        }
+        public IEnumerable<K> Keys() => _keys;
     }
 
-    //Ordered symbol table operation
-    public partial class BinarySearchST<K, V>
+    //Ordered SET Operation
+    public partial class BinarySearchSET<K>
     {
         public K Min() => _keys[0];
 
@@ -118,27 +93,20 @@ namespace Searching
             return lo;
         }
 
-        public virtual K Select(int index) => _keys[index];
+        public K Select(int index) => _keys[index];
 
-        public virtual void DeleteMin()
+        public void DeleteMin()
         {
-            _count--;
-            for (int i = 0; i <= _count - 1; i++)
-            {
-                _keys[i] = _keys[i + 1];
-                _values[i] = _values[i + 1];
-            }
-            _keys[_count] = default(K);
-            _values[_count] = default(V);
+            for (int i = 1; i < _count; i++)
+                _keys[i - 1] = _keys[i];
+            _keys[--_count] = default(K);
             if (_count < _keys.Length / 4)
                 Resize(_keys.Length / 2);
         }
 
-        public virtual void DeleteMax()
+        public void DeleteMax()
         {
-            _count--;
-            _keys[_count] = default(K);
-            _values[_count] = default(V);
+            _keys[--_count] = default(K);
             if (_count < _keys.Length / 4)
                 Resize(_keys.Length / 2);
         }
@@ -165,8 +133,8 @@ namespace Searching
         }
     }
 
-    //Dedicated funtions
-    public partial class BinarySearchST<K, V>
+    //Dedicated function
+    public partial class BinarySearchSET<K>
     {
         protected bool KeyEquals(int index, K key) =>
             index < _count && _keys[index].CompareTo(key) == 0;
@@ -176,30 +144,6 @@ namespace Searching
             K[] newKeys = new K[size];
             Array.Copy(_keys, newKeys, _count);
             _keys = newKeys;
-
-            V[] newValues = new V[size];
-            Array.Copy(_values, newValues, _count);
-            _values = newValues;
-        }
-    }
-
-    //For certification
-    public partial class BinarySearchST<K, V> : ICertificate
-    {
-        public virtual void Certificate()
-        {
-            K current = _keys[0];
-            for (int i = 1; i < _count; i++)
-            {
-                K key = _keys[i];
-                if (current.CompareTo(key) >= 0 ||
-                    i != Rank(Select(i)) ||
-                    key.CompareTo(Select(Rank(key))) != 0)
-                {
-                    throw new Exception("Inconsistant");
-                }
-                current = key;
-            }
         }
     }
 }

@@ -39,7 +39,8 @@ namespace ConsoleApp1
             //All23Trees();
             //DisplayChiSquare();
             //HashAttach();
-            HashAttack();
+            //HashAttack();
+            ShowConcordance();
             Console.ReadLine();
         }
 
@@ -494,6 +495,28 @@ namespace ConsoleApp1
                 return -1;
             else
                 return (double)a / b;
+        }
+
+        public static void ShowConcordance()
+        {
+            string text = "can you can a can like a canner can can a can";
+            Concordance client = new Concordance(text.Split(' '));
+
+            ISymbolTable<string, List<int>> st = client.WordsOccurance();
+            foreach (string word in st.Keys())
+            {
+                Console.WriteLine(word);
+                Console.Write("\t");
+                foreach (int position in st.Get(word))
+                {
+                    Console.Write(position);
+                    Console.Write(" ");
+                }
+                Console.WriteLine();
+            }
+
+            string[] sequence = client.Invert(st);
+            Console.WriteLine(string.Join(' ', sequence));
         }
     }
 }
