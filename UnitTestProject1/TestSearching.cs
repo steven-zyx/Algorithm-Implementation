@@ -57,6 +57,40 @@ namespace UnitTestProject1
             ms.Intersection(new int[] { 3, 4, 5, 6 });
             Assert.AreEqual(2, ms.Keys().Count());
         }
+
+        [TestMethod]
+        public void TestLRUCache()
+        {
+            LRUCache<int> cache = null;
+            Action<string> assert = sequence => Assert.AreEqual(sequence, string.Join("", cache.Keys()));
+
+            cache = new LRUCache<int>();
+            cache.Access(1);
+            cache.Access(2);
+            cache.Access(3);
+
+            assert("321");
+            cache.Access(2);
+            assert("231");
+            cache.Access(1);
+            assert("123");
+
+            cache.Remove();
+            assert("12");
+
+            cache.Access(4);
+            assert("412");
+
+            cache.Access(2);
+            assert("241");
+
+            cache.Remove();
+            cache.Remove();
+            assert("2");
+
+            cache.Remove();
+            assert("");
+        }
     }
 
     public class TestSymbolTable

@@ -8,6 +8,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Searching;
 using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ConsoleApp1
 {
@@ -40,7 +42,10 @@ namespace ConsoleApp1
             //DisplayChiSquare();
             //HashAttach();
             //HashAttack();
-            ShowConcordance();
+            //ShowConcordance();
+            //FullyIndexedCSV();
+            //NonOverlappingInterval();
+            RegistrarScheduling();
             Console.ReadLine();
         }
 
@@ -517,6 +522,78 @@ namespace ConsoleApp1
 
             string[] sequence = client.Invert(st);
             Console.WriteLine(string.Join(' ', sequence));
+        }
+
+        public static void FullyIndexedCSV()
+        {
+            Action<int> reportProgress = n =>
+            {
+                if (n % 1000 == 0)
+                    Console.WriteLine($"Processing line:{n}");
+            };
+
+            string fileName = @"C:\Users\v-yuzhu\Desktop\versafeed_Kroger_bing.txt";
+            FullLookupTSV client = new FullLookupTSV(fileName, 33, reportProgress);
+            client.BuildHeader();
+            client.BuildIndex();
+            Console.WriteLine("index built");
+
+            while (true)
+            {
+                string input = Console.ReadLine();
+                int space = input.IndexOf(' ');
+                string column = input.Substring(0, space);
+                string key = input.Substring(space + 1);
+
+                foreach (string line in client.Search(column, key))
+                    Console.WriteLine(line);
+                Console.WriteLine();
+            }
+        }
+
+        public static void NonOverlappingInterval()
+        {
+            IOrderedSymbolTable<int, int> intervals = new BST_23<int, int>();
+            intervals.Put(1643, 2033);
+            intervals.Put(5532, 7643);
+            intervals.Put(8999, 10332);
+            intervals.Put(5666653, 5669321);
+
+            while (true)
+            {
+                int value = int.Parse(Console.ReadLine());
+                int lower = intervals.Floor(value);
+                int higher = intervals.Get(lower);
+                if (higher >= value)
+                    Console.WriteLine($"{value} in {lower}-{higher}");
+                else
+                    Console.WriteLine($"{value} lies in no interval");
+            }
+        }
+
+        public static void RegistrarScheduling()
+        {
+            IOrderedSET<DateTime> oset = new BinarySearchSET<DateTime>();
+            Console.WriteLine("Schedule classes for a instructor");
+
+            DateTime dt = new DateTime(2021, 7, 30, 9, 0, 0);
+            for (int i = 0; i < 6; i++)
+            {
+                dt = dt.AddHours(1);
+                if (oset.Contains(dt))
+                    Console.WriteLine($"class already scheduled at {dt}");
+                else
+                {
+                    oset.Put(dt);
+                    Console.WriteLine($"class scheduled at {dt}");
+                }
+            }
+
+            dt = new DateTime(2021, 7, 30, 11, 0, 0);
+            if (oset.Contains(dt))
+                Console.WriteLine($"classes already scheduled at {dt}");
+            else
+                oset.Put(dt);
         }
     }
 }
