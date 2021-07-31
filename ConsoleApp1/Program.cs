@@ -45,7 +45,8 @@ namespace ConsoleApp1
             //ShowConcordance();
             //FullyIndexedCSV();
             //NonOverlappingInterval();
-            RegistrarScheduling();
+            //RegistrarScheduling();
+            TestKeyIntArray();
             Console.ReadLine();
         }
 
@@ -594,6 +595,27 @@ namespace ConsoleApp1
                 Console.WriteLine($"classes already scheduled at {dt}");
             else
                 oset.Put(dt);
+        }
+
+        public static void TestKeyIntArray()
+        {
+            KeyIntArray min = new KeyIntArray(new int[] { 0 });
+            KeyIntArray max = new KeyIntArray(new int[] { int.MaxValue });
+
+
+            Console.WriteLine(min);
+            Console.WriteLine(max);
+            while (true)
+            {
+                Console.ReadKey();
+                var key = KeyIntArray.GenerateMidean(min, max);
+                Console.Write(key);
+                Console.Write("\t");
+                Console.Write(key.CompareTo(max) < 0);
+                Console.Write("\t");
+                Console.WriteLine(key.CompareTo(min) > 0);
+                min = key;
+            }
         }
     }
 }

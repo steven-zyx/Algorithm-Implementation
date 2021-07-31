@@ -87,5 +87,13 @@ namespace Utils
             double sum = numbers.Sum(x => Pow(x - avg, 2));
             return Sqrt(sum / numbers.Count() - 1);
         }
+
+        public static int AVG(params int[] numbers)
+        {
+            long sum = 0;
+            foreach (int n in numbers)
+                sum += n;
+            return (int)(sum / numbers.Length);
+        }
     }
 }

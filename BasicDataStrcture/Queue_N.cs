@@ -6,7 +6,7 @@ using System.Collections;
 
 namespace BasicDataStrcture
 {
-    public class Queue_N<T> : IQueue<T>, IEnumerable
+    public class Queue_N<T> : IQueue<T>, IEnumerable<T>
     {
         private Node<T> _last;
         private Node<T> _first;
@@ -53,7 +53,13 @@ namespace BasicDataStrcture
 
         public int Length => _count;
 
-        public IEnumerator GetEnumerator()
+
+        public void Catenation(IQueue<T> source)
+        {
+
+        }
+
+        public IEnumerator<T> GetEnumerator()
         {
             Node<T> current = _first;
             for (int i = 0; i < _count; i++)
@@ -63,9 +69,6 @@ namespace BasicDataStrcture
             }
         }
 
-        public void Catenation(IQueue<T> source)
-        {
-
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

@@ -56,7 +56,11 @@ namespace Searching
 
         public int Size() => _count;
 
-        public IEnumerable<K> Keys() => _keys;
+        public IEnumerable<K> Keys()
+        {
+            for (int i = 0; i < _count; i++)
+                yield return _keys[i];
+        }
     }
 
     //Ordered SET Operation

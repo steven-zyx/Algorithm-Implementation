@@ -18,22 +18,17 @@ namespace Searching
 
         public void Access(K key)
         {
-
-
-
-
-            if (_st.IsEmpty)
-                AddToFirst(key);
+            Node_D<K> n = _st.Get(key);
+            if (n == null)
+            {
+                n = new Node_D<K>(key);
+                AddToFirst(n);
+                _st.Put(key, n);
+            }
             else
             {
-                Node_D<K> n = _st.Get(key);
-                if (n == null)
-                    AddToFirst(key);
-                else
-                {
-                    Remove(n);
-                    AddToFirst(n);
-                }
+                Remove(n);
+                AddToFirst(n);
             }
         }
 
@@ -55,12 +50,6 @@ namespace Searching
                 _last = n.Previous;
             else
                 n.Next.Previous = n.Previous;
-        }
-
-        private void AddToFirst(K key)
-        {
-            Node_D<K> n = new Node_D<K>(key);
-            AddToFirst(n);
         }
 
         private void AddToFirst(Node_D<K> n)

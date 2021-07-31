@@ -61,10 +61,9 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestLRUCache()
         {
-            LRUCache<int> cache = null;
+            LRUCache<int> cache = new LRUCache<int>();
             Action<string> assert = sequence => Assert.AreEqual(sequence, string.Join("", cache.Keys()));
 
-            cache = new LRUCache<int>();
             cache.Access(1);
             cache.Access(2);
             cache.Access(3);
@@ -89,6 +88,62 @@ namespace UnitTestProject1
             assert("2");
 
             cache.Remove();
+            assert("");
+        }
+
+        [TestMethod]
+        public void TestList_L()
+        {
+            List_L<int> list = new List_L<int>();
+            Action<string> assert = sequence => Assert.AreEqual(sequence, string.Join("", list.Keys()));
+
+            list.AddFront(1);
+            list.AddFront(2);
+            assert("21");
+
+            list.AddBack(3);
+            list.AddBack(4);
+            assert("2134");
+
+            list.DeleteFront();
+            assert("134");
+            list.DeleteBack();
+            assert("13");
+
+            list.Add(1, 2);
+            assert("123");
+            list.Add(3, 4);
+            assert("1234");
+
+            list.Add(2, 4);
+            assert("12434");
+            list.AddFront(4);
+            assert("412434");
+
+            list.Delete(4);
+            assert("123");
+        }
+
+        [TestMethod]
+        public void TestUniQueue()
+        {
+            UniQueue<int> queue = new UniQueue<int>();
+            Action<string> assert = sequence => Assert.AreEqual(sequence, string.Join("", queue));
+
+            queue.Enqueue(1);
+            queue.Enqueue(2);
+            assert("12");
+
+            queue.Enqueue(1);
+            queue.Enqueue(2);
+            assert("12");
+
+            queue.Enqueue(3);
+            assert("123");
+
+            queue.Dequeue();
+            queue.Dequeue();
+            queue.Dequeue();
             assert("");
         }
     }
