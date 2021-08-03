@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Searching", "Searching\Sear
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils", "Utils\Utils.csproj", "{617C46DD-B3D6-4888-8F51-C48500C6A0A2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "String", "String\String.csproj", "{1C204FBA-F186-4885-BC44-9F2618D12575}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,18 @@ Global
 		{617C46DD-B3D6-4888-8F51-C48500C6A0A2}.Release|x64.Build.0 = Release|Any CPU
 		{617C46DD-B3D6-4888-8F51-C48500C6A0A2}.Release|x86.ActiveCfg = Release|Any CPU
 		{617C46DD-B3D6-4888-8F51-C48500C6A0A2}.Release|x86.Build.0 = Release|Any CPU
+		{1C204FBA-F186-4885-BC44-9F2618D12575}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C204FBA-F186-4885-BC44-9F2618D12575}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C204FBA-F186-4885-BC44-9F2618D12575}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1C204FBA-F186-4885-BC44-9F2618D12575}.Debug|x64.Build.0 = Debug|Any CPU
+		{1C204FBA-F186-4885-BC44-9F2618D12575}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1C204FBA-F186-4885-BC44-9F2618D12575}.Debug|x86.Build.0 = Debug|Any CPU
+		{1C204FBA-F186-4885-BC44-9F2618D12575}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C204FBA-F186-4885-BC44-9F2618D12575}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C204FBA-F186-4885-BC44-9F2618D12575}.Release|x64.ActiveCfg = Release|Any CPU
+		{1C204FBA-F186-4885-BC44-9F2618D12575}.Release|x64.Build.0 = Release|Any CPU
+		{1C204FBA-F186-4885-BC44-9F2618D12575}.Release|x86.ActiveCfg = Release|Any CPU
+		{1C204FBA-F186-4885-BC44-9F2618D12575}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -146,6 +146,29 @@ namespace UnitTestProject1
             queue.Dequeue();
             assert("");
         }
+
+        [TestMethod]
+        public void TestRandomSymbolTable()
+        {
+            RandomSymbolTable<int, bool> st = new RandomSymbolTable<int, bool>();
+            st.Put(1, true);
+            st.Put(2, true);
+
+            Assert.IsTrue(st.Get(1));
+            Assert.IsTrue(st.Get(2));
+
+            int value = st.RandomDelete();
+            Assert.IsFalse(st.Get(value));
+
+            st.Put(3, true);
+            Assert.IsTrue(st.Get(3));
+
+
+            value = st.RandomDelete();
+            Assert.IsFalse(st.Get(value));
+            value = st.RandomDelete();
+            Assert.IsFalse(st.Get(value));
+        }
     }
 
     public class TestSymbolTable

@@ -5,20 +5,19 @@ using System.Text;
 
 namespace BasicDataStrcture
 {
-    public class RandomQueue<T> : IEnumerable
+    public class RandomQueue<T> : IQueue<T>, IEnumerable<T>
     {
         private T[] _data;
         private int _count;
-        private Random ran;
+        private Random _ran;
 
         public RandomQueue()
         {
             _data = new T[4];
             _count = 0;
-            ran = new Random(DateTime.Now.Second);
+            _ran = new Random(DateTime.Now.Millisecond);
         }
 
-        public bool IsEmpty => _count == 0;
 
         public void Enqueue(T t)
         {
@@ -30,7 +29,7 @@ namespace BasicDataStrcture
 
         public T Dequeue()
         {
-            int randomIndex = ran.Next(0, _count);
+            int randomIndex = _ran.Next(0, _count);
             T value = _data[randomIndex];
             _data[randomIndex] = _data[_count - 1];
             _count--;
@@ -41,7 +40,7 @@ namespace BasicDataStrcture
 
         public T Sample()
         {
-            int randomIndex = ran.Next(0, _count);
+            int randomIndex = _ran.Next(0, _count);
             return _data[randomIndex];
         }
 
@@ -52,14 +51,14 @@ namespace BasicDataStrcture
             _data = newData;
         }
 
-        public IEnumerator GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             T[] output = new T[_count];
             Array.Copy(_data, output, _count);
             for (int i = 0; i < _count; i++)
             {
                 T temp = output[i];
-                int randomIndex = ran.Next(0, _count);
+                int randomIndex = _ran.Next(0, _count);
                 output[i] = output[randomIndex];
                 output[randomIndex] = temp;
             }
@@ -67,5 +66,11 @@ namespace BasicDataStrcture
             for (int i = 0; i < _count; i++)
                 yield return output[i];
         }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public bool IsEmpty => _count == 0;
+
+        public int Length => _count;
     }
 }
