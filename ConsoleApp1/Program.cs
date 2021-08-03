@@ -46,7 +46,8 @@ namespace ConsoleApp1
             //FullyIndexedCSV();
             //NonOverlappingInterval();
             //RegistrarScheduling();
-            TestKeyIntArray();
+            //TestKeyIntArray();
+            TestSaytax();
             Console.ReadLine();
         }
 
@@ -617,5 +618,6 @@ namespace ConsoleApp1
                 min = key;
             }
         }
+
     }
 }

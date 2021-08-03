@@ -24,12 +24,11 @@ namespace Utils
 
         public static int[] GenerateRandomArrayRepeat(int start, int count, int repeat)
         {
-            IEnumerable<int> numbers = new int[0];
+            int[] source = new int[count * repeat];
+            int index = 0;
             for (int i = 0; i < repeat; i++)
-            {
-                numbers = numbers.Concat(Enumerable.Range(start, count));
-            }
-            int[] source = numbers.ToArray();
+                for (int j = 0; j < count; j++)
+                    source[index++] = start + j;
             Shuffle(source);
             return source;
         }
@@ -94,6 +93,36 @@ namespace Utils
             foreach (int n in numbers)
                 sum += n;
             return (int)(sum / numbers.Length);
+        }
+
+        public static bool IsSorted<T>(this T[] source) where T : IComparable
+        {
+            for (int i = 1; i < source.Length; i++)
+                if (source[i].CompareTo(source[i - 1]) < 0)
+                    throw new Exception("Not sorted");
+            return true;
+        }
+
+        public static string[] GenerateString(int count, int length)
+        {
+            Func<char> generateRandomChar = () =>
+            {
+                int number;
+                do
+                    number = Ran.Next(48, 91);
+                while (number >= 58 && number <= 64);
+                return (char)number;
+            };
+
+            string[] textList = new string[count];
+            for (int i = 0; i < count; i++)
+            {
+                char[] text = new char[length];
+                for (int j = 0; j < length; j++)
+                    text[j] = generateRandomChar();
+                textList[i] = new string(text);
+            }
+            return textList;
         }
     }
 }
