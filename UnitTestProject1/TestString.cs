@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Utils;
 using String;
+using Sorting;
 
 namespace UnitTestProject1
 {
@@ -25,6 +26,16 @@ namespace UnitTestProject1
             string[] stringList = Util.GenerateString(1_000_000, 10);
             LSDSort client = new LSDSort();
             client.Sort(stringList, 10);
+            Assert.IsTrue(stringList.IsSorted());
+        }
+
+        [TestMethod]
+        public void TestMSDSort()
+        {
+            string[] stringList = Util.GenerateString(1_000_000, 10);
+            MSDSort client = new MSDSort();
+            Alphabet a = new Alphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+            client.Sort(stringList, a);
             Assert.IsTrue(stringList.IsSorted());
         }
     }

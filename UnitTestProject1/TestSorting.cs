@@ -291,7 +291,7 @@ namespace UnitTestProject1
         {
             int count = 20_000_000;
             int[] source = Util.GenerateRandomArray(0, count);
-            QuickSort client = new QuickSort();
+            QuickSort<int> client = new QuickSort<int>();
             client.Sort(source);
 
             for (int i = 0; i < count; i++)
@@ -325,7 +325,7 @@ namespace UnitTestProject1
             Array.Copy(source2, 0, source, count, count);
 
 
-            QuickSort client = new QuickSort();
+            QuickSort<int> client = new QuickSort<int>();
             client.Sort(source);
 
             for (int i = 0; i < count * 2; i++)
@@ -375,7 +375,7 @@ namespace UnitTestProject1
             {
                 source[i] = source[i] % 10;
             }
-            QuickSort client = new QuickSort();
+            QuickSort<int> client = new QuickSort<int>();
             client.Sort(source);
 
             for (int i = 0; i < count; i++)

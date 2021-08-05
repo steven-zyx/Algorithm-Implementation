@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Sorting
 {
-    public class QuickSort
+    public class QuickSort<T> where T : IComparable
     {
-        private int[] _source;
+        private T[] _source;
 
-        public void Sort(int[] source)
+        public void Sort(T[] source)
         {
             _source = source;
             Sort(0, source.Length - 1);
@@ -26,14 +26,14 @@ namespace Sorting
         {
             int leftIndex = lo;
             int rightIndex = hi + 1;
-            int midE = _source[lo];
+            T midE = _source[lo];
 
             while (true)
             {
-                while (_source[++leftIndex] < midE)
+                while (_source[++leftIndex].CompareTo(midE) < 0)
                     if (leftIndex >= hi)
                         break;
-                while (midE < _source[--rightIndex])
+                while (_source[--rightIndex].CompareTo(midE) > 0)
                     if (rightIndex <= lo)
                         break;
                 if (leftIndex >= rightIndex)
@@ -47,7 +47,7 @@ namespace Sorting
 
         private void Exchange(int i, int j)
         {
-            int item = _source[i];
+            T item = _source[i];
             _source[i] = _source[j];
             _source[j] = item;
         }

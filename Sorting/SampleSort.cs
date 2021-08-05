@@ -8,7 +8,7 @@ namespace Sorting
     {
         private int[] _source;
         private int[] _sample;
-        private QuickSort _client = new QuickSort();
+        private QuickSort<int> _client = new QuickSort<int>();
 
         public void Sort(int[] source, int[] sample)
         {

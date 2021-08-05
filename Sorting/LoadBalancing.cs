@@ -33,7 +33,7 @@ namespace Sorting
         private int[] _tasks;
         private int _pCount;
         private MinPQ<TaskList> _processor;
-        private QuickSort _sortClient = new QuickSort();
+        private QuickSort<int> _sortClient = new QuickSort<int>();
 
         public LoadBalancing(int[] tasks, int processors)
         {
