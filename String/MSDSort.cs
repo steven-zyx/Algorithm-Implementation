@@ -7,10 +7,10 @@ namespace String
 {
     public class MSDSort
     {
-        private string[] _source;
-        private string[] _aux;
-        private Alphabet _a;
-        private const int CUTOFF = 15;
+        protected string[] _source;
+        protected string[] _aux;
+        protected Alphabet _a;
+        protected const int CUTOFF = 15;
 
         public void Sort(string[] source, Alphabet a)
         {
@@ -20,7 +20,7 @@ namespace String
             Sort(0, source.Length - 1, 0);
         }
 
-        private void Sort(int lo, int hi, int d)
+        protected virtual void Sort(int lo, int hi, int d)
         {
             if (lo + CUTOFF > hi)
             {
@@ -43,7 +43,7 @@ namespace String
                     Sort(lo + count[i], lo + count[i + 1] - 1, d + 1);
         }
 
-        private int CharAt(string text, int i)
+        protected int CharAt(string text, int i)
         {
             if (i >= text.Length)
                 return -1;
@@ -51,16 +51,16 @@ namespace String
                 return _a.ToIndex(text[i]);
         }
 
-        private bool Less(int a, int b, int d) => _source[a].Substring(d).CompareTo(_source[b].Substring(d)) < 0;
+        protected bool Less(int a, int b, int d) => _source[a].Substring(d).CompareTo(_source[b].Substring(d)) < 0;
 
-        private void Exchange(int a, int b)
+        protected void Exchange(int a, int b)
         {
             string temp = _source[a];
             _source[a] = _source[b];
             _source[b] = temp;
         }
 
-        private void InsertionSort(int lo, int hi, int d)
+        protected void InsertionSort(int lo, int hi, int d)
         {
             for (int i = lo; i <= hi; i++)
                 for (int j = i; j > lo && Less(j, j - 1, d); j--)

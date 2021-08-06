@@ -38,5 +38,35 @@ namespace UnitTestProject1
             client.Sort(stringList, a);
             Assert.IsTrue(stringList.IsSorted());
         }
+
+        [TestMethod]
+        public void TestThreeWayStringQuickSort()
+        {
+            string[] stringList = Util.GenerateString(1_000_000, 10);
+            ThreeWayStringQuickSort client = new ThreeWayStringQuickSort();
+            client.Sort(stringList);
+            Assert.IsTrue(stringList.IsSorted());
+        }
+
+        [TestMethod]
+        public void TestQueueSort()
+        {
+            string[] stringList = Util.GenerateString(1_000_000, 10);
+            QueueSort client = new QueueSort();
+            Alphabet a = new Alphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+            client.Sort(stringList, a);
+            Assert.IsTrue(stringList.IsSorted());
+        }
+
+
+        [TestMethod]
+        public void TestHybridSort()
+        {
+            string[] stringList = Util.GenerateString(1_000_000, 10);
+            HybridSort client = new HybridSort();
+            Alphabet a = new Alphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+            client.Sort(stringList, a);
+            Assert.IsTrue(stringList.IsSorted());
+        }
     }
 }

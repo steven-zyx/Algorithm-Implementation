@@ -47,7 +47,6 @@ namespace ConsoleApp1
             //NonOverlappingInterval();
             //RegistrarScheduling();
             //TestKeyIntArray();
-            TestSaytax();
             Console.ReadLine();
         }
 
