@@ -5,17 +5,17 @@ using Utils;
 
 namespace String
 {
-    public class MSDSort
+    public abstract class MSDSort<T>
     {
-        protected string[] _source;
-        protected string[] _aux;
+        protected T[] _source;
+        protected T[] _aux;
         protected Alphabet _a;
         protected const int CUTOFF = 15;
 
-        public void Sort(string[] source, Alphabet a)
+        public void Sort(T[] source, Alphabet a)
         {
             _source = source;
-            _aux = new string[source.Length];
+            _aux = new T[source.Length];
             _a = a;
             Sort(0, source.Length - 1, 0);
         }
@@ -43,19 +43,13 @@ namespace String
                     Sort(lo + count[i], lo + count[i + 1] - 1, d + 1);
         }
 
-        protected int CharAt(string text, int i)
-        {
-            if (i >= text.Length)
-                return -1;
-            else
-                return _a.ToIndex(text[i]);
-        }
+        protected abstract int CharAt(T text, int i);
 
-        protected bool Less(int a, int b, int d) => _source[a].Substring(d).CompareTo(_source[b].Substring(d)) < 0;
+        protected abstract bool Less(int a, int b, int d);
 
         protected void Exchange(int a, int b)
         {
-            string temp = _source[a];
+            T temp = _source[a];
             _source[a] = _source[b];
             _source[b] = temp;
         }

@@ -102,7 +102,7 @@ namespace String
 
         private bool Less(int a, int b)
         {
-            if (_digit >= _heap[a].Length)
+            if (_digit > _heap[a].Length)
                 return false;
             else
                 return _heap[a].Substring(_digit).CompareTo(_heap[b].Substring(_digit)) < 0;
@@ -124,4 +124,5 @@ namespace String
 
         public int Length => _count;
     }
-}
+}
+

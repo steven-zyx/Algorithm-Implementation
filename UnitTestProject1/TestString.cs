@@ -23,17 +23,17 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestLSDSort()
         {
-            string[] stringList = Util.GenerateString(1_000_000, 10);
+            string[] stringList = Util.GenerateFixedLengthString(1_000_000, 10);
             LSDSort client = new LSDSort();
             client.Sort(stringList, 10);
             Assert.IsTrue(stringList.IsSorted());
         }
 
         [TestMethod]
-        public void TestMSDSort()
+        public void TestMSDStringSort()
         {
-            string[] stringList = Util.GenerateString(1_000_000, 10);
-            MSDSort client = new MSDSort();
+            string[] stringList = Util.GenerateDynamicLengthString(1_000_000, 10);
+            MSDStringSort client = new MSDStringSort();
             Alphabet a = new Alphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
             client.Sort(stringList, a);
             Assert.IsTrue(stringList.IsSorted());
@@ -42,7 +42,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestThreeWayStringQuickSort()
         {
-            string[] stringList = Util.GenerateString(1_000_000, 10);
+            string[] stringList = Util.GenerateDynamicLengthString(1_000_000, 10);
             ThreeWayStringQuickSort client = new ThreeWayStringQuickSort();
             client.Sort(stringList);
             Assert.IsTrue(stringList.IsSorted());
@@ -51,7 +51,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestQueueSort()
         {
-            string[] stringList = Util.GenerateString(1_000_000, 10);
+            string[] stringList = Util.GenerateDynamicLengthString(1_000_000, 10);
             QueueSort client = new QueueSort();
             Alphabet a = new Alphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
             client.Sort(stringList, a);
@@ -62,7 +62,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestHybridSort()
         {
-            string[] stringList = Util.GenerateString(1_000_000, 10);
+            string[] stringList = Util.GenerateDynamicLengthString(1_000_000, 10);
             HybridSort client = new HybridSort();
             Alphabet a = new Alphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
             client.Sort(stringList, a);
@@ -76,6 +76,15 @@ namespace UnitTestProject1
             ThreeWayIntArrayQuickSort client = new ThreeWayIntArrayQuickSort();
             client.Sort(intArrayList);
             Assert.IsTrue(intArrayList.IsSorted());
+        }
+
+        [TestMethod]
+        public void TestMSDIntSort()
+        {
+            int[] source = Util.GenerateRandomArray(0, 1_000_000);
+            MSDIntSort client = new MSDIntSort();
+            client.Sort(source, null);
+            Assert.IsTrue(source.IsSorted());
         }
     }
 }

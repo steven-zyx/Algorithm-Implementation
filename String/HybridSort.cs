@@ -4,7 +4,7 @@ using System.Text;
 
 namespace String
 {
-    public class HybridSort : MSDSort
+    public class HybridSort : MSDStringSort
     {
         protected override void Sort(int lo, int hi, int d)
         {
