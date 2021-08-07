@@ -68,5 +68,14 @@ namespace UnitTestProject1
             client.Sort(stringList, a);
             Assert.IsTrue(stringList.IsSorted());
         }
+
+        [TestMethod]
+        public void TestThreeWayIntArrayQuickSort()
+        {
+            int[][] intArrayList = Util.GenerateIntArray(1_000_000, 10);
+            ThreeWayIntArrayQuickSort client = new ThreeWayIntArrayQuickSort();
+            client.Sort(intArrayList);
+            Assert.IsTrue(intArrayList.IsSorted());
+        }
     }
 }

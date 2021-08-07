@@ -47,6 +47,7 @@ namespace ConsoleApp1
             //NonOverlappingInterval();
             //RegistrarScheduling();
             //TestKeyIntArray();
+            TestSubString();
             Console.ReadLine();
         }
 
@@ -618,5 +619,10 @@ namespace ConsoleApp1
             }
         }
 
+        public static void TestSubString()
+        {
+            string abc = "a".Substring(1);
+            Console.WriteLine(abc);
+        }
     }
 }

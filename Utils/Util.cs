@@ -103,6 +103,34 @@ namespace Utils
             return true;
         }
 
+        public static bool IsSorted(this int[][] source)
+        {
+            for (int i = 1; i < source.Length; i++)
+                if (Compare(source[i - 1], source[i]) > 0)
+                    throw new Exception("Not sorted");
+            return true;
+        }
+
+        public static int Compare(int[] a, int[] b)
+        {
+            int maxLength = Max(a.Length, b.Length);
+            for (int i = 0; i < maxLength; i++)
+            {
+                int valueA = int.MinValue;
+                if (i < a.Length)
+                    valueA = a[i];
+
+                int valueB = int.MinValue;
+                if (i < b.Length)
+                    valueB = b[i];
+
+                int result = valueA.CompareTo(valueB);
+                if (result != 0)
+                    return result;
+            }
+            return 0;
+        }
+
         public static string[] GenerateString(int count, int length)
         {
             Func<char> generateRandomChar = () =>
@@ -123,6 +151,19 @@ namespace Utils
                 textList[i] = new string(text);
             }
             return textList;
+        }
+
+        public static int[][] GenerateIntArray(int count, int length)
+        {
+            int[][] result = new int[count][];
+            for (int i = 0; i < count; i++)
+            {
+                int[] element = new int[length];
+                for (int j = 0; j < length; j++)
+                    element[j] = Ran.Next(0, int.MaxValue);
+                result[i] = element;
+            }
+            return result;
         }
     }
 }
