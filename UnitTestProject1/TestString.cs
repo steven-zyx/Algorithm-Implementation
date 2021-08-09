@@ -86,5 +86,24 @@ namespace UnitTestProject1
             client.Sort(source, null);
             Assert.IsTrue(source.IsSorted());
         }
+
+        [TestMethod]
+        public void Test3WayLinkedList()
+        {
+            string[] textList = Util.GenerateDynamicLengthString(1_000_000, 10);
+            var linkedList = Util.GenerateDoublyLinkedList(textList);
+            ThreeWayStringQuickSort4LinkedList client = new ThreeWayStringQuickSort4LinkedList();
+            client.Sort(linkedList.start, linkedList.end);
+            Util.IsSorted(linkedList.start);
+        }
+
+        [TestMethod]
+        public void TestInplaceKeyIndexedCounting()
+        {
+            int[] source = Util.GenerateRandomArrayRepeat(0, 30, 1_000_000);
+            KeyIndexedCounting client = new KeyIndexedCounting();
+            client.InplaceSort(source, 30);
+            Assert.IsTrue(source.IsSorted());
+        }
     }
 }

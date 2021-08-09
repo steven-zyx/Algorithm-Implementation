@@ -58,6 +58,21 @@ namespace Utils
             return start;
         }
 
+        public static (Node_D<string> start, Node_D<string> end) GenerateDoublyLinkedList(string[] textList)
+        {
+            int count = textList.Length;
+            Node_D<string>[] nodeList = textList.Select(x => new Node_D<string>(x)).ToArray();
+            for (int i = 1; i < count - 1; i++)
+            {
+                nodeList[i].Previous = nodeList[i - 1];
+                nodeList[i].Next = nodeList[i + 1];
+            }
+            nodeList[0].Next = nodeList[1];
+            nodeList[count - 1].Previous = nodeList[count - 2];
+
+            return (nodeList[0], nodeList[count - 1]);
+        }
+
         public static int PrimeCeiling(int n)
         {
             while (true)
@@ -108,6 +123,17 @@ namespace Utils
             for (int i = 1; i < source.Length; i++)
                 if (Compare(source[i - 1], source[i]) > 0)
                     throw new Exception("Not sorted");
+            return true;
+        }
+
+        public static bool IsSorted<T>(Node_D<T> start) where T : IComparable
+        {
+            while (start.Next != null)
+            {
+                if (start.Value.CompareTo(start.Next.Value) > 0)
+                    throw new Exception("Not sorted");
+                start = start.Next;
+            }
             return true;
         }
 
