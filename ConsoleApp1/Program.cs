@@ -47,7 +47,6 @@ namespace ConsoleApp1
             //NonOverlappingInterval();
             //RegistrarScheduling();
             //TestKeyIntArray();
-            TestSubString();
             Console.ReadLine();
         }
 
@@ -617,12 +616,6 @@ namespace ConsoleApp1
                 Console.WriteLine(key.CompareTo(min) > 0);
                 min = key;
             }
-        }
-
-        public static void TestSubString()
-        {
-            string abc = "a".Substring(1);
-            Console.WriteLine(abc);
         }
     }
 }
