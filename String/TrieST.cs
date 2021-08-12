@@ -115,6 +115,7 @@ namespace String
             else
                 Collect(node.Next[_a.ToIndex(c)], text + c, pat, keys);
         }
+
         public string LongestPrefixOf(string s)
         {
             int length = LongestPrefixOf(_root, s, 0, 0);

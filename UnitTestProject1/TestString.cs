@@ -106,4 +106,21 @@ namespace UnitTestProject1
             Assert.IsTrue(source.IsSorted());
         }
     }
+
+    public class TestStringST
+    {
+        protected IStringSymbolTable<string> _st;
+        protected int _rowCount;
+
+        public TestStringST()
+        {
+            _rowCount = 100_000;
+        }
+
+        [TestMethod]
+        public void TestPutGet()
+        {
+            string[] stringList = Util.GenerateDynamicLengthString(_rowCount, 15);
+        }
+    }
 }
