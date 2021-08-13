@@ -23,7 +23,7 @@ namespace String
         protected TrieNode<V> Put(TrieNode<V> node, string key, V value, int digit)
         {
             if (node == null)
-                node = new TrieNode<V>();
+                node = new TrieNode<V>(_a.R);
             if (digit == key.Length)
             {
                 node.Value = value;
@@ -140,7 +140,7 @@ namespace String
         public bool Contains(string key)
         {
             TrieNode<V> node = Get(_root, key, 0);
-            return node == null || node.Value.Equals(default(V));
+            return node != null && !node.Value.Equals(default(V));
         }
 
         public bool Delete(string key)
@@ -157,7 +157,7 @@ namespace String
                 node.Value = default(V);
             else
             {
-                int i = _a.ToChar(key[digit]);
+                int i = _a.ToIndex(key[digit]);
                 node.Next[i] = Delete(node.Next[i], key, digit + 1);
             }
 

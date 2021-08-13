@@ -10,6 +10,8 @@ namespace String
         private ISymbolTable<char, int> _st;
         private char[] _charcters;
 
+        public char[] Charcters => _charcters;
+
         public Alphabet(string s)
         {
             _charcters = s.ToCharArray();

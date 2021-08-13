@@ -9,6 +9,16 @@ namespace String
     {
         protected TSTNode<V> _root;
 
+        public V Get(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Put(string key, V value)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool IsEmpty => throw new NotImplementedException();
 
         public bool Contains(string key)
@@ -17,11 +27,6 @@ namespace String
         }
 
         public bool Delete(string key)
-        {
-            throw new NotImplementedException();
-        }
-
-        public V Get(string key)
         {
             throw new NotImplementedException();
         }
@@ -42,11 +47,6 @@ namespace String
         }
 
         public string LongestPrefixOf(string s)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Put(string key, V value)
         {
             throw new NotImplementedException();
         }

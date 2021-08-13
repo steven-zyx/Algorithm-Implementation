@@ -33,13 +33,13 @@ namespace Utils
             return source;
         }
 
-        private static void Shuffle(int[] source)
+        public static void Shuffle<T>(T[] source)
         {
             int count = source.Length;
             for (int i = 0; i < count; i++)
             {
                 int randomIndex = Ran.Next(0, count);
-                int temp = source[i];
+                T temp = source[i];
                 source[i] = source[randomIndex];
                 source[randomIndex] = temp;
             }
@@ -157,52 +157,56 @@ namespace Utils
             return 0;
         }
 
-        public static string[] GenerateDynamicLengthString(int count, int length)
+        public static HashSet<string> GenerateDynamicLengthString_Distinct(char[] characters, int count, int length)
         {
-            Func<int, int> generateRandomLength = average =>
-             {
-                 int offset = Ran.Next(-1, 2);
-                 while (offset != 0)
-                 {
-                     average += offset;
-                     offset = Ran.Next(-1, 2);
-                 }
-                 if (average < 0)
-                     average = 0;
-                 return average;
-             };
+            HashSet<string> textList = new HashSet<string>();
+            while (textList.Count < count)
+            {
+                char[] text = new char[GenerateRandomLength(length)];
+                for (int j = 0; j < text.Length; j++)
+                    text[j] = characters[Ran.Next(0, characters.Length)];
+                textList.Add(new string(text));
+            }
+            return textList;
+        }
 
+        public static string[] GenerateDynamicLengthString(char[] characters, int count, int length)
+        {
             string[] textList = new string[count];
             for (int i = 0; i < count; i++)
             {
-                char[] text = new char[generateRandomLength(length)];
+                char[] text = new char[GenerateRandomLength(length)];
                 for (int j = 0; j < text.Length; j++)
-                    text[j] = GenerateRandomChar();
+                    text[j] = characters[Ran.Next(0, characters.Length)];
                 textList[i] = new string(text);
             }
             return textList;
         }
 
-        public static string[] GenerateFixedLengthString(int count, int length)
+        public static string[] GenerateFixedLengthString(char[] characters, int count, int length)
         {
             string[] textList = new string[count];
             for (int i = 0; i < count; i++)
             {
                 char[] text = new char[length];
                 for (int j = 0; j < length; j++)
-                    text[j] = GenerateRandomChar();
+                    text[j] = characters[Ran.Next(0, characters.Length)];
                 textList[i] = new string(text);
             }
             return textList;
         }
 
-        private static char GenerateRandomChar()
+        private static int GenerateRandomLength(int average)
         {
-            int number;
-            do
-                number = Ran.Next(48, 91);
-            while (number >= 58 && number <= 64);
-            return (char)number;
+            int offset = Ran.Next(-1, 2);
+            while (offset != 0)
+            {
+                average += offset;
+                offset = Ran.Next(-1, 2);
+            }
+            if (average < 0)
+                average = 0;
+            return average;
         }
 
         public static int[][] GenerateIntArray(int count, int length)
