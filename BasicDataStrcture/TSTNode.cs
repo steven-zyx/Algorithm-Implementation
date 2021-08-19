@@ -15,5 +15,10 @@ namespace BasicDataStrcture
         public TSTNode<V> Right { get; set; }
 
         public V Value { get; set; }
+
+        public TSTNode(char c)
+        {
+            C = c;
+        }
     }
 }

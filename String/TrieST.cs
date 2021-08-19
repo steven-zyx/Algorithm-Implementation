@@ -15,12 +15,12 @@ namespace String
             _a = a;
         }
 
-        public void Put(string key, V value)
+        public virtual void Put(string key, V value)
         {
             _root = Put(_root, key, value, 0);
         }
 
-        protected TrieNode<V> Put(TrieNode<V> node, string key, V value, int digit)
+        protected virtual TrieNode<V> Put(TrieNode<V> node, string key, V value, int digit)
         {
             if (node == null)
                 node = new TrieNode<V>(_a.R);
@@ -52,9 +52,9 @@ namespace String
             return Get(node.Next[c], key, digit + 1);
         }
 
-        public int Size() => Size(_root);
+        public virtual int Size() => Size(_root);
 
-        protected int Size(TrieNode<V> node)
+        protected virtual int Size(TrieNode<V> node)
         {
             if (node == null)
                 return 0;
@@ -143,13 +143,13 @@ namespace String
             return node != null && !node.Value.Equals(default(V));
         }
 
-        public bool Delete(string key)
+        public virtual bool Delete(string key)
         {
             _root = Delete(_root, key, 0);
             return true;
         }
 
-        protected TrieNode<V> Delete(TrieNode<V> node, string key, int digit)
+        protected virtual TrieNode<V> Delete(TrieNode<V> node, string key, int digit)
         {
             if (node == null)
                 return null;

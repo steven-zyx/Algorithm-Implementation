@@ -6,6 +6,8 @@ using Utils;
 using String;
 using Sorting;
 using System.Linq;
+using System.Text.RegularExpressions;
+using Searching;
 
 namespace UnitTestProject1
 {
@@ -64,7 +66,6 @@ namespace UnitTestProject1
             Assert.IsTrue(stringList.IsSorted());
         }
 
-
         [TestMethod]
         public void TestHybridSort()
         {
@@ -114,10 +115,12 @@ namespace UnitTestProject1
 
     public class TestStringST
     {
-        protected IStringSymbolTable<int> _st;
+        protected ISymbolTable<string, int> _st;
         protected Alphabet _alphabet;
         protected int _rowCount;
         protected string[] _stringList;
+
+        protected IStringSymbolTable<int> _stStr => _st as IStringSymbolTable<int>;
 
         public TestStringST()
         {
@@ -157,6 +160,41 @@ namespace UnitTestProject1
                 Assert.IsTrue(_st.Contains(text));
                 _st.Delete(text);
                 Assert.IsFalse(_st.Contains(text));
+            }
+        }
+
+        [TestMethod]
+        public void TestRandomlyPutGetDelete()
+        {
+            string[] textList = Util.GenerateDynamicLengthString(_alphabet.Charcters, _rowCount, 15);
+            HashSet<string> addedList = new HashSet<string>();
+            for (int i = 0; i < _rowCount * 4; i++)
+            {
+                string text = textList[Util.Ran.Next(0, textList.Length)];
+                switch (Util.Ran.Next(0, 3))
+                {
+                    case 0:
+                        {
+                            addedList.Add(text);
+                            _st.Put(text, 1);
+                            break;
+                        }
+                    case 1:
+                        {
+                            int value = _st.Get(text);
+                            if (addedList.Contains(text))
+                                Assert.AreEqual(1, value);
+                            else
+                                Assert.AreEqual(0, value);
+                            break;
+                        }
+                    case 2:
+                        {
+                            addedList.Remove(text);
+                            _st.Delete(text);
+                            break;
+                        }
+                }
             }
         }
 
@@ -214,27 +252,53 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
+        public void TestKeysWithPrefixSimple()
+        {
+            string[] textList = { "ABC", "ABD", "ACE", "ZYX" };
+            foreach (string text in textList)
+                _st.Put(text, 1);
+
+            string[] keys = _stStr.KeysWithPrefix("AB").OrderBy(x => x).ToArray();
+            Assert.AreEqual("ABC", keys[0]);
+            Assert.AreEqual("ABD", keys[1]);
+        }
+
+        [TestMethod]
         public void TestKeysWithPrefix()
         {
             _rowCount /= 2;
 
-            HashSet<string> stringList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, _rowCount, 15);
+            HashSet<string> stringList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, _rowCount, 20);
             foreach (string text in stringList)
                 _st.Put(text, 1);
 
-            HashSet<string> prefixList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, 100, 4);
+            HashSet<string> prefixList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, 100, 6);
             foreach (string prefix in prefixList)
             {
                 HashSet<string> correct = stringList.Where(x => x.StartsWith(prefix)).ToHashSet();
-                Assert.IsTrue(correct.SetEquals(_st.KeysWithPrefix(prefix)));
+                Assert.IsTrue(correct.SetEquals(_stStr.KeysWithPrefix(prefix)));
             }
+        }
+
+        [TestMethod]
+        public void TestLongestPrefixOfSimple()
+        {
+            string[] textList = { "abc", "abcd", "abce", "zyx" };
+            foreach (string text in textList)
+                _stStr.Put(text, 1);
+
+            string prefix = _stStr.LongestPrefixOf("abcdef");
+            Assert.AreEqual("abcd", prefix);
         }
 
         [TestMethod]
         public void TestLongestPrefixOf()
         {
             _rowCount *= 5;
-            HashSet<string> stringList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, _rowCount, 5);
+            HashSet<string> stringList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, _rowCount, 5).ToHashSet();
+            if (_stStr as TST<int> != null)
+                stringList.Remove("");
+
             foreach (string text in stringList)
                 _st.Put(text, 1);
 
@@ -246,8 +310,62 @@ namespace UnitTestProject1
                     if (longStr.StartsWith(text) && text.Length > correct.Length)
                         correct = text;
 
-                Assert.AreEqual(correct, _st.LongestPrefixOf(longStr));
+                Assert.AreEqual(correct, _stStr.LongestPrefixOf(longStr));
             }
+        }
+
+        [TestMethod]
+        public void KeysThatMatchSimple()
+        {
+            string[] textList = { "ABC", "ADC", "1EC", "ABD" };
+            foreach (string text in textList)
+                _st.Put(text, 1);
+
+            string[] keys = _stStr.KeysThatMatch("A.C").OrderBy(x => x).ToArray();
+            Assert.AreEqual("ABC", keys[0]);
+            Assert.AreEqual("ADC", keys[1]);
+        }
+
+        [TestMethod]
+        public void TestKeysThatMatch()
+        {
+            _rowCount *= 2;
+            HashSet<string> stringList = Util.GenerateFixedLengthString_Distinct(_alphabet.Charcters, _rowCount, 4);
+            foreach (string text in stringList)
+                _st.Put(text, 1);
+
+            HashSet<string> patternList = Util.GenerateFixedLengthString_Distinct(_alphabet.Charcters, 25, 4);
+            foreach (string pattern in patternList)
+            {
+                char[] temp = pattern.ToCharArray();
+                temp[Util.Ran.Next(0, temp.Length - 1)] = '.';
+                string regexText = new string(temp);
+                Regex regex = new Regex(regexText);
+
+                HashSet<string> correct = stringList.Where(x => regex.IsMatch(x)).ToHashSet<string>();
+                Assert.IsTrue(correct.SetEquals(_stStr.KeysThatMatch(regexText)));
+            }
+        }
+    }
+
+    public class TestStringSTCert : TestStringST
+    {
+        protected int _rowCount4Cert = 300;
+
+        [TestMethod]
+        public void TestPutGet_Cert()
+        {
+            _rowCount = _rowCount4Cert;
+            _st = new CertWrapper4ST<ISymbolTable<string, int>, string, int>(_st);
+            TestPutGet();
+        }
+
+        [TestMethod]
+        public void TestDelete_Cert()
+        {
+            _rowCount = _rowCount4Cert;
+            _st = new CertWrapper4ST<ISymbolTable<string, int>, string, int>(_st);
+            TestDelete();
         }
     }
 
@@ -257,6 +375,33 @@ namespace UnitTestProject1
         public TestTrie()
         {
             _st = new TrieST<int>(_alphabet);
+        }
+    }
+
+    [TestClass]
+    public class TestTST : TestStringSTCert
+    {
+        public TestTST()
+        {
+            _st = new TST<int>();
+        }
+    }
+
+    [TestClass]
+    public class TestTST_Empty : TestStringSTCert
+    {
+        public TestTST_Empty()
+        {
+            _st = new TST_Empty<int>();
+        }
+    }
+
+    [TestClass]
+    public class TestTrie_Ordered : TestStringSTCert
+    {
+        public TestTrie_Ordered()
+        {
+            _st = new Trie_Ordered<int>(_alphabet);
         }
     }
 }

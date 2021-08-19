@@ -183,6 +183,19 @@ namespace Utils
             return textList;
         }
 
+        public static HashSet<string> GenerateFixedLengthString_Distinct(char[] characters, int count, int length)
+        {
+            HashSet<string> textList = new HashSet<string>();
+            while (textList.Count < count)
+            {
+                char[] text = new char[length];
+                for (int j = 0; j < length; j++)
+                    text[j] = characters[Ran.Next(0, characters.Length)];
+                textList.Add(new string(text));
+            }
+            return textList;
+        }
+
         public static string[] GenerateFixedLengthString(char[] characters, int count, int length)
         {
             string[] textList = new string[count];

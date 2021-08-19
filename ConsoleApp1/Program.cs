@@ -10,6 +10,7 @@ using Searching;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using String;
 
 namespace ConsoleApp1
 {
@@ -47,6 +48,7 @@ namespace ConsoleApp1
             //NonOverlappingInterval();
             //RegistrarScheduling();
             //TestKeyIntArray();
+            TestTST();
             Console.ReadLine();
         }
 
@@ -597,24 +599,23 @@ namespace ConsoleApp1
                 oset.Put(dt);
         }
 
-        public static void TestKeyIntArray()
+        public static void TestTST()
         {
-            KeyIntArray min = new KeyIntArray(new int[] { 0 });
-            KeyIntArray max = new KeyIntArray(new int[] { int.MaxValue });
+            var _st = new CertWrapper4ST<ISymbolTable<string, int>, string, int>(new TST<int>());
+            Alphabet _alphabet = new Alphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
+            //var stringList = Util.GenerateFixedLengthString_Distinct(_alphabet.Charcters, 5, 1);
+            string[] stringList = { "B", "S", "3", "5", "G" };
+            foreach (string text in stringList)
+                _st.Put(text, 1);
 
-            Console.WriteLine(min);
-            Console.WriteLine(max);
-            while (true)
+            foreach (string text in stringList)
             {
-                Console.ReadKey();
-                var key = KeyIntArray.GenerateMidean(min, max);
-                Console.Write(key);
-                Console.Write("\t");
-                Console.Write(key.CompareTo(max) < 0);
-                Console.Write("\t");
-                Console.WriteLine(key.CompareTo(min) > 0);
-                min = key;
+                if (!_st.Contains(text))
+                    throw new Exception("Assert failed");
+                _st.Delete(text);
+                if (_st.Contains(text))
+                    throw new Exception("Assert failed");
             }
         }
     }
