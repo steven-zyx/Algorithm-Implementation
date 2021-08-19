@@ -41,7 +41,7 @@ namespace String
             _root = Put(_root, key, 0, value);
         }
 
-        protected TSTNode<V> Put(TSTNode<V> node, string key, int digit, V value)
+        protected virtual TSTNode<V> Put(TSTNode<V> node, string key, int digit, V value)
         {
             if (node == null)
                 node = new TSTNode<V>(key[digit]);
@@ -72,7 +72,7 @@ namespace String
             return true;
         }
 
-        protected TSTNode<V> Delete(TSTNode<V> node, string key, int digit)
+        protected virtual TSTNode<V> Delete(TSTNode<V> node, string key, int digit)
         {
             if (node == null)
                 return null;
@@ -88,12 +88,12 @@ namespace String
                 node.Mid = Delete(node.Mid, key, digit + 1);
 
             if (node.Value.Equals(default(V)) && node.Mid == null)
-                return Delete(node);
+                return DeleteNode(node);
             else
                 return node;
         }
 
-        protected TSTNode<V> Delete(TSTNode<V> node)
+        protected virtual TSTNode<V> DeleteNode(TSTNode<V> node)
         {
             if (node.Right == null)
                 return node.Left;
@@ -108,15 +108,13 @@ namespace String
             }
         }
 
-        protected TSTNode<V> DeleteMin(TSTNode<V> node)
+        protected virtual TSTNode<V> DeleteMin(TSTNode<V> node)
         {
             if (node.Left == null)
                 return node.Right;
-            else
-            {
-                node.Left = DeleteMin(node.Left);
-                return node;
-            }
+
+            node.Left = DeleteMin(node.Left);
+            return node;
         }
 
         protected TSTNode<V> Min(TSTNode<V> node)
@@ -148,7 +146,7 @@ namespace String
 
         public virtual int Size() => Size(_root);
 
-        protected int Size(TSTNode<V> node)
+        protected virtual int Size(TSTNode<V> node)
         {
             if (node == null)
                 return 0;
@@ -238,7 +236,7 @@ namespace String
             RecrusiveCert(_root);
         }
 
-        public void RecrusiveCert(TSTNode<V> node)
+        protected virtual void RecrusiveCert(TSTNode<V> node)
         {
             if (node == null)
                 return;

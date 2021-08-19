@@ -230,7 +230,18 @@ namespace UnitTestProject1
                 _st.Put(text, 1);
                 count++;
             }
+
+            foreach (string text in stringList)
+            {
+                if (count % 500 == 0)
+                    Assert.AreEqual(count, _st.Size());
+
+                _st.Delete(text);
+                count--;
+            }
         }
+
+
 
         [TestMethod]
         public void TestKeys()
@@ -296,8 +307,7 @@ namespace UnitTestProject1
         {
             _rowCount *= 5;
             HashSet<string> stringList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, _rowCount, 5).ToHashSet();
-            if (_stStr as TST<int> != null)
-                stringList.Remove("");
+            stringList.Remove("");
 
             foreach (string text in stringList)
                 _st.Put(text, 1);
@@ -402,6 +412,15 @@ namespace UnitTestProject1
         public TestTrie_Ordered()
         {
             _st = new Trie_Ordered<int>(_alphabet);
+        }
+    }
+
+    [TestClass]
+    public class TestTST_Ordered : TestStringSTCert
+    {
+        public TestTST_Ordered()
+        {
+            _st = new TST_Ordered<int>();
         }
     }
 }

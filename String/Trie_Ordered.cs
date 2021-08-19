@@ -15,27 +15,15 @@ namespace String
 
         public Trie_Ordered(Alphabet a) : base(a) { }
 
-        public override void Put(string key, V value)
-        {
-            _isToAdd = false;
-            _root = Put(Root_N, key, value, 0);
-        }
-
         protected override TrieNode<V> Put(TrieNode<V> node, string key, V value, int digit)
         {
             if (node == null)
-            {
                 node = new TrieNode_N<V>(_a.R);
-                if (digit == key.Length)
-                {
-                    _isToAdd = true;
-                    (node as TrieNode_N<V>).N = 1;
-                    node.Value = value;
-                    return node;
-                }
-            }
-            else if (digit == key.Length)
+            if (digit == key.Length)
             {
+                _isToAdd = node.Value.Equals(default(V));
+                if (_isToAdd)
+                    (node as TrieNode_N<int>).N++;
                 node.Value = value;
                 return node;
             }

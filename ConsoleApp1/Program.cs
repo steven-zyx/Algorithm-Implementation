@@ -48,7 +48,6 @@ namespace ConsoleApp1
             //NonOverlappingInterval();
             //RegistrarScheduling();
             //TestKeyIntArray();
-            TestTST();
             Console.ReadLine();
         }
 
@@ -597,26 +596,6 @@ namespace ConsoleApp1
                 Console.WriteLine($"classes already scheduled at {dt}");
             else
                 oset.Put(dt);
-        }
-
-        public static void TestTST()
-        {
-            var _st = new CertWrapper4ST<ISymbolTable<string, int>, string, int>(new TST<int>());
-            Alphabet _alphabet = new Alphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-
-            //var stringList = Util.GenerateFixedLengthString_Distinct(_alphabet.Charcters, 5, 1);
-            string[] stringList = { "B", "S", "3", "5", "G" };
-            foreach (string text in stringList)
-                _st.Put(text, 1);
-
-            foreach (string text in stringList)
-            {
-                if (!_st.Contains(text))
-                    throw new Exception("Assert failed");
-                _st.Delete(text);
-                if (_st.Contains(text))
-                    throw new Exception("Assert failed");
-            }
         }
     }
 }
