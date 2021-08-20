@@ -6,6 +6,7 @@ using Searching;
 
 namespace String
 {
+    //Common operations
     public partial class Trie_Ordered<V> : TrieST<V>
     {
         protected TrieNode_N<V> Root_N => _root as TrieNode_N<V>;
@@ -81,6 +82,64 @@ namespace String
         }
     }
 
+    //Ordered operations
+    public partial class Trie_Ordered<V>
+    {
+        public int Rank(string key) => Rank(_root, key, 0);
+
+        protected int Rank(TrieNode<V> node, string key, int digit)
+        {
+            int count = 0;
+            if (!node.Value.Equals(default(V)))
+                count++;
+
+            for (int i = 0; i < _a.R; i++)
+            {
+                int result = _a.ToIndex(key[digit]).CompareTo(i);
+                if (result < 0)
+                    return count;
+                else if (result > 0)
+                    count += Size(node.Next[i]);
+                else if (digit + 1 == key.Length)
+                    return count;
+                else
+                    return count + Rank(node.Next[i], key, digit + 1);
+            }
+            return count;
+        }
+
+        public string Select(int index) => Select(_root, index);
+
+        public string Select(TrieNode<V> node, int index)
+        {
+            if (!node.Value.Equals(default(V)))
+                if (index == 0)
+                    return "";
+                else
+                    index--;
+
+            for (int i = 0; i < _a.R; i++)
+                if (node.Next[i] != null)
+                    if (index < (node.Next[i] as TrieNode_N<V>).N)
+                        return _a.ToChar(i) + Select(node.Next[i], index);
+                    else
+                        index -= (node.Next[i] as TrieNode_N<V>).N;
+
+            return null;
+        }
+
+        public string Ceiling(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string Floor(string key)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    //Functions for Certificate
     public partial class Trie_Ordered<V> : ICertificate
     {
         public void Certificate()

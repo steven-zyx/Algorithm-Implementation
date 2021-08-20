@@ -234,5 +234,7 @@ namespace Utils
             }
             return result;
         }
+
+        public static double Log2(double number) => Log10(number) / Log10(2);
     }
 }

@@ -597,5 +597,10 @@ namespace ConsoleApp1
             else
                 oset.Put(dt);
         }
+
+        public static void TestBinaryStdOut()
+        {
+
+        }
     }
 }

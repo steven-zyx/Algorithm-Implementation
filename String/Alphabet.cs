@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Searching;
+using Utils;
 
 namespace String
 {
@@ -45,5 +46,7 @@ namespace String
                 cArray[i] = _charcters[indices[i]];
             return new string(cArray);
         }
+
+        public int LgR() => (int)Math.Ceiling(Util.Log2(R));
     }
 }

@@ -241,8 +241,6 @@ namespace UnitTestProject1
             }
         }
 
-
-
         [TestMethod]
         public void TestKeys()
         {
@@ -409,9 +407,86 @@ namespace UnitTestProject1
     [TestClass]
     public class TestTrie_Ordered : TestStringSTCert
     {
+        protected Trie_Ordered<int> _trieO => _st as Trie_Ordered<int>;
+
         public TestTrie_Ordered()
         {
             _st = new Trie_Ordered<int>(_alphabet);
+        }
+
+        [TestMethod]
+        public void TestRankSimple()
+        {
+            _trieO.Put("A", 1);
+            _trieO.Put("C", 1);
+            _trieO.Put("E", 1);
+            Assert.AreEqual(1, _trieO.Rank("B"));
+            Assert.AreEqual(1, _trieO.Rank("C"));
+            Assert.AreEqual(2, _trieO.Rank("D"));
+            Assert.AreEqual(3, _trieO.Rank("F"));
+
+            _trieO.Put("CB", 1);
+            _trieO.Put("CD", 1);
+
+            Assert.AreEqual(1, _trieO.Rank("C"));
+            Assert.AreEqual(2, _trieO.Rank("CA"));
+            Assert.AreEqual(3, _trieO.Rank("CC"));
+            Assert.AreEqual(3, _trieO.Rank("CD"));
+            Assert.AreEqual(4, _trieO.Rank("CE"));
+            Assert.AreEqual(4, _trieO.Rank("E"));
+            Assert.AreEqual(5, _trieO.Rank("F"));
+
+            _trieO.Put("", 1);
+            Assert.AreEqual(1, _trieO.Rank("A"));
+        }
+
+        [TestMethod]
+        public void TestRank()
+        {
+            string[] textList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, _rowCount, 15).ToArray();
+            foreach (string text in textList)
+                _st.Put(text, 1);
+
+            Array.Sort(textList);
+            for (int i = 0; i < _rowCount / 2; i++)
+            {
+                int index = Util.Ran.Next(0, _rowCount);
+                Assert.AreEqual(index, _trieO.Rank(textList[index]));
+            }
+        }
+
+        [TestMethod]
+        public void TestSelectSimple()
+        {
+            _trieO.Put("", 1);
+            _trieO.Put("A", 1);
+            _trieO.Put("C", 1);
+            _trieO.Put("E", 1);
+            _trieO.Put("CB", 1);
+            _trieO.Put("CD", 1);
+
+            Assert.AreEqual("", _trieO.Select(0));
+            Assert.AreEqual("A", _trieO.Select(1));
+            Assert.AreEqual("C", _trieO.Select(2));
+            Assert.AreEqual("CB", _trieO.Select(3));
+            Assert.AreEqual("CD", _trieO.Select(4));
+            Assert.AreEqual("E", _trieO.Select(5));
+            Assert.IsNull(_trieO.Select(6));
+        }
+
+        [TestMethod]
+        public void TestSelect()
+        {
+            string[] textList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, _rowCount, 15).ToArray();
+            foreach (string text in textList)
+                _st.Put(text, 1);
+
+            Array.Sort(textList);
+            for (int i = 0; i < _rowCount; i++)
+            {
+                int index = Util.Ran.Next(0, _rowCount);
+                Assert.AreEqual(textList[index], _trieO.Select(index));
+            }
         }
     }
 
