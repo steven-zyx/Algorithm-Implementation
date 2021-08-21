@@ -488,6 +488,91 @@ namespace UnitTestProject1
                 Assert.AreEqual(textList[index], _trieO.Select(index));
             }
         }
+
+        [TestMethod]
+        public void TestMinSimple()
+        {
+            _trieO.Put("E", 1);
+            Assert.AreEqual("E", _trieO.Min());
+            _trieO.Put("CD", 1);
+            Assert.AreEqual("CD", _trieO.Min());
+            _trieO.Put("CB", 1);
+            Assert.AreEqual("CB", _trieO.Min());
+            _trieO.Put("C", 1);
+            Assert.AreEqual("C", _trieO.Min());
+            _trieO.Put("A", 1);
+            Assert.AreEqual("A", _trieO.Min());
+            _trieO.Put("", 1);
+            Assert.AreEqual("", _trieO.Min());
+        }
+
+        [TestMethod]
+        public void TestMin()
+        {
+            string[] textList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, _rowCount, 15).ToArray();
+            foreach (string text in textList)
+                _trieO.Put(text, 1);
+
+            Array.Sort(textList);
+            foreach (string text in textList)
+            {
+                Assert.AreEqual(text, _trieO.Min());
+                _trieO.Delete(text);
+            }
+        }
+
+        [TestMethod]
+        public void TestMaxSimple()
+        {
+            _trieO.Put("", 1);
+            Assert.AreEqual("", _trieO.Max());
+            _trieO.Put("A", 1);
+            Assert.AreEqual("A", _trieO.Max());
+            _trieO.Put("C", 1);
+            Assert.AreEqual("C", _trieO.Max());
+            _trieO.Put("CB", 1);
+            Assert.AreEqual("CB", _trieO.Max());
+            _trieO.Put("CD", 1);
+            Assert.AreEqual("CD", _trieO.Max());
+            _trieO.Put("E", 1);
+            Assert.AreEqual("E", _trieO.Max());
+        }
+
+        [TestMethod]
+        public void TestMax()
+        {
+            string[] textList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, _rowCount, 15).ToArray();
+            foreach (string text in textList)
+                _trieO.Put(text, 1);
+
+            Array.Sort(textList);
+            foreach (string text in textList.Reverse())
+            {
+                Assert.AreEqual(text, _trieO.Max());
+                _trieO.Delete(text);
+            }
+        }
+
+        [TestMethod]
+        public void TestCeilingSimple()
+        {
+            _trieO.Put("", 1);
+            _trieO.Put("A", 1);
+            _trieO.Put("C", 1);
+            _trieO.Put("E", 1);
+            _trieO.Put("CB", 1);
+            _trieO.Put("CD", 1);
+
+            Assert.AreEqual("CB", _trieO.Ceiling("CB"));
+            Assert.AreEqual("E", _trieO.Ceiling("E"));
+            //Assert.AreEqual("", _trieO.Ceiling(""));
+
+            Assert.AreEqual("CB", _trieO.Ceiling("CA"));
+            Assert.AreEqual("CD", _trieO.Ceiling("CC"));
+            Assert.AreEqual("C", _trieO.Ceiling("B"));
+            Assert.AreEqual("E", _trieO.Ceiling("CE"));
+            Assert.IsNull(_trieO.Ceiling("F"));
+        }
     }
 
     [TestClass]

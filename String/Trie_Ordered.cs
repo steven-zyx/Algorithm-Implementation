@@ -108,7 +108,12 @@ namespace String
             return count;
         }
 
-        public string Select(int index) => Select(_root, index);
+        public string Select(int index)
+        {
+            if (index >= Size(_root))
+                return null;
+            return Select(_root, index);
+        }
 
         public string Select(TrieNode<V> node, int index)
         {
@@ -125,17 +130,61 @@ namespace String
                     else
                         index -= (node.Next[i] as TrieNode_N<V>).N;
 
-            return null;
+            throw new Exception("Impossible code path");
         }
 
-        public string Ceiling(string key)
+        public string Ceiling(string key) => Ceiling(_root, key, 0, "");
+
+        //public string Ceiling(string key) => Select(Rank(key));
+
+        public string Ceiling(TrieNode<V> node, string key, int digit, string text)
         {
-            throw new NotImplementedException();
+            if (node == null)
+                return null;
+
+            if (digit == key.Length)
+                if (node.Value.Equals(default(V)))
+                    return null;
+                else
+                    return text;
+
+            int index = _a.ToIndex(key[digit]);
+            string result = Ceiling(node.Next[index], key, digit + 1, text + key[digit]);
+            if (result == null)
+                for (int i = index + 1; i < _a.R; i++)
+                    if (node.Next[i] != null)
+                        return text + _a.ToChar(i) + Min(node.Next[i]);
+            return result;
         }
 
         public string Floor(string key)
         {
             throw new NotImplementedException();
+        }
+
+        public string Min() => Min(_root);
+
+        protected string Min(TrieNode<V> node)
+        {
+            if (!node.Value.Equals(default(V)))
+                return "";
+
+            for (int i = 0; i < _a.R; i++)
+                if (node.Next[i] != null)
+                    return _a.ToChar(i) + Min(node.Next[i]);
+
+            throw new Exception("Impossible code path");
+        }
+
+        public string Max() => Max(_root);
+
+        protected string Max(TrieNode<V> node)
+        {
+            for (int i = _a.R - 1; i >= 0; i--)
+                if (node.Next[i] != null)
+                    return _a.ToChar(i) + Max(node.Next[i]);
+
+            return "";
         }
     }
 
