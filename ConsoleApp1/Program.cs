@@ -602,21 +602,22 @@ namespace ConsoleApp1
         public static void TestBinaryStdOut()
         {
             string fileName = @"C:\Users\v-yuzhu\Desktop\TestOutput.tsv";
+            int length = 2;
 
             BinaryStdOut output = new BinaryStdOut(fileName);
-            output.Write(2, 2);
-            output.Write(1, 2);
-            output.Write(0, 2);
-            output.Write(3, 2);
-            output.Write(2, 2);
+            output.Write(2, length);
+            output.Write(1, length);
+            output.Write(0, length);
+            output.Write(3, length);
+            output.Write(2, length);
             output.Close();
 
             BinaryStdIn input = new BinaryStdIn(fileName);
-            Console.WriteLine(input.Read<int>(2));
-            Console.WriteLine(input.Read<int>(2));
-            Console.WriteLine(input.Read<int>(2));
-            Console.WriteLine(input.Read<int>(2));
-            Console.WriteLine(input.Read<int>(2));
+            Console.WriteLine(input.Read<int>(length));
+            Console.WriteLine(input.Read<int>(length));
+            Console.WriteLine(input.Read<int>(length));
+            Console.WriteLine(input.Read<int>(length));
+            Console.WriteLine(input.Read<int>(length));
         }
     }
 }
