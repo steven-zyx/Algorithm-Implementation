@@ -565,13 +565,70 @@ namespace UnitTestProject1
 
             Assert.AreEqual("CB", _trieO.Ceiling("CB"));
             Assert.AreEqual("E", _trieO.Ceiling("E"));
-            //Assert.AreEqual("", _trieO.Ceiling(""));
+            Assert.AreEqual("", _trieO.Ceiling(""));
 
             Assert.AreEqual("CB", _trieO.Ceiling("CA"));
             Assert.AreEqual("CD", _trieO.Ceiling("CC"));
             Assert.AreEqual("C", _trieO.Ceiling("B"));
             Assert.AreEqual("E", _trieO.Ceiling("CE"));
             Assert.IsNull(_trieO.Ceiling("F"));
+        }
+
+        [TestMethod]
+        public void TestCeiling()
+        {
+            string[] textList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, _rowCount, 15).ToArray();
+            foreach (string text in textList)
+                _trieO.Put(text, 1);
+
+            Array.Sort(textList);
+            for (int i = 0; i < _rowCount - 1; i++)
+            {
+                _trieO.Delete(textList[i]);
+                Assert.AreEqual(textList[i + 1], _trieO.Ceiling(textList[i]));
+            }
+        }
+
+        [TestMethod]
+        public void TestFloorSimple()
+        {
+            _trieO.Put("", 1);
+            _trieO.Put("A", 1);
+            _trieO.Put("C", 1);
+            _trieO.Put("E", 1);
+            _trieO.Put("CB", 1);
+            _trieO.Put("CD", 1);
+
+            Assert.AreEqual("CB", _trieO.Floor("CB"));
+            Assert.AreEqual("E", _trieO.Floor("E"));
+            Assert.AreEqual("", _trieO.Floor(""));
+
+            Assert.AreEqual("", _trieO.Floor("9"));
+            Assert.AreEqual("A", _trieO.Floor("B"));
+            Assert.AreEqual("C", _trieO.Floor("CA"));
+            Assert.AreEqual("CB", _trieO.Floor("CC"));
+            Assert.AreEqual("CD", _trieO.Floor("CE"));
+            Assert.AreEqual("CD", _trieO.Floor("D"));
+            Assert.AreEqual("E", _trieO.Floor("F"));
+            Assert.AreEqual("E", _trieO.Floor("FA"));
+
+            _trieO.Delete("");
+            Assert.IsNull(_trieO.Floor("9"));
+        }
+
+        [TestMethod]
+        public void TestFloor()
+        {
+            string[] textList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, _rowCount, 15).ToArray();
+            foreach (string text in textList)
+                _trieO.Put(text, 1);
+
+            Array.Sort(textList);
+            for (int i = _rowCount - 1; i > 0; i--)
+            {
+                _trieO.Delete(textList[i]);
+                Assert.AreEqual(textList[i - 1], _trieO.Floor(textList[i]));
+            }
         }
     }
 
@@ -581,6 +638,15 @@ namespace UnitTestProject1
         public TestTST_Ordered()
         {
             _st = new TST_Ordered<int>();
+        }
+    }
+
+    [TestClass]
+    public class TestTrie_NoOneWayBranching : TestStringSTCert
+    {
+        public TestTrie_NoOneWayBranching()
+        {
+            _st = new Trie_NoOneWayBranching<int>(_alphabet);
         }
     }
 }

@@ -48,6 +48,7 @@ namespace ConsoleApp1
             //NonOverlappingInterval();
             //RegistrarScheduling();
             //TestKeyIntArray();
+            TestBinaryStdOut();
             Console.ReadLine();
         }
 
@@ -600,7 +601,22 @@ namespace ConsoleApp1
 
         public static void TestBinaryStdOut()
         {
+            string fileName = @"C:\Users\v-yuzhu\Desktop\TestOutput.tsv";
 
+            BinaryStdOut output = new BinaryStdOut(fileName);
+            output.Write(2, 2);
+            output.Write(1, 2);
+            output.Write(0, 2);
+            output.Write(3, 2);
+            output.Write(2, 2);
+            output.Close();
+
+            BinaryStdIn input = new BinaryStdIn(fileName);
+            Console.WriteLine(input.Read<int>(2));
+            Console.WriteLine(input.Read<int>(2));
+            Console.WriteLine(input.Read<int>(2));
+            Console.WriteLine(input.Read<int>(2));
+            Console.WriteLine(input.Read<int>(2));
         }
     }
 }

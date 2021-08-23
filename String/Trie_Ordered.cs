@@ -133,11 +133,35 @@ namespace String
             throw new Exception("Impossible code path");
         }
 
-        public string Ceiling(string key) => Ceiling(_root, key, 0, "");
+        public string Ceiling(string key) => Ceiling(_root, key, 0);
 
-        //public string Ceiling(string key) => Select(Rank(key));
+        public string Ceiling(TrieNode<V> node, string key, int digit)
+        {
+            if (node == null)
+                return null;
 
-        public string Ceiling(TrieNode<V> node, string key, int digit, string text)
+            if (digit == key.Length)
+                if (node.Value.Equals(default(V)))
+                    return Min(node);
+                else
+                    return "";
+
+            int index = _a.ToIndex(key[digit]);
+            string result = Ceiling(node.Next[index], key, digit + 1);
+            if (result == null)
+            {
+                for (int i = index + 1; i < _a.R; i++)
+                    if (node.Next[i] != null)
+                        return _a.ToChar(i) + Min(node.Next[i]);
+                return null;
+            }
+            else
+                return _a.ToChar(index) + result;
+        }
+
+        public string Floor(string key) => Floor(_root, key, 0);
+
+        public string Floor(TrieNode<V> node, string key, int digit)
         {
             if (node == null)
                 return null;
@@ -146,20 +170,21 @@ namespace String
                 if (node.Value.Equals(default(V)))
                     return null;
                 else
-                    return text;
+                    return "";
 
             int index = _a.ToIndex(key[digit]);
-            string result = Ceiling(node.Next[index], key, digit + 1, text + key[digit]);
+            string result = Floor(node.Next[index], key, digit + 1);
             if (result == null)
-                for (int i = index + 1; i < _a.R; i++)
+            {
+                for (int i = index - 1; i >= 0; i--)
                     if (node.Next[i] != null)
-                        return text + _a.ToChar(i) + Min(node.Next[i]);
-            return result;
-        }
-
-        public string Floor(string key)
-        {
-            throw new NotImplementedException();
+                        return _a.ToChar(i) + Max(node.Next[i]);
+                if (!node.Value.Equals(default(V)))
+                    return "";
+                return null;
+            }
+            else
+                return _a.ToChar(index) + result;
         }
 
         public string Min() => Min(_root);
