@@ -3,12 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BasicDataStrcture;
+using System.Diagnostics;
 using static System.Math;
 
 namespace Utils
 {
     public static class Util
     {
+        public static readonly string DesktopPath =
+            Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\";
+
         public static Random Ran = new Random((int)DateTime.Now.Ticks);
 
         public static readonly int[] Primes = {
@@ -236,5 +240,15 @@ namespace Utils
         }
 
         public static double Log2(double number) => Log10(number) / Log10(2);
+
+        public static string GenerateLongString(char[] characters, int length)
+        {
+            int count = characters.Length;
+            char[] charList = new char[length];
+            for (int i = 0; i < charList.Length; i++)
+                charList[i] = characters[Ran.Next(0, count)];
+
+            return new string(charList);
+        }
     }
 }

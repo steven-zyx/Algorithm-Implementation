@@ -441,13 +441,13 @@ namespace ConsoleApp1
 
 
             string diagram = tree.DrawTree().ToString();
-            string fileName = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + $@"\{name}.txt";
+            string fileName = Util.DesktopPath + $@"\{name}.txt";
             File.WriteAllText(fileName, diagram);
         }
 
         public static void All23Trees()
         {
-            string fileName = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"/{0}.txt";
+            string fileName = Util.DesktopPath + @"/{0}.txt";
             new BST_23_GenerateAll(2, string.Format(fileName, "23Tree_height2"));
             new BST_23_GenerateAll(3, string.Format(fileName, "23Tree_height3"));
             new BST_23_GenerateAll(4, string.Format(fileName, "23Tree_height4"));
@@ -535,7 +535,7 @@ namespace ConsoleApp1
                     Console.WriteLine($"Processing line:{n}");
             };
 
-            string fileName = @"C:\Users\v-yuzhu\Desktop\versafeed_Kroger_bing.txt";
+            string fileName = Util.DesktopPath + "\versafeed_Kroger_bing.txt";
             FullLookupTSV client = new FullLookupTSV(fileName, 33, reportProgress);
             client.BuildHeader();
             client.BuildIndex();
@@ -601,23 +601,35 @@ namespace ConsoleApp1
 
         public static void TestBinaryStdOut()
         {
-            string fileName = @"C:\Users\v-yuzhu\Desktop\TestOutput.tsv";
+            string fileName = Util.DesktopPath + @"TestOutput.tsv";
             int length = 2;
 
-            BinaryStdOut output = new BinaryStdOut(fileName);
-            output.Write(2, length);
-            output.Write(1, length);
-            output.Write(0, length);
-            output.Write(3, length);
-            output.Write(2, length);
-            output.Close();
+            using (BinaryStdOut output = new BinaryStdOut(fileName))
+            {
+                output.Write(2, length);
+                output.Write(1, length);
+                output.Write(0, length);
+                output.Write(3, length);
+                output.Write(2, length);
+            }
 
-            BinaryStdIn input = new BinaryStdIn(fileName);
-            Console.WriteLine(input.Read<int>(length));
-            Console.WriteLine(input.Read<int>(length));
-            Console.WriteLine(input.Read<int>(length));
-            Console.WriteLine(input.Read<int>(length));
-            Console.WriteLine(input.Read<int>(length));
+             using (BinaryStdIn input = new BinaryStdIn(fileName))
+            {
+                Console.WriteLine(input.ReadInt(length));
+                Console.WriteLine(input.ReadInt(length));
+                Console.WriteLine(input.ReadInt(length));
+                Console.WriteLine(input.ReadInt(length));
+                Console.WriteLine(input.ReadInt(length));
+            }
+
+
+            //string source = @"C:\Users\v-yuzhu\Desktop\genome.txt";
+            //string compressed = @"C:\Users\v-yuzhu\Desktop\compressed.txt";
+            //string expanded = @"C:\Users\v-yuzhu\Desktop\expanded.txt";
+
+            //Alphabet alphabet = new Alphabet("ACTG");
+            //FixedLengthEncoding.Compress(source, compressed, alphabet);
+            //FixedLengthEncoding.Expand(compressed, expanded, alphabet);
         }
     }
 }

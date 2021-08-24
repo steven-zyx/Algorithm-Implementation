@@ -1,13 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Utils;
-using String;
+using Searching;
 using Sorting;
+using String;
+using System;
+using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Searching;
+using Utils;
 
 namespace UnitTestProject1
 {
@@ -110,6 +110,33 @@ namespace UnitTestProject1
             KeyIndexedCounting client = new KeyIndexedCounting();
             client.InplaceSort(source, 30);
             Assert.IsTrue(source.IsSorted());
+        }
+
+        [TestMethod]
+        public void TestFixedLengthEncoding()
+        {
+            _alphabet = new Alphabet("ACTG");
+            string content = Util.GenerateLongString(_alphabet.Charcters, 300_000);
+            string testFile = Util.DesktopPath + "testFile.txt";
+            int length = _alphabet.LgR();
+
+            using (BinaryStdOut output = new BinaryStdOut(testFile))
+            {
+                foreach (char c in content)
+                    output.Write(_alphabet.ToIndex(c), length);
+            }
+
+            string expanded;
+            using (BinaryStdIn input = new BinaryStdIn(testFile))
+            {
+                char[] value = new char[content.Length];
+                for (int i = 0; i < content.Length; i++)
+                    value[i] = _alphabet.ToChar(input.ReadInt(length));
+                expanded = new string(value);
+            }
+
+            Assert.AreEqual(content, expanded);
+            File.Delete(testFile);
         }
     }
 

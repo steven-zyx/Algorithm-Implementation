@@ -5,7 +5,7 @@ using System.Collections.Specialized;
 
 namespace String
 {
-    public class BinaryStdIn
+    public class BinaryStdIn : IDisposable
     {
         protected string _fileName;
         protected BitArray _bits;
@@ -17,7 +17,7 @@ namespace String
             _bits = new BitArray(content);
         }
 
-        public V Read<V>(int digit)
+        protected byte[] Read(int digit)
         {
             BitArray value = new BitArray(digit);
             for (int i = 0; i < digit; i++)
@@ -26,9 +26,15 @@ namespace String
             _bits.RightShift(digit);
             _bits.Length -= digit;
 
-            V[] number = new V[1];
-            value.CopyTo(number, 0);
-            return number[0];
+            byte[] content = new byte[8];
+            value.CopyTo(content, 0);
+            return content;
         }
+
+        public int ReadInt(int digit = 32) => BitConverter.ToInt32(Read(digit), 0);
+
+        public long ReadLong(int digit = 64) => BitConverter.ToInt64(Read(digit), 0);
+
+        public void Dispose() { }
     }
 }
