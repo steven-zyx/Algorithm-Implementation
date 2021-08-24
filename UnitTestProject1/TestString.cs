@@ -113,10 +113,27 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
+        public void TestFixedLengthEncodingSimple()
+        {
+            string testFile = Util.DesktopPath + @"TestOutput.tsv";
+            int length = 2;
+            int[] numbers = { 2, 1, 0, 3, 2 };
+
+            using (BinaryStdOut output = new BinaryStdOut(testFile))
+                foreach (int n in numbers)
+                    output.Write(n, length);
+
+            using (BinaryStdIn input = new BinaryStdIn(testFile))
+                foreach (int n in numbers)
+                    Assert.AreEqual(n, input.ReadInt(length));
+            File.Delete(testFile);
+        }
+
+        [TestMethod]
         public void TestFixedLengthEncoding()
         {
             _alphabet = new Alphabet("ACTG");
-            string content = Util.GenerateLongString(_alphabet.Charcters, 300_000);
+            string content = Util.GenerateLongString(_alphabet.Charcters, 3_000_000);
             string testFile = Util.DesktopPath + "testFile.txt";
             int length = _alphabet.LgR();
 
