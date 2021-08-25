@@ -48,7 +48,6 @@ namespace ConsoleApp1
             //NonOverlappingInterval();
             //RegistrarScheduling();
             //TestKeyIntArray();
-            TestBinaryStdOut();
             Console.ReadLine();
         }
 
