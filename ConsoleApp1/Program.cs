@@ -598,38 +598,5 @@ namespace ConsoleApp1
             else
                 oset.Put(dt);
         }
-
-        public static void TestBinaryStdOut()
-        {
-            string fileName = Util.DesktopPath + @"TestOutput.tsv";
-            int length = 2;
-
-            using (BinaryStdOut output = new BinaryStdOut(fileName))
-            {
-                output.Write(2, length);
-                output.Write(1, length);
-                output.Write(0, length);
-                output.Write(3, length);
-                output.Write(2, length);
-            }
-
-             using (BinaryStdIn input = new BinaryStdIn(fileName))
-            {
-                Console.WriteLine(input.ReadInt(length));
-                Console.WriteLine(input.ReadInt(length));
-                Console.WriteLine(input.ReadInt(length));
-                Console.WriteLine(input.ReadInt(length));
-                Console.WriteLine(input.ReadInt(length));
-            }
-
-
-            //string source = @"C:\Users\v-yuzhu\Desktop\genome.txt";
-            //string compressed = @"C:\Users\v-yuzhu\Desktop\compressed.txt";
-            //string expanded = @"C:\Users\v-yuzhu\Desktop\expanded.txt";
-
-            //Alphabet alphabet = new Alphabet("ACTG");
-            //FixedLengthEncoding.Compress(source, compressed, alphabet);
-            //FixedLengthEncoding.Expand(compressed, expanded, alphabet);
-        }
     }
 }
