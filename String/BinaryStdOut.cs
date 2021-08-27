@@ -24,6 +24,17 @@ namespace String
 
         public void Write(int value, int digit = 32) => Write(BitConverter.GetBytes(value), digit);
 
+        public void Write(char value, int digit = 16) => Write(BitConverter.GetBytes(value), digit);
+
+        public void Write(bool bit)
+        {
+            _bits.Length++;
+            _bits[_bits.Length - 1] = bit;
+
+            if (_bits.Length >= BUFFER_LENGTH_BIT)
+                WriteCacheToFile();
+        }
+
         protected void Write(byte[] value, int digit)
         {
             int startIndex = _bits.Length;
@@ -34,14 +45,17 @@ namespace String
                 _bits[startIndex + i] = bitValue[i];
 
             if (_bits.Length >= BUFFER_LENGTH_BIT)
-            {
-                byte[] content = new byte[BUFFER_LENGTH + 12];
-                _bits.CopyTo(content, 0);
-                _fs.Write(content, 0, BUFFER_LENGTH);
+                WriteCacheToFile();
+        }
 
-                _bits.RightShift(BUFFER_LENGTH_BIT);
-                _bits.Length = _bits.Length - BUFFER_LENGTH_BIT;
-            }
+        protected void WriteCacheToFile()
+        {
+            byte[] content = new byte[BUFFER_LENGTH + 8];
+            _bits.CopyTo(content, 0);
+            _fs.Write(content, 0, BUFFER_LENGTH);
+
+            _bits.RightShift(BUFFER_LENGTH_BIT);
+            _bits.Length -= BUFFER_LENGTH_BIT;
         }
 
         public void Close()

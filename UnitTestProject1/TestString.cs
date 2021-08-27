@@ -4,10 +4,13 @@ using Sorting;
 using String;
 using System;
 using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Utils;
+using System.Text;
+
 
 namespace UnitTestProject1
 {
@@ -126,6 +129,7 @@ namespace UnitTestProject1
             using (BinaryStdIn input = new BinaryStdIn(testFile))
                 foreach (int n in numbers)
                     Assert.AreEqual(n, input.ReadInt(length));
+
             File.Delete(testFile);
         }
 
@@ -154,6 +158,44 @@ namespace UnitTestProject1
 
             Assert.AreEqual(content, expanded);
             File.Delete(testFile);
+        }
+
+        protected byte[] DoRunLengthEncoding(byte[] source)
+        {
+            string sourceFile = Util.DesktopPath + "Source.tsv";
+            File.WriteAllBytes(sourceFile, source);
+
+            string compressedFile = Util.DesktopPath + "compressedFile.tsv";
+            RunLengthEncoding.Compress(sourceFile, compressedFile);
+
+            string expandedFile = Util.DesktopPath + "expandedFile.tsv";
+            RunLengthEncoding.Expand(compressedFile, expandedFile);
+
+            byte[] expanded = File.ReadAllBytes(expandedFile);
+            File.Delete(sourceFile);
+            File.Delete(compressedFile);
+            File.Delete(expandedFile);
+            return expanded;
+        }
+
+        [TestMethod]
+        public void TestRunLengthEncodingSimple()
+        {
+            string source = "ABCDEFG";
+            string expanded = Encoding.ASCII.GetString(DoRunLengthEncoding(Encoding.ASCII.GetBytes("ABCDEFG")));
+            Assert.AreEqual(source, expanded);
+        }
+
+        [TestMethod]
+        public void TestRunLengthEncoding()
+        {
+            BitArray source = Util.GenerateRandomBits(4_000_000);
+            byte[] sourceByte = new byte[source.Length / 8];
+            source.CopyTo(sourceByte, 0);
+            BitArray expanded = new BitArray(DoRunLengthEncoding(sourceByte));
+
+            for (int i = 0; i < source.Length; i++)
+                Assert.AreEqual(source[i], expanded[i]);
         }
     }
 
@@ -690,7 +732,7 @@ namespace UnitTestProject1
     {
         public TestTrie_NoOneWayBranching()
         {
-            _st = new Trie_NoOneWayBranching<int>(_alphabet);
+            _st = new Trie_NoOneWayBranching_LinkedList<int>(_alphabet);
         }
     }
 }

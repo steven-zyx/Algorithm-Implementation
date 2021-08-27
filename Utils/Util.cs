@@ -250,5 +250,23 @@ namespace Utils
 
             return new string(charList);
         }
+
+        public static BitArray GenerateRandomBits(int count)
+        {
+            List<bool> content = new List<bool>();
+
+            bool currentBit = false;
+            while (content.Count < count)
+            {
+                int length = Ran.Next(8, 81);
+                for (; length >= 0; length--)
+                    content.Add(currentBit);
+                currentBit = !currentBit;
+            }
+
+            BitArray value = new BitArray(content.ToArray());
+            value.Length = count;
+            return value;
+        }
     }
 }
