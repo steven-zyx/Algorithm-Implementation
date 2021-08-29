@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections;
 using System.Collections.Specialized;
+using System.Text;
 
 namespace String
 {
@@ -50,6 +51,7 @@ namespace String
             }
 
             BitArray augment = new BitArray(_buffer);
+            augment.Length += _bits.Length;
             augment.LeftShift(_bits.Length);
             for (int i = 0; i < _bits.Length; i++)
                 augment[i] = _bits[i];

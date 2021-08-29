@@ -6,12 +6,12 @@ using System.IO;
 
 namespace String
 {
-    public class RunLengthEncoding
+    public class RunLengthEncoding : ICompression
     {
         private const int BUFFER_SIZE = 4096;
         private const int MAX_RUN_LENGTH = 255;
 
-        public static void Compress(string source, string compressed)
+        public void Compress(string source, string compressed)
         {
             using (BinaryStdIn input = new BinaryStdIn(source))
             using (BinaryStdOut output = new BinaryStdOut(compressed))
@@ -40,7 +40,7 @@ namespace String
             }
         }
 
-        public static void Expand(string compressed, string expanded)
+        public void Expand(string compressed, string expanded)
         {
             using (BinaryStdIn input = new BinaryStdIn(compressed))
             using (BinaryStdOut output = new BinaryStdOut(expanded))

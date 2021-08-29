@@ -259,7 +259,7 @@ namespace Utils
             while (content.Count < count)
             {
                 int length = Ran.Next(8, 81);
-                for (; length >= 0; length--)
+                for (; length > 0; length--)
                     content.Add(currentBit);
                 currentBit = !currentBit;
             }

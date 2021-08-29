@@ -160,18 +160,21 @@ namespace UnitTestProject1
             File.Delete(testFile);
         }
 
-        protected byte[] DoRunLengthEncoding(byte[] source)
+        protected byte[] DoRunLengthEncoding<T>(byte[] source) where T : ICompression, new()
         {
             string sourceFile = Util.DesktopPath + "Source.tsv";
-            File.WriteAllBytes(sourceFile, source);
-
             string compressedFile = Util.DesktopPath + "compressedFile.tsv";
-            RunLengthEncoding.Compress(sourceFile, compressedFile);
-
             string expandedFile = Util.DesktopPath + "expandedFile.tsv";
-            RunLengthEncoding.Expand(compressedFile, expandedFile);
+            File.Delete(sourceFile);
+            File.Delete(compressedFile);
+            File.Delete(expandedFile);
 
+            File.WriteAllBytes(sourceFile, source);
+            T client = new T();
+            client.Compress(sourceFile, compressedFile);
+            client.Expand(compressedFile, expandedFile);
             byte[] expanded = File.ReadAllBytes(expandedFile);
+
             File.Delete(sourceFile);
             File.Delete(compressedFile);
             File.Delete(expandedFile);
@@ -182,7 +185,7 @@ namespace UnitTestProject1
         public void TestRunLengthEncodingSimple()
         {
             string source = "ABCDEFG";
-            string expanded = Encoding.ASCII.GetString(DoRunLengthEncoding(Encoding.ASCII.GetBytes("ABCDEFG")));
+            string expanded = Encoding.ASCII.GetString(DoRunLengthEncoding<RunLengthEncoding>(Encoding.ASCII.GetBytes(source)));
             Assert.AreEqual(source, expanded);
         }
 
@@ -192,10 +195,42 @@ namespace UnitTestProject1
             BitArray source = Util.GenerateRandomBits(4_000_000);
             byte[] sourceByte = new byte[source.Length / 8];
             source.CopyTo(sourceByte, 0);
-            BitArray expanded = new BitArray(DoRunLengthEncoding(sourceByte));
+            BitArray expanded = new BitArray(DoRunLengthEncoding<RunLengthEncoding>(sourceByte));
 
             for (int i = 0; i < source.Length; i++)
                 Assert.AreEqual(source[i], expanded[i]);
+        }
+
+        [TestMethod]
+        public void TestHaffmanSimple()
+        {
+            string source = "ABCDEFG";
+            string expanded = Encoding.ASCII.GetString(DoRunLengthEncoding<Haffman>(Encoding.ASCII.GetBytes(source)));
+            Assert.AreEqual(source, expanded);
+        }
+
+        [TestMethod]
+        public void TestHaffman()
+        {
+            string source = Util.GenerateLongString(_alphabet.Charcters, 400_000);
+            string expanded = Encoding.ASCII.GetString(DoRunLengthEncoding<Haffman>(Encoding.ASCII.GetBytes(source)));
+            Assert.AreEqual(source, expanded);
+        }
+
+        [TestMethod]
+        public void TestLZWSimple()
+        {
+            string source = "ABABABA";
+            string expanded = Encoding.ASCII.GetString(DoRunLengthEncoding<LZW>(Encoding.ASCII.GetBytes(source)));
+            Assert.AreEqual(source, expanded);
+        }
+
+        [TestMethod]
+        public void TestLZW()
+        {
+            string source = Util.GenerateLongString(_alphabet.Charcters, 400_000);
+            string expanded = Encoding.ASCII.GetString(DoRunLengthEncoding<LZW>(Encoding.ASCII.GetBytes(source)));
+            Assert.AreEqual(source, expanded);
         }
     }
 
