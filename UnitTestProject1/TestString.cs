@@ -250,6 +250,29 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
+        public void TestPutGetSimple()
+        {
+            List<KeyValuePair<string, int>> testData = new List<KeyValuePair<string, int>>()
+            {
+                new KeyValuePair<string, int>("ABCDE",1),
+                new KeyValuePair<string, int>("ABCDEFG",2),
+                new KeyValuePair<string, int>("ABCXYZ",3),
+                new KeyValuePair<string, int>("OBCXYZ",4),
+                new KeyValuePair<string, int>("ABCXYW",5),
+                new KeyValuePair<string, int>("AUC",6),
+            };
+
+            foreach (var pair in testData)
+            {
+                _st.Put(pair.Key, pair.Value);
+                //Assert.AreEqual(pair.Value, _st.Get(pair.Key));
+            }
+
+            //foreach (var pair in testData)
+            //    Assert.AreEqual(pair.Value, _st.Get(pair.Key));
+        }
+
+        [TestMethod]
         public void TestPutGet()
         {
             HashSet<string> stringList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, _rowCount, 15);
@@ -767,7 +790,7 @@ namespace UnitTestProject1
     {
         public TestTrie_NoOneWayBranching()
         {
-            _st = new Trie_NoOneWayBranching_LinkedList<int>(_alphabet);
+            _st = new Trie_NoOneWayBranching<int>(_alphabet);
         }
     }
 }
