@@ -254,22 +254,23 @@ namespace UnitTestProject1
         {
             List<KeyValuePair<string, int>> testData = new List<KeyValuePair<string, int>>()
             {
-                new KeyValuePair<string, int>("ABCDE",1),
-                new KeyValuePair<string, int>("ABCDEFG",2),
-                new KeyValuePair<string, int>("ABCXYZ",3),
-                new KeyValuePair<string, int>("OBCXYZ",4),
-                new KeyValuePair<string, int>("ABCXYW",5),
-                new KeyValuePair<string, int>("AUC",6),
+                new KeyValuePair<string, int>("A",1),
+                new KeyValuePair<string, int>("ABCDE",2),
+                new KeyValuePair<string, int>("ABCDEFG",3),
+                new KeyValuePair<string, int>("ABCXYZ",4),
+                new KeyValuePair<string, int>("OBCXYZ",5),
+                new KeyValuePair<string, int>("ABCXYW",6),
+                new KeyValuePair<string, int>("AUC",7),
             };
 
             foreach (var pair in testData)
             {
                 _st.Put(pair.Key, pair.Value);
-                //Assert.AreEqual(pair.Value, _st.Get(pair.Key));
+                Assert.AreEqual(pair.Value, _st.Get(pair.Key));
             }
 
-            //foreach (var pair in testData)
-            //    Assert.AreEqual(pair.Value, _st.Get(pair.Key));
+            foreach (var pair in testData)
+                Assert.AreEqual(pair.Value, _st.Get(pair.Key));
         }
 
         [TestMethod]

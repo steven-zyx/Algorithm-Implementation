@@ -6,9 +6,11 @@ namespace BasicDataStrcture
 {
     public interface ITrieNode<V>
     {
+        V GetValue();
+
         void SetValue(V value);
 
-        ITrieNode<V> GetNext(int index);
+        ITrieNode<V> GetNext(int index, bool resetDigit = true);
 
         ITrieNode<V> SetNext(int index, ITrieNode<V> node, int R);
     }

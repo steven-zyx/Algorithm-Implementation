@@ -23,7 +23,7 @@ namespace String
         protected ITrieNode<V> Put(ITrieNode<V> node, string key, int digit, V value)
         {
             if (node == null)
-                node = new TrieNode_Str<V>(key, digit);
+                node = new TrieNode_Str<V>();
             if (key.Length == digit)
             {
                 node.SetValue(value);
@@ -31,8 +31,27 @@ namespace String
             }
 
             int index = _alphabet.ToIndex(key[digit]);
-            var result = Put(node.GetNext(index), key, digit + 1, value);
+            var result = Put(node.GetNext(index, false), key, digit + 1, value);
             return node.SetNext(index, result, _alphabet.R);
+        }
+
+        public V Get(string key)
+        {
+            ITrieNode<V> node = Get(_root, key, 0);
+            if (node == null)
+                return default(V);
+
+            return node.GetValue();
+        }
+
+        protected ITrieNode<V> Get(ITrieNode<V> node, string key, int digit)
+        {
+            if (node == null)
+                return null;
+            if (digit == key.Length)
+                return node;
+            int index = _alphabet.ToIndex(key[digit]);
+            return Get(node.GetNext(index), key, digit + 1);
         }
 
         public bool IsEmpty => throw new NotImplementedException();
@@ -43,11 +62,6 @@ namespace String
         }
 
         public bool Delete(string key)
-        {
-            throw new NotImplementedException();
-        }
-
-        public V Get(string key)
         {
             throw new NotImplementedException();
         }

@@ -10,13 +10,11 @@ namespace BasicDataStrcture
         protected V[] _values;
         protected int _digit;
         protected TrieNode_Char<V> _nextMultiple;
+        protected const int EMPTY_INDEX = -1;
 
-        public TrieNode_Str(string key, int digit) : this(1)
+        public TrieNode_Str() : this(1)
         {
-            if (digit < key.Length)
-                _characters[0] = key[digit];
-            else
-                _characters[0] = -1;
+            _characters[0] = EMPTY_INDEX;
         }
 
         protected TrieNode_Str(int length)
@@ -27,49 +25,79 @@ namespace BasicDataStrcture
             _nextMultiple = null;
         }
 
-
         public void SetValue(V value) => _values[_digit] = value;
 
-        public ITrieNode<V> GetNext(int index)
+        public V GetValue()
         {
-            if (_characters[_digit] != index)
-                return null;
-            else if (_digit + 1 < _values.Length)
-            {
-                _digit++;
-                return this;
-            }
-            else
-                return _nextMultiple;
+            V value = _values[_digit];
+            _digit = 0;
+            return value;
+        }
+
+        public ITrieNode<V> GetNext(int index, bool resetDigit = true)
+        {
+            ITrieNode<V> result = null;
+            if (_characters[_digit] == index)
+                if (_digit + 1 == _characters.Length)
+                    result = _nextMultiple;
+                else
+                {
+                    _digit++;
+                    return this;
+                }
+
+            if (resetDigit)
+                _digit = 0;
+            return result;
         }
 
         public ITrieNode<V> SetNext(int index, ITrieNode<V> node, int R)
         {
             if (node is TrieNode_Char<V> c)
+            {
                 _nextMultiple = c;
-            else if (node is TrieNode_Str<V> s)
-                if (s._characters[0] == index || s._characters[0] == -1)
-                    if (_digit == _values.Length - 1)
-                        MergeNew(s);
-                    else
+                if (_digit > 0)
+                    _digit--;
+            }
+            else
+            {
+                TrieNode_Str<V> s = node as TrieNode_Str<V>;
+                if (_characters[_digit] == EMPTY_INDEX)
+                {
+                    _characters[_digit] = index;
+                    MergeNew(s);
+                    if (_digit > 0)
                         _digit--;
+                }
+                else if (_characters[_digit] == index)
+                {
+                    if (_digit > 0)
+                        _digit--;
+                }
                 else
                     return Split(index, node, R);
+            }
             return this;
+        }
+
+        public void ResetDigit()
+        {
+            _digit = 0;
         }
 
         protected void MergeNew(TrieNode_Str<V> s)
         {
-            int length = _characters.Length;
+            int thisLength = _values.Length;
+            int newLength = s._values.Length;
 
-            int[] newCharacters = new int[length + 1];
-            Array.Copy(_characters, newCharacters, length);
-            newCharacters[length] = s._characters[0];
+            int[] newCharacters = new int[thisLength + newLength];
+            Array.Copy(_characters, newCharacters, thisLength);
+            Array.Copy(s._characters, 0, newCharacters, thisLength, newLength);
             _characters = newCharacters;
 
-            V[] newValues = new V[length + 1];
-            Array.Copy(_values, newValues, length);
-            newValues[length] = s._values[0];
+            V[] newValues = new V[thisLength + newLength];
+            Array.Copy(_values, newValues, thisLength);
+            Array.Copy(s._values, 0, newValues, thisLength, newLength);
             _values = newValues;
         }
 
