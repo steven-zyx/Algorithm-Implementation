@@ -25,7 +25,11 @@ namespace BasicDataStrcture
             _nextMultiple = null;
         }
 
-        public void SetValue(V value) => _values[_digit] = value;
+        public void SetValue(V value)
+        {
+            _values[_digit] = value;
+            DecrementDigit();
+        }
 
         public V GetValue()
         {
@@ -54,11 +58,7 @@ namespace BasicDataStrcture
         public ITrieNode<V> SetNext(int index, ITrieNode<V> node, int R)
         {
             if (node is TrieNode_Char<V> c)
-            {
                 _nextMultiple = c;
-                if (_digit > 0)
-                    _digit--;
-            }
             else
             {
                 TrieNode_Str<V> s = node as TrieNode_Str<V>;
@@ -66,23 +66,12 @@ namespace BasicDataStrcture
                 {
                     _characters[_digit] = index;
                     MergeNew(s);
-                    if (_digit > 0)
-                        _digit--;
                 }
-                else if (_characters[_digit] == index)
-                {
-                    if (_digit > 0)
-                        _digit--;
-                }
-                else
+                else if (_characters[_digit] != index)
                     return Split(index, node, R);
             }
+            DecrementDigit();
             return this;
-        }
-
-        public void ResetDigit()
-        {
-            _digit = 0;
         }
 
         protected void MergeNew(TrieNode_Str<V> s)
@@ -133,6 +122,12 @@ namespace BasicDataStrcture
                 _nextMultiple = cNode;
             }
             return cNode;
+        }
+
+        protected void DecrementDigit()
+        {
+            if (_digit > 0)
+                _digit--;
         }
     }
 }

@@ -40,7 +40,6 @@ namespace String
             ITrieNode<V> node = Get(_root, key, 0);
             if (node == null)
                 return default(V);
-
             return node.GetValue();
         }
 
@@ -85,7 +84,6 @@ namespace String
         {
             throw new NotImplementedException();
         }
-
 
         public int Size()
         {

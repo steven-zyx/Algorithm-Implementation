@@ -252,6 +252,12 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestPutGetSimple()
         {
+            string key = "AB";
+            _st.Put(key, 8);
+            Assert.AreEqual(8, _st.Get(key));
+            _st.Put(key, -8);
+            Assert.AreEqual(-8, _st.Get(key));
+
             List<KeyValuePair<string, int>> testData = new List<KeyValuePair<string, int>>()
             {
                 new KeyValuePair<string, int>("A",1),
@@ -268,7 +274,6 @@ namespace UnitTestProject1
                 _st.Put(pair.Key, pair.Value);
                 Assert.AreEqual(pair.Value, _st.Get(pair.Key));
             }
-
             foreach (var pair in testData)
                 Assert.AreEqual(pair.Value, _st.Get(pair.Key));
         }
@@ -276,7 +281,8 @@ namespace UnitTestProject1
         [TestMethod]
         public void TestPutGet()
         {
-            HashSet<string> stringList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, _rowCount, 15);
+            int length = 15;
+            HashSet<string> stringList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, _rowCount, length);
             Dictionary<string, int> dict = stringList.ToDictionary(x => x, y => Util.Ran.Next(1, int.MaxValue));
 
             for (int i = 0; i < 2; i++)
@@ -286,7 +292,7 @@ namespace UnitTestProject1
                 foreach (var pair in dict)
                     Assert.AreEqual(pair.Value, _st.Get(pair.Key));
 
-                HashSet<string> otherStringList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, 100, 15);
+                HashSet<string> otherStringList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, 100, length);
                 foreach (string text in otherStringList)
                     if (!dict.ContainsKey(text))
                         Assert.AreEqual(0, _st.Get(text));
