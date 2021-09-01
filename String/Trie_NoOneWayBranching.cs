@@ -31,7 +31,10 @@ namespace String
             }
 
             int index = _alphabet.ToIndex(key[digit]);
-            var result = Put(node.GetNext(index, false), key, digit + 1, value);
+            ITrieNode<V> result = Put(node.GetNext(index, false), key, digit + 1, value);
+            if (node is TrieNode_Str<V> s)
+                s.DecrementDigit();
+
             return node.SetNext(index, result, _alphabet.R);
         }
 

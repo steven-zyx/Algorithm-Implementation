@@ -28,7 +28,6 @@ namespace BasicDataStrcture
         public void SetValue(V value)
         {
             _values[_digit] = value;
-            DecrementDigit();
         }
 
         public V GetValue()
@@ -45,12 +44,9 @@ namespace BasicDataStrcture
                 if (_digit + 1 == _characters.Length)
                     result = _nextMultiple;
                 else
-                {
-                    _digit++;
-                    return this;
-                }
-
-            if (resetDigit)
+                    result = this;
+            _digit++;
+            if (resetDigit && _digit == _values.Length)
                 _digit = 0;
             return result;
         }
@@ -59,18 +55,15 @@ namespace BasicDataStrcture
         {
             if (node is TrieNode_Char<V> c)
                 _nextMultiple = c;
-            else
-            {
-                TrieNode_Str<V> s = node as TrieNode_Str<V>;
+            else if (node is TrieNode_Str<V> s)
                 if (_characters[_digit] == EMPTY_INDEX)
                 {
                     _characters[_digit] = index;
                     MergeNew(s);
                 }
+                //else if (!ReferenceEquals(this, s))
                 else if (_characters[_digit] != index)
                     return Split(index, node, R);
-            }
-            DecrementDigit();
             return this;
         }
 
@@ -118,16 +111,14 @@ namespace BasicDataStrcture
                 Array.Copy(_characters, newCharacters, _digit);
                 _characters = newCharacters;
 
-                _digit--;
                 _nextMultiple = cNode;
             }
             return cNode;
         }
 
-        protected void DecrementDigit()
+        public void DecrementDigit()
         {
-            if (_digit > 0)
-                _digit--;
+            _digit--;
         }
     }
 }
