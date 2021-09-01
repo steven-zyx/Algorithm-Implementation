@@ -18,7 +18,7 @@ namespace BasicDataStrcture
 
         public void SetValue(V value) => _value = value;
 
-        public ITrieNode<V> GetNext(int index, bool resetDigit) => _next[index];
+        public ITrieNode<V> GetNext(int index) => _next[index];
 
         public ITrieNode<V> SetNext(int index, ITrieNode<V> node, int R)
         {

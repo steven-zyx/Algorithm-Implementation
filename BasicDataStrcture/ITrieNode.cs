@@ -10,7 +10,7 @@ namespace BasicDataStrcture
 
         void SetValue(V value);
 
-        ITrieNode<V> GetNext(int index, bool resetDigit = true);
+        ITrieNode<V> GetNext(int index);
 
         ITrieNode<V> SetNext(int index, ITrieNode<V> node, int R);
     }
