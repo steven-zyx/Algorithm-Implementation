@@ -300,6 +300,27 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
+        public void TestDeleteSimple()
+        {
+            List<KeyValuePair<string, int>> testData = new List<KeyValuePair<string, int>>()
+            {
+                new KeyValuePair<string, int>("ABCXYZ",1),
+                new KeyValuePair<string, int>("ABCD",2),
+                new KeyValuePair<string, int>("ABCX",3),
+                new KeyValuePair<string, int>("ABCDEF",4),
+            };
+            testData.ForEach(x => _st.Put(x.Key, x.Value));
+
+            for (int i = 0; i < testData.Count; i++)
+            {
+                _st.Delete(testData[i].Key);
+                //Assert.AreEqual(0, _st.Get(testData[i].Key));
+                for (int j = i + 1; j < testData.Count; j++)
+                    Assert.AreEqual(testData[j].Value, _st.Get(testData[j].Key));
+            }
+        }
+
+        [TestMethod]
         public void TestDelete()
         {
             HashSet<string> stringList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, _rowCount, 15);
@@ -307,6 +328,23 @@ namespace UnitTestProject1
                 _st.Put(text, 1);
 
             foreach (string text in stringList)
+            {
+                Assert.IsTrue(_st.Contains(text));
+                _st.Delete(text);
+                Assert.IsFalse(_st.Contains(text));
+            }
+        }
+
+        [TestMethod]
+        public void TestDeleteRandomly()
+        {
+            HashSet<string> stringList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, _rowCount, 15);
+            foreach (string text in stringList)
+                _st.Put(text, 1);
+
+            string[] randomStringList = stringList.ToArray();
+            Util.Shuffle(randomStringList);
+            foreach (string text in randomStringList)
             {
                 Assert.IsTrue(_st.Contains(text));
                 _st.Delete(text);
@@ -346,23 +384,6 @@ namespace UnitTestProject1
                             break;
                         }
                 }
-            }
-        }
-
-        [TestMethod]
-        public void TestDeleteRandomly()
-        {
-            HashSet<string> stringList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, _rowCount, 15);
-            foreach (string text in stringList)
-                _st.Put(text, 1);
-
-            string[] randomStringList = stringList.ToArray();
-            Util.Shuffle(randomStringList);
-            foreach (string text in randomStringList)
-            {
-                Assert.IsTrue(_st.Contains(text));
-                _st.Delete(text);
-                Assert.IsFalse(_st.Contains(text));
             }
         }
 

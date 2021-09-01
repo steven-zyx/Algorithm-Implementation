@@ -53,6 +53,43 @@ namespace String
             return Get(node.GetNext(index), key, digit + 1);
         }
 
+        public bool Delete(string key)
+        {
+            _root = Delete(_root, key, 0);
+            if (_root is TrieNode_Str<V> s && s.IsFinalEmpty())
+                _root = null;
+            return true;
+        }
+
+        protected ITrieNode<V> Delete(ITrieNode<V> node, string key, int digit)
+        {
+            if (node == null)
+                return null;
+
+            int index = -1;
+            if (digit == key.Length)
+            {
+                node.SetValue(default(V));
+                if (node is TrieNode_Char<V>)
+                    return node;
+            }
+            else
+            {
+                index = _alphabet.ToIndex(key[digit]);
+                ITrieNode<V> result = Delete(node.GetNext(index), key, digit + 1);
+                node.SetNext(index, result, _alphabet.R);
+            }
+
+            if (node is TrieNode_Str<V> s && s.NeedToShrink())
+                s.Shrink();
+            else if (node is TrieNode_Char<V> c)
+                if (c.GetNext(index) is TrieNode_Str<V> sSub && sSub.IsFinalEmpty())
+                    c.SetNext(index, null, _alphabet.R);
+                else if (c.NextCount() == 1)
+                    return c.MergeChild();
+            return node;
+        }
+
         public bool IsEmpty => throw new NotImplementedException();
 
         public bool Contains(string key)
@@ -60,10 +97,6 @@ namespace String
             throw new NotImplementedException();
         }
 
-        public bool Delete(string key)
-        {
-            throw new NotImplementedException();
-        }
 
         public IEnumerable<string> Keys()
         {

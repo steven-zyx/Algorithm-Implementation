@@ -61,14 +61,41 @@ namespace BasicDataStrcture
                 if (_characters[_digit] == EMPTY_INDEX)
                 {
                     _characters[_digit] = index;
-                    MergeNew(s);
+                    MergeChild(s);
                 }
                 else if (_characters[_digit] != index)
                     return Split(index, node, R);
+                else if (_digit == _characters.Length - 1)
+                    MergeChild(s);
             return this;
         }
 
-        protected void MergeNew(TrieNode_Str<V> s)
+        public bool NeedToShrink()
+        {
+            int index = _values.Length - 1;
+            return !_values[_digit].Equals(default(V)) && IsFinalEmpty();
+        }
+
+        public bool IsFinalEmpty()
+        {
+            int index = _values.Length - 1;
+            return _characters[index] == EMPTY_INDEX && _values[index].Equals(default(V));
+        }
+
+        public void Shrink()
+        {
+            int length = _digit + 1;
+
+            int[] newCharacters = new int[length];
+            Array.Copy(_characters, newCharacters, length);
+            _characters = newCharacters;
+
+            V[] newValues = new V[length];
+            Array.Copy(_values, newValues, length);
+            _values = newValues;
+        }
+
+        protected void MergeChild(TrieNode_Str<V> s)
         {
             int thisL = _values.Length;
             int newL = s._values.Length;

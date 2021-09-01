@@ -25,5 +25,31 @@ namespace BasicDataStrcture
             _next[index] = node;
             return this;
         }
+
+        public int NextCount()
+        {
+            int cnt = 0;
+            for (int i = 0; i < _next.Length; i++)
+                if (_next[i] != null)
+                    cnt++;
+            return cnt;
+        }
+
+        public TrieNode_Str<V> MergeChild()
+        {
+            int index = -1;
+            for (int i = 0; i < _next.Length; i++)
+                if (_next[i] != null)
+                {
+                    index = i;
+                    break;
+                }
+
+            TrieNode_Str<V> current = new TrieNode_Str<V>();
+            current.SetValue(_value);
+            current.GetNext(index);
+            current.SetNext(index, _next[index], _next.Length);
+            return current;
+        }
     }
 }
