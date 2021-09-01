@@ -53,6 +53,7 @@ namespace BasicDataStrcture
 
         public ITrieNode<V> SetNext(int index, ITrieNode<V> node, int R)
         {
+            _digit--;
             if (node is TrieNode_Char<V> c)
                 _nextMultiple = c;
             else if (node is TrieNode_Str<V> s)
@@ -61,7 +62,6 @@ namespace BasicDataStrcture
                     _characters[_digit] = index;
                     MergeNew(s);
                 }
-                //else if (!ReferenceEquals(this, s))
                 else if (_characters[_digit] != index)
                     return Split(index, node, R);
             return this;
@@ -69,17 +69,17 @@ namespace BasicDataStrcture
 
         protected void MergeNew(TrieNode_Str<V> s)
         {
-            int thisLength = _values.Length;
-            int newLength = s._values.Length;
+            int thisL = _values.Length;
+            int newL = s._values.Length;
 
-            int[] newCharacters = new int[thisLength + newLength];
-            Array.Copy(_characters, newCharacters, thisLength);
-            Array.Copy(s._characters, 0, newCharacters, thisLength, newLength);
+            int[] newCharacters = new int[thisL + newL];
+            Array.Copy(_characters, newCharacters, thisL);
+            Array.Copy(s._characters, 0, newCharacters, thisL, newL);
             _characters = newCharacters;
 
-            V[] newValues = new V[thisLength + newLength];
-            Array.Copy(_values, newValues, thisLength);
-            Array.Copy(s._values, 0, newValues, thisLength, newLength);
+            V[] newValues = new V[thisL + newL];
+            Array.Copy(_values, newValues, thisL);
+            Array.Copy(s._values, 0, newValues, thisL, newL);
             _values = newValues;
         }
 
@@ -114,11 +114,6 @@ namespace BasicDataStrcture
                 _nextMultiple = cNode;
             }
             return cNode;
-        }
-
-        public void DecrementDigit()
-        {
-            _digit--;
         }
     }
 }
