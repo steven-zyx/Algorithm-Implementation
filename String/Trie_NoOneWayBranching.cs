@@ -83,20 +83,22 @@ namespace String
             if (node is TrieNode_Str<V> s && s.NeedToShrink())
                 s.Shrink();
             else if (node is TrieNode_Char<V> c)
+            {
                 if (c.GetNext(index) is TrieNode_Str<V> sSub && sSub.IsFinalEmpty())
                     c.SetNext(index, null, _alphabet.R);
-                else if (c.NextCount() == 1)
+                if (c.NextCount() == 1)
                     return c.MergeChild();
+            }
             return node;
         }
 
-        public bool IsEmpty => throw new NotImplementedException();
+        public bool IsEmpty => _root is null;
 
         public bool Contains(string key)
         {
-            throw new NotImplementedException();
+            ITrieNode<V> node = Get(_root, key, 0);
+            return node != null && !node.GetValue().Equals(default(V));
         }
-
 
         public IEnumerable<string> Keys()
         {

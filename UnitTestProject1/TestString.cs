@@ -313,7 +313,9 @@ namespace UnitTestProject1
 
             for (int i = 0; i < testData.Count; i++)
             {
+                Assert.IsTrue(_st.Contains(testData[i].Key));
                 _st.Delete(testData[i].Key);
+                Assert.IsFalse(_st.Contains(testData[i].Key));
                 Assert.AreEqual(0, _st.Get(testData[i].Key));
                 for (int j = i + 1; j < testData.Count; j++)
                     Assert.AreEqual(testData[j].Value, _st.Get(testData[j].Key));

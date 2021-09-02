@@ -63,12 +63,16 @@ namespace BasicDataStrcture
         {
             _digit--;
             if (node is TrieNode_Char<V> c)
+            {
+                _characters[_digit] = index;
                 _nextMultiple = c;
+            }
             else if (node is TrieNode_Str<V> s)
                 if (_characters[_digit] == EMPTY_INDEX)
                 {
                     _characters[_digit] = index;
                     MergeChild(s);
+                    _nextMultiple = s._nextMultiple;
                 }
                 else if (_characters[_digit] != index)
                     return Split(index, node, R);
@@ -94,7 +98,8 @@ namespace BasicDataStrcture
             int length = _digit + 1;
 
             int[] newCharacters = new int[length];
-            Array.Copy(_characters, newCharacters, length);
+            Array.Copy(_characters, newCharacters, length - 1);
+            newCharacters[length - 1] = EMPTY_INDEX;
             _characters = newCharacters;
 
             V[] newValues = new V[length];
@@ -116,6 +121,8 @@ namespace BasicDataStrcture
             Array.Copy(_values, newValues, thisL);
             Array.Copy(s._values, 0, newValues, thisL, newL);
             _values = newValues;
+
+            _nextMultiple = s._nextMultiple;
         }
 
         protected TrieNode_Char<V> Split(int index, ITrieNode<V> node, int R)
