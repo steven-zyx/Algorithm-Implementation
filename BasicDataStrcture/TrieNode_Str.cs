@@ -37,7 +37,7 @@ namespace BasicDataStrcture
             return value;
         }
 
-        public ITrieNode<V> GetNext(int index)
+        public ITrieNode<V> GetNext(int index, bool resetDigit = true)
         {
             if (_digit == _values.Length)
                 _digit = 0;
@@ -47,8 +47,15 @@ namespace BasicDataStrcture
                 if (_digit + 1 == _characters.Length)
                     result = _nextMultiple;
                 else
-                    result = this;
-            _digit++;
+                {
+                    _digit++;
+                    return this;
+                }
+
+            if (resetDigit)
+                _digit = 0;
+            else
+                _digit++;
             return result;
         }
 

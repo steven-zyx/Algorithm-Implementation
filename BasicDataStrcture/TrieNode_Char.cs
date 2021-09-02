@@ -18,7 +18,7 @@ namespace BasicDataStrcture
 
         public void SetValue(V value) => _value = value;
 
-        public ITrieNode<V> GetNext(int index) => _next[index];
+        public ITrieNode<V> GetNext(int index, bool resetDigit = true) => _next[index];
 
         public ITrieNode<V> SetNext(int index, ITrieNode<V> node, int R)
         {
@@ -47,7 +47,7 @@ namespace BasicDataStrcture
 
             TrieNode_Str<V> current = new TrieNode_Str<V>();
             current.SetValue(_value);
-            current.GetNext(index);
+            current.GetNext(index, false);
             current.SetNext(index, _next[index], _next.Length);
             return current;
         }
