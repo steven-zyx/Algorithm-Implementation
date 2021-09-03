@@ -148,7 +148,6 @@ namespace String
             _root = Delete(_root, key, 0);
             return true;
         }
-
         protected virtual TrieNode<V> Delete(TrieNode<V> node, string key, int digit)
         {
             if (node == null)

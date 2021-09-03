@@ -415,6 +415,19 @@ namespace UnitTestProject1
             }
         }
 
+        public void TestKeysRecrusive()
+        {
+            while (true)
+            {
+                _st = new Trie_NoOneWayBranching<int>(_alphabet);
+                HashSet<string> testData = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, 5, 3);
+                foreach (string text in testData)
+                    _st.Put(text, 1);
+
+                Assert.IsTrue(testData.SetEquals(_st.Keys()));
+            }
+        }
+
         [TestMethod]
         public void TestKeys()
         {
