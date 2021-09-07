@@ -836,4 +836,13 @@ namespace UnitTestProject1
             _st = new Trie_NoOneWayBranching<int>(_alphabet);
         }
     }
+
+    [TestClass]
+    public class TestTST_NoOneWayBranching : TestStringSTCert
+    {
+        public TestTST_NoOneWayBranching()
+        {
+            _st = new TST_NoOneWayBranching<int>();
+        }
+    }
 }
