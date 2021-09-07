@@ -33,15 +33,14 @@ namespace BasicDataStrcture
                 current.NextTST = s.NextTST;
                 return current;
             }
-            else if (child is TSTNode_3<V> t)
+            else
             {
+                TSTNode_3<V> t = child as TSTNode_3<V>;
                 TSTNode_Str<V> current = new TSTNode_Str<V>(C);
                 current.Value = Value;
                 current.NextTST = t;
                 return current;
             }
-            else
-                throw new InvalidOperationException("Merging a null child");
         }
     }
 }

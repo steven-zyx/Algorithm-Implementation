@@ -143,6 +143,7 @@ namespace String
                 }
                 else if (t.Left == null && t.Right == null)
                     return t.MergeChild(t.Mid);
+
                 return t;
             }
             else
@@ -154,7 +155,7 @@ namespace String
                 s.Digit--;
                 s.SetNext(key[digit], result);
 
-                if (s.Value.Equals(default(V)) && s.IsFinalEmpty())
+                if (!s.Value.Equals(default(V)) && s.IsFinalEmpty())
                     s.Shrink();
                 return s;
             }

@@ -337,10 +337,34 @@ namespace UnitTestProject1
             }
         }
 
+        public void TestDeleteRandomlyRecrusive()
+        {
+            while (true)
+            {
+                _st = new TST_NoOneWayBranching<int>();
+
+                HashSet<string> stringList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, 5, 3);
+                stringList.Remove("");
+
+                foreach (string text in stringList)
+                    _st.Put(text, 1);
+
+                string[] randomStringList = stringList.ToArray();
+                Util.Shuffle(randomStringList);
+                foreach (string text in randomStringList)
+                {
+                    Assert.IsTrue(_st.Contains(text));
+                    _st.Delete(text);
+                    Assert.IsFalse(_st.Contains(text));
+                }
+            }
+        }
+
         [TestMethod]
         public void TestDeleteRandomly()
         {
             HashSet<string> stringList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, _rowCount, 15);
+            stringList.Remove("");
             foreach (string text in stringList)
                 _st.Put(text, 1);
 
