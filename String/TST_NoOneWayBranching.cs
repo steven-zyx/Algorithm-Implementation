@@ -172,27 +172,167 @@ namespace String
 
         public IEnumerable<string> Keys()
         {
-            throw new NotImplementedException();
+            Queue<string> keys = new Queue<string>();
+            Keys(_root, "", keys);
+            return keys;
         }
 
-        public IEnumerable<string> KeysThatMatch(string s)
+        protected void Keys(ITSTNode<V> node, string text, Queue<string> keys)
         {
-            throw new NotImplementedException();
+            if (node == null)
+                return;
+
+            if (!node.Value.Equals(default(V)))
+                keys.Enqueue(text + node.C);
+
+            if (node is TSTNode_3<V> t)
+            {
+                Keys(t.Left, text, keys);
+                Keys(t.Mid, text + t.C, keys);
+                Keys(t.Right, text, keys);
+            }
+            else
+            {
+                TSTNode_Str<V> s = node as TSTNode_Str<V>;
+                text += s.C;
+                ITSTNode<V> next = s.GetNext(s.C);
+                s.Digit++;
+                Keys(next, text, keys);
+                s.Digit--;
+            }
         }
 
-        public IEnumerable<string> KeysWithPrefix(string s)
+        public IEnumerable<string> KeysThatMatch(string pat)
         {
-            throw new NotImplementedException();
+            Queue<string> keys = new Queue<string>();
+            KeysThatMatch(_root, pat, "", keys);
+            return keys;
+        }
+
+        protected void KeysThatMatch(ITSTNode<V> node, string pat, string text, Queue<string> keys)
+        {
+            if (node == null)
+                return;
+
+            char c = pat[text.Length];
+            if (c.Equals('.') || c.Equals(node.C))
+                if (text.Length == pat.Length - 1)
+                {
+                    keys.Enqueue(text + node.C);
+                    return;
+                }
+
+            if (node is TSTNode_3<V> t)
+            {
+                if (c.Equals('.'))
+                {
+                    KeysThatMatch(t.Left, pat, text, keys);
+                    KeysThatMatch(t.Mid, pat, text + t.C, keys);
+                    KeysThatMatch(t.Right, pat, text, keys);
+                }
+                else
+                {
+                    int result = c.CompareTo(t.C);
+                    if (result < 0)
+                        KeysThatMatch(t.Left, pat, text, keys);
+                    else if (result > 0)
+                        KeysThatMatch(t.Right, pat, text, keys);
+                    else
+                        KeysThatMatch(t.Mid, pat, text + t.C, keys);
+                }
+            }
+            else
+            {
+                TSTNode_Str<V> s = node as TSTNode_Str<V>;
+                text += s.C;
+
+                ITSTNode<V> next = null;
+                if (c.Equals('.'))
+                    next = s.GetNext(s.C);
+                else
+                    next = s.GetNext(c);
+
+                s.Digit++;
+                KeysThatMatch(next, pat, text, keys);
+                s.Digit--;
+            }
+        }
+
+        public IEnumerable<string> KeysWithPrefix(string prefix)
+        {
+            Queue<string> keys = new Queue<string>();
+            var result = Get(_root, prefix, 0);
+            if (result.node is TSTNode_3<V> t)
+                Keys(t.Mid, prefix, keys);
+            else if (result.node is TSTNode_Str<V> s)
+            {
+                s.Digit = result.digit;
+                ITSTNode<V> next = s.GetNext(s.C);
+                s.Digit++;
+                Keys(next, prefix, keys);
+                s.Digit = 0;
+            }
+            return keys;
         }
 
         public string LongestPrefixOf(string s)
         {
-            throw new NotImplementedException();
+            int length = LongestPrefixOf(_root, s, 0, 0);
+            return s.Substring(0, length);
         }
 
-        public int Size()
+        protected int LongestPrefixOf(ITSTNode<V> node, string text, int digit, int length)
         {
-            throw new NotImplementedException();
+            if (node == null || digit == text.Length)
+                return length;
+
+            int result = text[digit].CompareTo(node.C);
+            if (result == 0 && !node.Value.Equals(default(V)))
+                length = digit + 1;
+
+            if (node is TSTNode_3<V> t)
+            {
+                if (result < 0)
+                    return LongestPrefixOf(t.Left, text, digit, length);
+                else if (result > 0)
+                    return LongestPrefixOf(t.Right, text, digit, length);
+                else
+                    return LongestPrefixOf(t.Mid, text, digit + 1, length);
+            }
+            else if (result == 0)
+            {
+                TSTNode_Str<V> s = node as TSTNode_Str<V>;
+                ITSTNode<V> next = s.GetNext(s.C);
+                s.Digit++;
+                length = LongestPrefixOf(next, text, digit + 1, length);
+                s.Digit--;
+                return length;
+            }
+            return length;
+        }
+
+        public int Size() => Size(_root);
+
+        protected virtual int Size(ITSTNode<V> node)
+        {
+            if (node == null)
+                return 0;
+
+            int cnt = 0;
+            if (!node.Value.Equals(default(V)))
+                cnt++;
+
+            if (node is TSTNode_3<V> t)
+                return cnt + Size(t.Left) + Size(t.Right) + Size(t.Mid);
+            else
+            {
+                TSTNode_Str<V> s = node as TSTNode_Str<V>;
+                ITSTNode<V> next = s.GetNext(s.C);
+                s.Digit++;
+                int result = cnt + Size(next);
+                s.Digit--;
+                return result;
+            }
         }
     }
 
@@ -200,7 +340,6 @@ namespace String
     {
         public void Certificate()
         {
-            throw new NotImplementedException();
         }
     }
 }
