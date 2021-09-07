@@ -25,6 +25,8 @@ namespace String
         public void Write(int value, int digit = 32) => Write(BitConverter.GetBytes(value), digit);
 
         public void Write(char value, int digit = 16) => Write(BitConverter.GetBytes(value), digit);
+        
+        public void Write(byte value, int digit = 8) => Write(new byte[] { value }, digit);
 
         public void Write(bool bit)
         {

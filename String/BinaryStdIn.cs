@@ -76,6 +76,8 @@ namespace String
 
         public long ReadLong(int digit = 64) => BitConverter.ToInt64(Read(digit), 0);
 
+        public byte ReadByte(int digit = 8) => Read(digit)[0];
+
         public bool IsEmpty()
         {
             if (_bits.Length == 0)

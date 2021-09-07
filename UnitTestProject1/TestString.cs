@@ -160,7 +160,7 @@ namespace UnitTestProject1
             File.Delete(testFile);
         }
 
-        protected byte[] DoRunLengthEncoding<T>(byte[] source) where T : ICompression, new()
+        protected byte[] CompressAndExpand<T>(byte[] source) where T : ICompression, new()
         {
             string sourceFile = Util.DesktopPath + "Source.tsv";
             string compressedFile = Util.DesktopPath + "compressedFile.tsv";
@@ -185,7 +185,7 @@ namespace UnitTestProject1
         public void TestRunLengthEncodingSimple()
         {
             string source = "ABCDEFG";
-            string expanded = Encoding.ASCII.GetString(DoRunLengthEncoding<RunLengthEncoding>(Encoding.ASCII.GetBytes(source)));
+            string expanded = Encoding.ASCII.GetString(CompressAndExpand<RunLengthEncoding>(Encoding.ASCII.GetBytes(source)));
             Assert.AreEqual(source, expanded);
         }
 
@@ -195,7 +195,7 @@ namespace UnitTestProject1
             BitArray source = Util.GenerateRandomBits(4_000_000);
             byte[] sourceByte = new byte[source.Length / 8];
             source.CopyTo(sourceByte, 0);
-            BitArray expanded = new BitArray(DoRunLengthEncoding<RunLengthEncoding>(sourceByte));
+            BitArray expanded = new BitArray(CompressAndExpand<RunLengthEncoding>(sourceByte));
 
             for (int i = 0; i < source.Length; i++)
                 Assert.AreEqual(source[i], expanded[i]);
@@ -205,7 +205,7 @@ namespace UnitTestProject1
         public void TestHaffmanSimple()
         {
             string source = "ABCDEFG";
-            string expanded = Encoding.ASCII.GetString(DoRunLengthEncoding<Haffman>(Encoding.ASCII.GetBytes(source)));
+            string expanded = Encoding.ASCII.GetString(CompressAndExpand<Haffman>(Encoding.ASCII.GetBytes(source)));
             Assert.AreEqual(source, expanded);
         }
 
@@ -213,7 +213,7 @@ namespace UnitTestProject1
         public void TestHaffman()
         {
             string source = Util.GenerateLongString(_alphabet.Charcters, 400_000);
-            string expanded = Encoding.ASCII.GetString(DoRunLengthEncoding<Haffman>(Encoding.ASCII.GetBytes(source)));
+            string expanded = Encoding.ASCII.GetString(CompressAndExpand<Haffman>(Encoding.ASCII.GetBytes(source)));
             Assert.AreEqual(source, expanded);
         }
 
@@ -221,7 +221,7 @@ namespace UnitTestProject1
         public void TestLZWSimple()
         {
             string source = "ABABABA";
-            string expanded = Encoding.ASCII.GetString(DoRunLengthEncoding<LZW>(Encoding.ASCII.GetBytes(source)));
+            string expanded = Encoding.ASCII.GetString(CompressAndExpand<LZW>(Encoding.ASCII.GetBytes(source)));
             Assert.AreEqual(source, expanded);
         }
 
@@ -229,7 +229,27 @@ namespace UnitTestProject1
         public void TestLZW()
         {
             string source = Util.GenerateLongString(_alphabet.Charcters, 400_000);
-            string expanded = Encoding.ASCII.GetString(DoRunLengthEncoding<LZW>(Encoding.ASCII.GetBytes(source)));
+            string expanded = Encoding.ASCII.GetString(CompressAndExpand<LZW>(Encoding.ASCII.GetBytes(source)));
+            Assert.AreEqual(source, expanded);
+        }
+
+        [TestMethod]
+        public void TestFixedLengthEncoding_TrieSimple()
+        {
+            string source = "ABC";
+            string expanded = Encoding.ASCII.GetString(CompressAndExpand<FixedLengthEncoding_Trie>(Encoding.ASCII.GetBytes(source)));
+            Assert.AreEqual(source, expanded);
+
+            source = Util.GenerateLongString("ABCDE".ToCharArray(), 100_000);
+            expanded = Encoding.ASCII.GetString(CompressAndExpand<FixedLengthEncoding_Trie>(Encoding.ASCII.GetBytes(source)));
+            Assert.AreEqual(source, expanded);
+        }
+
+        [TestMethod]
+        public void TestFixedLengthEncoding_Trie()
+        {
+            string source = Util.GenerateLongString(_alphabet.Charcters, 400_000);
+            string expanded = Encoding.ASCII.GetString(CompressAndExpand<FixedLengthEncoding_Trie>(Encoding.ASCII.GetBytes(source)));
             Assert.AreEqual(source, expanded);
         }
     }
