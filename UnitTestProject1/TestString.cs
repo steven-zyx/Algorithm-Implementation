@@ -252,6 +252,14 @@ namespace UnitTestProject1
             string expanded = Encoding.ASCII.GetString(CompressAndExpand<FixedLengthEncoding_Trie>(Encoding.ASCII.GetBytes(source)));
             Assert.AreEqual(source, expanded);
         }
+
+        [TestMethod]
+        public void TestLZW_Rebuilding()
+        {
+            string source = Util.GenerateLongString(_alphabet.Charcters, 400_000);
+            string expanded = Encoding.ASCII.GetString(CompressAndExpand<LZW_Rebuilding>(Encoding.ASCII.GetBytes(source)));
+            Assert.AreEqual(source, expanded);
+        }
     }
 
     public class TestStringST
