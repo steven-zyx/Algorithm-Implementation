@@ -897,4 +897,13 @@ namespace UnitTestProject1
             _st = new TST_NoOneWayBranching<int>();
         }
     }
+
+    [TestClass]
+    public class TestHybridST : TestStringSTCert
+    {
+        public TestHybridST()
+        {
+            _st = new HybridST<int>(_alphabet);
+        }
+    }
 }

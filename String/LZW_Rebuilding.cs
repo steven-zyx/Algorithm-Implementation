@@ -14,8 +14,8 @@ namespace String
 
         public void Compress(string sourceFile, string compressedFile)
         {
-            TST<short> code = InitializeCode();
-            short index = (short)(R + 1);
+            TST<int> code = InitializeCode();
+            int index = (short)(R + 1);
 
             using (FileStream fs = File.OpenRead(sourceFile))
             using (BinaryStdOut output = new BinaryStdOut(compressedFile))
@@ -55,10 +55,10 @@ namespace String
             }
         }
 
-        protected TST<short> InitializeCode()
+        protected TST<int> InitializeCode()
         {
-            TST<short> code = new TST<short>();
-            for (short index = 0; index < R; index++)
+            TST<int> code = new TST<int>();
+            for (int index = 0; index < R; index++)
                 code.Put(((char)index).ToString(), index);
             return code;
         }
@@ -78,13 +78,13 @@ namespace String
             using (BinaryStdIn input = new BinaryStdIn(compressedFile))
             using (BinaryStdOut output = new BinaryStdOut(expandedFile))
             {
-                string val = code[input.ReadChar(12)];
+                string val = code[input.ReadChar(L)];
                 while (true)
                 {
                     foreach (char c in val)
                         output.Write(c, 8);
 
-                    int next = input.ReadChar(12);
+                    int next = input.ReadChar(L);
                     if (next == R)
                         break;
 

@@ -48,6 +48,10 @@ namespace ConsoleApp1
             //NonOverlappingInterval();
             //RegistrarScheduling();
             //TestKeyIntArray();
+            //LongRepeats();
+            //SubStringOfLengthL();
+            //SubStringOfAnyLength();
+            SpellChecking();
             Console.ReadLine();
         }
 
@@ -596,6 +600,82 @@ namespace ConsoleApp1
                 Console.WriteLine($"classes already scheduled at {dt}");
             else
                 oset.Put(dt);
+        }
+
+        public static void LongRepeats()
+        {
+            Alphabet alphabet = new Alphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+            string sourceText = Util.GenerateLongString(alphabet.Charcters, 400_000);
+
+            string sourceFile = Util.DesktopPath + "sourceFile.txt";
+            File.WriteAllText(sourceFile, sourceText);
+            string sDoubleFile = Util.DesktopPath + "sDoubleFile.txt";
+            File.WriteAllText(sDoubleFile, sourceText + sourceText);
+            string compressedFile = Util.DesktopPath + "compressed.txt";
+
+            ICompression[] clients = new ICompression[] {
+                new RunLengthEncoding(),
+                new Haffman(),
+                new LZW(16, 65536)
+            };
+            string[] sourceList = new string[]
+            {
+                sourceFile,
+                sDoubleFile
+            };
+
+            foreach (ICompression client in clients)
+                for (int i = 0; i < sourceList.Length; i++)
+                {
+                    client.Compress(sourceList[i], compressedFile);
+                    double ratio = new FileInfo(compressedFile).Length / (double)new FileInfo(sourceList[i]).Length;
+                    Console.WriteLine($"{client.GetType()}: {i + 1} {ratio}");
+                    File.Delete(compressedFile);
+                }
+
+            File.Delete(sourceFile);
+            File.Delete(sDoubleFile);
+        }
+
+        public static void SubStringOfLengthL()
+        {
+            UniqueSubStringOfLength client = new UniqueSubStringOfLength();
+            while (true)
+            {
+                int length = int.Parse(Console.ReadLine());
+                string content = Console.ReadLine();
+                IEnumerable<string> uniqueString = client.SubStringOfLength(content, length);
+                foreach (string str in uniqueString)
+                    Console.WriteLine(str);
+                Console.WriteLine();
+            }
+        }
+
+        public static void SubStringOfAnyLength()
+        {
+            string content = Console.ReadLine();
+            UniqueSubString client = new UniqueSubString(content);
+            while (true)
+            {
+                int length = int.Parse(Console.ReadLine());
+                IEnumerable<string> subString = client.SubStringOfLength(length);
+                foreach (string str in subString)
+                    Console.WriteLine(str);
+                Console.WriteLine();
+            }
+        }
+
+        public static void SpellChecking()
+        {
+            TST<bool> dict = EnglishDictionary.Load();
+            while (true)
+            {
+                string sentence = Console.ReadLine();
+                foreach (string word in sentence.Split(' '))
+                    if (!dict.Contains(word))
+                        Console.WriteLine(word);
+                Console.WriteLine();
+            }
         }
     }
 }

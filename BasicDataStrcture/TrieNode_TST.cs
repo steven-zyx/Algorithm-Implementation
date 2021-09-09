@@ -4,15 +4,15 @@ using System.Text;
 
 namespace BasicDataStrcture
 {
-    public class TrieNode<V>
+    public class TrieNode_TST<V>
     {
         public V Value { get; set; }
 
-        public TrieNode<V>[] Next { get; }
+        public object[] Next { get; }
 
-        public TrieNode(int R)
+        public TrieNode_TST(int R)
         {
-            Next = new TrieNode<V>[R];
+            Next = new object[R];
         }
     }
 }

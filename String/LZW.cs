@@ -12,10 +12,18 @@ namespace String
         protected readonly int C = 4096;
         protected const int BUFFER_SIZE = 4096;
 
+        public LZW() { }
+
+        public LZW(int codeLength, int codeCount)
+        {
+            L = codeLength;
+            C = codeCount;
+        }
+
         public void Compress(string sourceFile, string compressedFile)
         {
-            TST<short> code = new TST<short>();
-            short index = 0;
+            TST<int> code = new TST<int>();
+            int index = 0;
             for (; index < R; index++)
                 code.Put(((char)index).ToString(), index);
             index++;
@@ -71,13 +79,13 @@ namespace String
             using (BinaryStdIn input = new BinaryStdIn(compressedFile))
             using (BinaryStdOut output = new BinaryStdOut(expandedFile))
             {
-                string val = code[input.ReadChar(12)];
+                string val = code[input.ReadChar(L)];
                 while (true)
                 {
                     foreach (char c in val)
                         output.Write(c, 8);
 
-                    int next = input.ReadChar(12);
+                    int next = input.ReadChar(L);
                     if (next == R)
                         break;
 
