@@ -14,15 +14,19 @@ using System.Text;
 
 namespace UnitTestProject1
 {
-    [TestClass]
-    public class TestString
+    public abstract class TestStringBase
     {
         protected Alphabet _alphabet;
 
-        public TestString()
+        public TestStringBase()
         {
             _alphabet = new Alphabet("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ");
         }
+    }
+
+    [TestClass]
+    public class TestString : TestStringBase
+    {
 
         [TestMethod]
         public void TestKeyIndexedCounting()
@@ -114,7 +118,11 @@ namespace UnitTestProject1
             client.InplaceSort(source, 30);
             Assert.IsTrue(source.IsSorted());
         }
+    }
 
+    [TestClass]
+    public class TestCompression : TestStringBase
+    {
         [TestMethod]
         public void TestFixedLengthEncodingSimple()
         {
@@ -260,6 +268,33 @@ namespace UnitTestProject1
             string expanded = Encoding.ASCII.GetString(CompressAndExpand<LZW_Rebuilding>(Encoding.ASCII.GetBytes(source)));
             Assert.AreEqual(source, expanded);
         }
+    }
+
+    [TestClass]
+    public class TestSubstringSearch : TestStringBase
+    {
+        public void DoSubstringSearch(Func<string, string, int> SearchMethod)
+        {
+            for (int i = 0; i < 100_000; i++)
+            {
+                string text = Util.GenerateLongString(_alphabet.Charcters, 1_000);
+                string pattern = Util.GenerateLongString(_alphabet.Charcters, 3);
+                int correct = text.IndexOf(pattern);
+                int index = SearchMethod(text, pattern);
+                if (correct >= 0)
+                    Assert.AreEqual(correct, index);
+                else
+                    Assert.AreEqual(text.Length, index);
+            }
+        }
+
+        [TestMethod]
+        public void TestBruteForce_Approach1()
+            => DoSubstringSearch(BruteForceSubstringSearch.Search_Approach1);
+
+        [TestMethod]
+        public void TestBruteForce_Apporoach2()
+            => DoSubstringSearch(BruteForceSubstringSearch.Search_Approach2);
     }
 
     public class TestStringST
@@ -619,9 +654,26 @@ namespace UnitTestProject1
     [TestClass]
     public class TestTrie : TestStringST
     {
+        protected TrieST<int> TrieST => _st as TrieST<int>;
+
         public TestTrie()
         {
             _st = new TrieST<int>(_alphabet);
+        }
+
+        [TestMethod]
+        public void TestContainsPrefix()
+        {
+            HashSet<string> stringList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, _rowCount, 15);
+            foreach (string str in stringList)
+                _st.Put(str, 1);
+
+            HashSet<string> prefixList = Util.GenerateDynamicLengthString_Distinct(_alphabet.Charcters, 200, 3);
+            foreach (string pf in prefixList)
+            {
+                bool ifContains = stringList.Any(x => x.StartsWith(pf));
+                Assert.AreEqual(ifContains, TrieST.ContainsPrefix(pf));
+            }
         }
     }
 

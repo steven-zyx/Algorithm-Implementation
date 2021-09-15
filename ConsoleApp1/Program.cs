@@ -51,7 +51,11 @@ namespace ConsoleApp1
             //LongRepeats();
             //SubStringOfLengthL();
             //SubStringOfAnyLength();
-            SpellChecking();
+            //SpellChecking();
+            //WhiteList();
+            //ShowRandomPhoneNumbers();
+            //SubStringMatches();
+            TestAction();
             Console.ReadLine();
         }
 
@@ -676,6 +680,73 @@ namespace ConsoleApp1
                         Console.WriteLine(word);
                 Console.WriteLine();
             }
+        }
+
+        public static void WhiteList()
+        {
+            Console.WriteLine("Enter white list, seperate by space");
+            TST<bool> st = new TST<bool>();
+            foreach (string word in Console.ReadLine().Split(' '))
+                st.Put(word, true);
+
+            while (true)
+            {
+                foreach (string word in Console.ReadLine().Split(' '))
+                {
+                    if (st.Contains(word))
+                        Console.Write(word);
+                    else
+                        Console.Write(new string(Enumerable.Repeat('X', word.Length).ToArray()));
+                    Console.Write(' ');
+                }
+                Console.WriteLine();
+            }
+        }
+
+        public static void ShowRandomPhoneNumbers()
+        {
+            while (true)
+            {
+                int count = int.Parse(Console.ReadLine());
+                IEnumerable<string> phoneNumbers = RandomPhoneNumbers.PrintRandomPhoneNumbers(count);
+                foreach (string number in phoneNumbers)
+                    Console.WriteLine(number);
+                Console.WriteLine();
+            }
+        }
+
+        public static void SubStringMatches()
+        {
+            Console.WriteLine("Loading...");
+            TST<bool> englishDict = EnglishDictionary.Load();
+            SubStringMatches client = new SubStringMatches(englishDict.Keys());
+            Console.WriteLine("Loaded.");
+            while (true)
+            {
+                string s = Console.ReadLine();
+                foreach (string word in client.StringThatContains(s))
+                    Console.WriteLine(word);
+                Console.WriteLine();
+            }
+        }
+
+        public static void TestAction()
+        {
+            Action<int> method = x =>
+            {
+                Console.WriteLine(x);
+            };
+
+
+            var previousMethod = method;
+            method = x =>
+            {
+                if (previousMethod != null)
+                    previousMethod(x);
+                Console.WriteLine(x + 1);
+            };
+
+            method(4);
         }
     }
 }

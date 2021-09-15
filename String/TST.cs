@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using BasicDataStrcture;
 using Searching;
+using Utils;
 
 namespace String
 {
@@ -63,7 +64,7 @@ namespace String
         public virtual bool Contains(string key)
         {
             TSTNode<V> node = Get(_root, key, 0);
-            return node != null && !node.Value.Equals(default(V));
+            return node != null && !node.Value.IsNullOrDefault();
         }
 
         public virtual bool Delete(string key)
@@ -87,7 +88,7 @@ namespace String
             else
                 node.Mid = Delete(node.Mid, key, digit + 1);
 
-            if (node.Value.Equals(default(V)) && node.Mid == null)
+            if (node.Value.IsNullOrDefault() && node.Mid == null)
                 return DeleteNode(node);
             else
                 return node;
@@ -136,7 +137,7 @@ namespace String
             if (node == null)
                 return;
 
-            if (!node.Value.Equals(default(V)))
+            if (!node.Value.IsNullOrDefault())
                 keys.Enqueue(text + node.C);
 
             Keys(node.Left, text, keys);
@@ -152,7 +153,7 @@ namespace String
                 return 0;
 
             int cnt = 0;
-            if (!node.Value.Equals(default(V)))
+            if (!node.Value.IsNullOrDefault())
                 cnt++;
 
             return cnt + Size(node.Left) + Size(node.Right) + Size(node.Mid);
@@ -221,7 +222,7 @@ namespace String
                 return LongestPrefixOf(node.Right, text, digit, length);
             else
             {
-                if (!node.Value.Equals(default(V)))
+                if (!node.Value.IsNullOrDefault())
                     length = digit + 1;
                 return LongestPrefixOf(node.Mid, text, digit + 1, length);
             }

@@ -148,7 +148,7 @@ namespace String
             _root = Delete(_root, key, 0);
             return true;
         }
-        
+
         protected virtual TrieNode<V> Delete(TrieNode<V> node, string key, int digit)
         {
             if (node == null)
@@ -167,6 +167,12 @@ namespace String
                 if (node.Next[i] != null)
                     return node;
             return null;
+        }
+
+        public bool ContainsPrefix(string prefix)
+        {
+            TrieNode<V> node = Get(_root, prefix, 0);
+            return node != null;
         }
     }
 }

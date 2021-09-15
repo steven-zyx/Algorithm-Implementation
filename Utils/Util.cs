@@ -13,6 +13,9 @@ namespace Utils
         public static readonly string DesktopPath =
             Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\";
 
+        public static readonly string DocumentPath =
+            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\";
+
         public static Random Ran = new Random((int)DateTime.Now.Ticks);
 
         public static readonly int[] Primes = {
@@ -267,6 +270,14 @@ namespace Utils
             BitArray value = new BitArray(content.ToArray());
             value.Length = count;
             return value;
+        }
+
+        public static bool IsNullOrDefault<T>(this T obj)
+        {
+            if (obj is ValueType)
+                return obj.Equals(default(T));
+            else
+                return obj == null;
         }
     }
 }
