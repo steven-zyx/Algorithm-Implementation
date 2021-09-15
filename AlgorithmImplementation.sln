@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.1145
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasicDataStrcture", "BasicDataStrcture\BasicDataStrcture.csproj", "{52AFF1FA-0671-4F2A-8E9E-EE59DDB277F7}"
 EndProject
@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Searching", "Searching\Sear
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utils", "Utils\Utils.csproj", "{617C46DD-B3D6-4888-8F51-C48500C6A0A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "String", "String\String.csproj", "{1C204FBA-F186-4885-BC44-9F2618D12575}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "String", "String\String.csproj", "{1C204FBA-F186-4885-BC44-9F2618D12575}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graph", "Graph\Graph.csproj", "{6BD3FC09-0EA0-4C01-99D4-288BECC766CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -111,6 +113,18 @@ Global
 		{1C204FBA-F186-4885-BC44-9F2618D12575}.Release|x64.Build.0 = Release|Any CPU
 		{1C204FBA-F186-4885-BC44-9F2618D12575}.Release|x86.ActiveCfg = Release|Any CPU
 		{1C204FBA-F186-4885-BC44-9F2618D12575}.Release|x86.Build.0 = Release|Any CPU
+		{6BD3FC09-0EA0-4C01-99D4-288BECC766CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BD3FC09-0EA0-4C01-99D4-288BECC766CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BD3FC09-0EA0-4C01-99D4-288BECC766CD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6BD3FC09-0EA0-4C01-99D4-288BECC766CD}.Debug|x64.Build.0 = Debug|Any CPU
+		{6BD3FC09-0EA0-4C01-99D4-288BECC766CD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6BD3FC09-0EA0-4C01-99D4-288BECC766CD}.Debug|x86.Build.0 = Debug|Any CPU
+		{6BD3FC09-0EA0-4C01-99D4-288BECC766CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BD3FC09-0EA0-4C01-99D4-288BECC766CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BD3FC09-0EA0-4C01-99D4-288BECC766CD}.Release|x64.ActiveCfg = Release|Any CPU
+		{6BD3FC09-0EA0-4C01-99D4-288BECC766CD}.Release|x64.Build.0 = Release|Any CPU
+		{6BD3FC09-0EA0-4C01-99D4-288BECC766CD}.Release|x86.ActiveCfg = Release|Any CPU
+		{6BD3FC09-0EA0-4C01-99D4-288BECC766CD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
