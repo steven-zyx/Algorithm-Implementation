@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 
-namespace UnitTestProject1
+namespace AlgorithmUnitTest.TestBasicDataStructure
 {
     [TestClass]
     public class TestBasicDataStructure

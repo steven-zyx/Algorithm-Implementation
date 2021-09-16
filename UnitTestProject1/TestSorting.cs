@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Utils;
 
-namespace UnitTestProject1
+namespace AlgorithmUnitTest.TestSorting
 {
     [TestClass]
     public class TestSorting

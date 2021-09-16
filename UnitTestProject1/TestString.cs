@@ -12,7 +12,7 @@ using Utils;
 using System.Text;
 
 
-namespace UnitTestProject1
+namespace AlgorithmUnitTest.TestString
 {
     public abstract class TestStringBase
     {

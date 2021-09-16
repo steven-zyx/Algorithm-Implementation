@@ -7,7 +7,7 @@ using System.Linq;
 using BasicDataStrcture;
 using System.Diagnostics;
 
-namespace UnitTestProject1
+namespace AlgorithmUnitTest.TestSearching
 {
     [TestClass]
     public class TestSearching

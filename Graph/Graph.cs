@@ -4,7 +4,7 @@ using String;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Graph
+namespace AlgorithmImplementation.Graph
 {
     public class Graph
     {
