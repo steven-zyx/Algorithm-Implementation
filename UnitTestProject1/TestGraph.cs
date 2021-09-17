@@ -75,5 +75,18 @@ namespace AlgorithmUnitTest.TestGraph
             Assert.AreEqual(1, client.ID[5]);
             Assert.AreEqual(2, client.ID[6]);
         }
+
+        [TestMethod]
+        public void TestBipartite()
+        {
+            TwoColor client = new TwoColor(_simpleG);
+            client.Process();
+            Assert.IsTrue(client.IsBipartite);
+
+            _simpleG.AddEdge(1, 3);
+            client = new TwoColor(_simpleG);
+            client.Process();
+            Assert.IsFalse(client.IsBipartite);
+        }
     }
 }
