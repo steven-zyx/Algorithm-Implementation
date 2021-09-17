@@ -21,7 +21,7 @@ namespace AlgorithmImplementation.Graph
             for (int i = 0; i < V; i++)
                 _adjacencyList[i] = new Bag_L<int>();
             for (int i = 2; i < data.Length; i += 2)
-                AddEdge(i, i + 1);
+                AddEdge(data[i], data[i + 1]);
         }
 
         public void AddEdge(int v, int w)

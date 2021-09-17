@@ -1,50 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using BasicDataStrcture;
 
 namespace AlgorithmImplementation.Graph
 {
-    public class DepthFirstSearch
+    public class DepthFirstSearch : UndirectedGraphSearch
     {
-        protected Graph _g;
-        protected bool[] _marked;
-        protected int _count;
-        protected int[] _edgeTo;
-        protected int _s;
+        public int CountInComponent { get; protected set; }
 
-        public DepthFirstSearch(Graph g, int s)
-        {
-            _g = g;
-            _marked = new bool[_g.V];
-            _count = 0;
-            _edgeTo = new int[_g.V];
-            _s = s;
-            DFS(s);
-        }
+        public DepthFirstSearch(Graph g, int s) : base(g, s) { }
 
-        protected void DFS(int v)
+        protected override void Search(int v)
         {
-            _marked[v] = true;
-            _count++;
+            CountInComponent++;
+            Marked[v] = true;
             foreach (int w in _g.Adj(v))
-                if (!_marked[w])
-                {
-                    _edgeTo[w] = v;
-                    DFS(w);
-                }
-        }
-
-        public bool Marked(int v) => _marked[v];
-
-        public int Count() => _count;
-
-        public IEnumerable<int> PathTo(int v)
-        {
-            Stack<int> route = new Stack<int>();
-            for (; v != _s; v = _edgeTo[v])
-                route.Push(v);
-            route.Push(_s);
-            return route;
+                if (!Marked[w])
+                    Search(w);
         }
     }
 }
