@@ -88,5 +88,13 @@ namespace AlgorithmUnitTest.TestGraph
             client.Process();
             Assert.IsFalse(client.IsBipartite);
         }
+
+        [TestMethod]
+        public void TestCycle()
+        {
+            Cycle client = new Cycle(_simpleG);
+            client.Process();
+            Assert.IsTrue(client.HasCycle);
+        }
     }
 }
