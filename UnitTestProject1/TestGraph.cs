@@ -4,6 +4,8 @@ using System.Text;
 using AlgorithmImplementation.Graph;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using System.IO;
+using Utils;
 
 namespace AlgorithmUnitTest.TestGraph
 {
@@ -95,6 +97,76 @@ namespace AlgorithmUnitTest.TestGraph
             Cycle client = new Cycle(_simpleG);
             client.Process();
             Assert.IsTrue(client.HasCycle);
+        }
+
+        [TestMethod]
+        public void TestEulerianAndHamiltonianCycle()
+        {
+            int[][] dataList = new int[4][]
+            {
+                new int[] { 10, 15, 0, 1, 0, 2, 0, 3, 1, 3, 1, 4, 2, 5, 2, 9, 3, 6, 4, 7, 4, 8, 5, 8, 5, 9, 6, 7, 6, 9, 7, 8 },
+                new int[] { 10, 15, 0, 1, 0, 2, 0, 3, 1, 3, 0, 3, 2, 5, 5, 6, 3, 6, 4, 7, 4, 8, 5, 8, 5, 9, 6, 7, 6, 9, 8, 8 },
+                new int[] { 10, 15, 0, 1, 1, 2, 1, 3, 0, 3, 0, 4, 2, 5, 2, 9, 3, 6, 4, 7, 4, 8, 5, 8, 5, 9, 6, 7, 6, 9, 7, 8 },
+                new int[] { 10, 15, 4, 1, 7, 9, 6, 2, 7, 3, 5, 0, 0, 2, 0, 8, 1, 6, 3, 9, 6, 3, 2, 8, 1, 5, 9, 8, 4, 5, 4, 7 }
+            };
+            (bool IsEulerianCycle, bool IsHamiltonianCycle)[] result = new (bool IsEulerianCycle, bool IsHamiltonianCycle)[]
+            {
+                (false,true),
+                (true,false),
+                (false,true),
+                (false,true)
+            };
+
+            for (int i = 0; i < 4; i++)
+            {
+                Graph simpleGraph = new Graph(dataList[i]);
+                EulerianCycle eCycle = new EulerianCycle(simpleGraph);
+                eCycle.Process();
+                Assert.AreEqual(result[i].IsEulerianCycle, eCycle.IsEulerianCycle);
+
+                HamiltonianCycle hCycle = new HamiltonianCycle(simpleGraph);
+                hCycle.Process();
+                Assert.AreEqual(result[i].IsHamiltonianCycle, hCycle.IsHamiltonianCycle);
+            };
+        }
+
+        [TestMethod]
+        public void TestParallelEdge()
+        {
+            ParallelEdgeDetection client = new ParallelEdgeDetection(_simpleG);
+            client.Process();
+            Assert.AreEqual(0, client.ParallelEdge);
+
+            _simpleG.AddEdge(1, 0);
+            _simpleG.AddEdge(4, 5);
+            _simpleG.AddEdge(5, 4);
+            client = new ParallelEdgeDetection(_simpleG);
+            client.Process();
+            Assert.AreEqual(3, client.ParallelEdge);
+        }
+
+        [TestMethod]
+        public void TestSymbolGraph()
+        {
+            string fileName = Util.DesktopPath + "graph.txt";
+            string[] lines = new string[]
+            {
+                "basketball steven,john",
+                "cosmetics amy",
+                "food steven",
+                "food amy",
+                "house john,amy"
+            };
+            File.WriteAllLines(fileName, lines);
+
+            SymbolGraph graph = new SymbolGraph(fileName, ',');
+            Assert.AreEqual(2, graph.Adj("steven").Count());
+            Assert.AreEqual(2, graph.Adj("john").Count());
+            Assert.AreEqual(3, graph.Adj("amy").Count());
+            Assert.AreEqual(2, graph.Adj("basketball").Count());
+            Assert.AreEqual(1, graph.Adj("cosmetics").Count());
+            Assert.AreEqual(2, graph.Adj("house").Count());
+            Assert.AreEqual(2, graph.Adj("food").Count());
         }
     }
 }
