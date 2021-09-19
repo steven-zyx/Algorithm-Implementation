@@ -11,6 +11,7 @@ namespace AlgorithmImplementation.Application
         protected MinPQ<Event> _events;
         protected Particle[] _pList;
         protected double _t;
+        protected Graphics _g;
 
         public CollisionSystem(int count)
         {
@@ -23,6 +24,7 @@ namespace AlgorithmImplementation.Application
 
         public void Simulate(int limit)
         {
+            Redraw();
             foreach (Particle p in _pList)
                 PredictCollisions(p, limit);
             while (_events.Size > 0)
@@ -34,6 +36,7 @@ namespace AlgorithmImplementation.Application
                 foreach (Particle p in _pList)
                     p.Move(e.Time - _t);
                 _t = e.Time;
+                Redraw();
 
                 if (e.A != null && e.B != null)
                     e.A.BounceOff(e.B);
@@ -69,7 +72,8 @@ namespace AlgorithmImplementation.Application
 
         public void Redraw()
         {
-            throw new NotImplementedException();
+            foreach (Particle p in _pList)
+                p.Draw(_g);
         }
     }
 }

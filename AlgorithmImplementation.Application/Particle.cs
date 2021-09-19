@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Utils;
+using System.Drawing;
 
 namespace AlgorithmImplementation.Application
 {
@@ -36,9 +37,12 @@ namespace AlgorithmImplementation.Application
             Count = 0;
         }
 
-        public void Draw()
+        public void Draw(Graphics g)
         {
-            throw new NotImplementedException();
+            double x = _rx - _s;
+            double y = _ry - _s;
+            double width = _s + _s;
+            g.DrawEllipse(new Pen(Color.Black), (float)x, (float)y, (float)width, (float)width);
         }
 
         public void Move(double time)
