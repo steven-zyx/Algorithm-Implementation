@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Utils;
 
-namespace BasicDataStrcture
+namespace AlgorithmImplementation.Application
 {
     public class Particle
     {
+
         protected double _rx;
         protected double _ry;
         protected double _vx;
@@ -14,6 +16,10 @@ namespace BasicDataStrcture
         protected double _mass;
         public int Count { get; protected set; }
 
+        public Particle()
+        {
+
+        }
         public Particle(double rx, double ry, double vx, double vy, double s, double mass)
         {
             _rx = rx;
