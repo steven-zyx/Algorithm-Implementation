@@ -18,8 +18,14 @@ namespace AlgorithmImplementation.Application
 
         public Particle()
         {
-
+            _mass = 0.5;
+            _s = 0.01;
+            _rx = Util.Ran.NextDouble() * (1 - _s) / 1 + _s;
+            _ry = Util.Ran.NextDouble() * (1 - _s) / 1 + _s;
+            _vx = (Util.Ran.NextDouble() - 0.5) / 10;
+            _vy = (Util.Ran.NextDouble() - 0.5) / 10;
         }
+
         public Particle(double rx, double ry, double vx, double vy, double s, double mass)
         {
             _rx = rx;

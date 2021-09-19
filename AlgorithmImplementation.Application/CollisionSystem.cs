@@ -12,6 +12,13 @@ namespace AlgorithmImplementation.Application
 
         public CollisionSystem(int count)
         {
+            _pList = new Particle[count];
+            for (int i = 0; i < count; i++)
+                _pList[i] = new Particle();
+        }
+
+        public void Simulate()
+        {
 
         }
     }
