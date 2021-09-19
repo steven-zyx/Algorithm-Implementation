@@ -19,9 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "String", "String\String.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Graph", "Graph\Graph.csproj", "{6BD3FC09-0EA0-4C01-99D4-288BECC766CD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlgorithmImplementation.Application", "AlgorithmImplementation.Application\AlgorithmImplementation.Application.csproj", "{35ECF3E4-26EF-40E5-A9E3-696A72AD906C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "AlgorithmImplementation.Application\Application.csproj", "{35ECF3E4-26EF-40E5-A9E3-696A72AD906C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsApp", "WinFormsApp\WinFormsApp.csproj", "{AF1B5427-E83C-408F-8ED5-1AFA11B46A7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinFormsApp", "WinFormsApp\WinFormsApp.csproj", "{AF1B5427-E83C-408F-8ED5-1AFA11B46A7A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

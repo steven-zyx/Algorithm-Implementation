@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AlgorithmImplementation.Application\AlgorithmImplementation.Application.csproj" />
+    <ProjectReference Include="..\AlgorithmImplementation.Application\Application.csproj" />
   </ItemGroup>
 
 </Project>
