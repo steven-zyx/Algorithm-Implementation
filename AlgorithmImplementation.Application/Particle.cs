@@ -7,7 +7,6 @@ namespace AlgorithmImplementation.Application
 {
     public class Particle
     {
-
         protected double _rx;
         protected double _ry;
         protected double _vx;
@@ -40,6 +39,12 @@ namespace AlgorithmImplementation.Application
         public void Draw()
         {
             throw new NotImplementedException();
+        }
+
+        public void Move(double time)
+        {
+            _rx = _rx + (_vx * time);
+            _ry = _ry + (_vy * time);
         }
 
         public double TimeToHit(Particle otherParticle)

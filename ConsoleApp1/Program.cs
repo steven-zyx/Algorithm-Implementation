@@ -11,6 +11,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using String;
+using AlgorithmImplementation.Application;
 
 namespace ConsoleApp1
 {
@@ -55,7 +56,8 @@ namespace ConsoleApp1
             //WhiteList();
             //ShowRandomPhoneNumbers();
             //SubStringMatches();
-            TestAction();
+            //TestAction();
+            TestEventDrivenSimulation();
             Console.ReadLine();
         }
 
@@ -747,6 +749,12 @@ namespace ConsoleApp1
             };
 
             method(4);
+        }
+
+        public static void TestEventDrivenSimulation()
+        {
+            CollisionSystem system = new CollisionSystem(1);
+            system.Simulate(10000);
         }
     }
 }

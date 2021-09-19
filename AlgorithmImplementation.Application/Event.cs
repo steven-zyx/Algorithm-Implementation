@@ -4,17 +4,17 @@ namespace AlgorithmImplementation.Application
 {
     public class Event : IComparable<Event>
     {
-        protected double _time;
-        protected Particle _a;
-        protected Particle _b;
+        public double Time { get; }
+        public Particle A;
+        public Particle B;
         protected int _countA;
         protected int _countB;
 
         public Event(double time, Particle a, Particle b)
         {
-            _time = time;
-            _a = a;
-            _b = b;
+            Time = time;
+            A = a;
+            B = b;
 
             if (a != null)
                 _countA = a.Count;
@@ -30,9 +30,9 @@ namespace AlgorithmImplementation.Application
 
         public int CompareTo(Event other)
         {
-            if (_time < other._time)
+            if (Time < other.Time)
                 return -1;
-            else if (_time > other._time)
+            else if (Time > other.Time)
                 return 1;
             else
                 return 0;
@@ -40,9 +40,9 @@ namespace AlgorithmImplementation.Application
 
         public bool IsValid()
         {
-            if (_a != null && _a.Count != _countA)
+            if (A != null && A.Count != _countA)
                 return false;
-            if (_b != null && _b.Count != _countB)
+            if (B != null && B.Count != _countB)
                 return false;
             return true;
         }
