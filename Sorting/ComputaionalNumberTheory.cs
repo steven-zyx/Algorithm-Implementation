@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Sorting
 {
-    public class PolyNomial : IComparable
+    public class PolyNomial : IComparable<PolyNomial>
     {
         public long Sum { get; set; }
         public int A { get; set; }
@@ -18,9 +18,9 @@ namespace Sorting
             Sum = (long)temp;
         }
 
-        public int CompareTo(object obj)
+        public int CompareTo(PolyNomial obj)
         {
-            long result = Sum - (obj as PolyNomial).Sum;
+            long result = Sum - obj.Sum;
             if (result > 0)
                 return 1;
             else if (result == 0)

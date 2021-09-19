@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Sorting
 {
-    public class MinPQ<T> where T : IComparable
+    public class MinPQ<T> where T : IComparable<T>
     {
         private T[] _source;
         private int _count;

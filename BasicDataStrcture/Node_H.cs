@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BasicDataStrcture
 {
-    public class Node_H : IComparable
+    public class Node_H : IComparable<Node_H>
     {
         public char Key { get; }
 
@@ -22,6 +22,6 @@ namespace BasicDataStrcture
             Right = right;
         }
 
-        public int CompareTo(object obj) => Count.CompareTo((obj as Node_H).Count);
+        public int CompareTo(Node_H obj) => Count.CompareTo(obj.Count);
     }
 }

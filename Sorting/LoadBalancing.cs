@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Sorting
 {
-    public class TaskList : IComparable
+    public class TaskList : IComparable<TaskList>
     {
         private List<int> _taskList = new List<int>();
         private long _processingTime = 0;
@@ -17,9 +17,9 @@ namespace Sorting
 
         public long ProcessingTime => _processingTime;
 
-        public int CompareTo(object obj)
+        public int CompareTo(TaskList obj)
         {
-            long result = _processingTime - (obj as TaskList)._processingTime;
+            long result = _processingTime - obj._processingTime;
             if (result < 0)
                 return -1;
             else if (result == 0)
