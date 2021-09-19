@@ -13,18 +13,22 @@ namespace AlgorithmImplementation.Application
         protected double _t;
         protected Graphics _g;
 
-        public CollisionSystem(int count)
+        public CollisionSystem(int count, Graphics g)
         {
             _pList = new Particle[count];
             for (int i = 0; i < count; i++)
                 _pList[i] = new Particle();
             _events = new MinPQ<Event>();
             _t = 0;
+            _g = g;
         }
 
-        public void Simulate(int limit)
+        public void Simulate(int limit, float interval)
         {
-            Redraw();
+            float tick = 0;
+            while (tick <= limit)
+                _events.Insert(new Event(tick += interval, null, null));
+
             foreach (Particle p in _pList)
                 PredictCollisions(p, limit);
             while (_events.Size > 0)
@@ -36,7 +40,6 @@ namespace AlgorithmImplementation.Application
                 foreach (Particle p in _pList)
                     p.Move(e.Time - _t);
                 _t = e.Time;
-                Redraw();
 
                 if (e.A != null && e.B != null)
                     e.A.BounceOff(e.B);
@@ -44,6 +47,8 @@ namespace AlgorithmImplementation.Application
                     e.A.BounceOffVerticalWall();
                 else if (e.A == null && e.B != null)
                     e.B.BounceOffHorizontalWall();
+                else
+                    Redraw();
 
                 if (e.A != null)
                     PredictCollisions(e.A, limit);
@@ -72,8 +77,10 @@ namespace AlgorithmImplementation.Application
 
         public void Redraw()
         {
+            _g.Clear(Color.White);
             foreach (Particle p in _pList)
                 p.Draw(_g);
+            System.Threading.Thread.Sleep(200);
         }
     }
 }

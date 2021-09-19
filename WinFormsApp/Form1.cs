@@ -18,11 +18,10 @@ namespace WinFormsApp
             InitializeComponent();
         }
 
-        private void Form1_Click(object sender, EventArgs e)
+        private void Form1_Shown(object sender, EventArgs e)
         {
-            Graphics g = CreateGraphics();
-            CollisionSystem system = new CollisionSystem(1);
-            system.Simulate(10_000);
+            CollisionSystem system = new CollisionSystem(50, CreateGraphics());
+            system.Simulate(10_000, 2);
         }
     }
 }

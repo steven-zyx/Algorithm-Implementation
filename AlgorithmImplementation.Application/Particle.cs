@@ -18,12 +18,12 @@ namespace AlgorithmImplementation.Application
 
         public Particle()
         {
-            _mass = 0.5;
-            _s = 0.01;
+            _s = Util.Ran.NextDouble() / 20;
+            _mass = _s * 50;
             _rx = Util.Ran.NextDouble() * (1 - _s) / 1 + _s;
             _ry = Util.Ran.NextDouble() * (1 - _s) / 1 + _s;
-            _vx = (Util.Ran.NextDouble() - 0.5) / 10;
-            _vy = (Util.Ran.NextDouble() - 0.5) / 10;
+            _vx = (Util.Ran.NextDouble() - 0.5) / 100;
+            _vy = (Util.Ran.NextDouble() - 0.5) / 100;
         }
 
         public Particle(double rx, double ry, double vx, double vy, double s, double mass)
@@ -39,10 +39,16 @@ namespace AlgorithmImplementation.Application
 
         public void Draw(Graphics g)
         {
-            double x = _rx - _s;
-            double y = _ry - _s;
-            double width = _s + _s;
-            g.DrawEllipse(new Pen(Color.Black), (float)x, (float)y, (float)width, (float)width);
+            float bound = Math.Min(g.VisibleClipBounds.Width, g.VisibleClipBounds.Height);
+            double x = (_rx - _s) * bound;
+            double y = (_ry - _s) * bound;
+            double diameter = (_s + _s) * bound;
+
+            double redness = 255 - _mass * 100;
+            Color c = Color.FromArgb(255, (int)redness, (int)redness);
+            Rectangle r = new Rectangle((int)x, (int)y, (int)diameter, (int)diameter);
+            g.DrawEllipse(new Pen(Color.Black), r);
+            g.FillEllipse(new SolidBrush(c), r);
         }
 
         public void Move(double time)
@@ -73,9 +79,9 @@ namespace AlgorithmImplementation.Application
             double distanceBetweenCentersSquared = distanceBetweenCenters * distanceBetweenCenters;
 
             // Check if particles overlap
-            if (deltaPositionSquared < distanceBetweenCentersSquared)
-                throw new Exception("Invalid state: overlapping particles. No two objects can occupy the same space " +
-                        "at the same time.");
+            //if (deltaPositionSquared < distanceBetweenCentersSquared)
+            //    throw new Exception("Invalid state: overlapping particles. No two objects can occupy the same space " +
+            //            "at the same time.");
 
             double distance = (deltaPositionByDeltaVelocity * deltaPositionByDeltaVelocity)
                     - deltaVelocitySquared * (deltaPositionSquared - distanceBetweenCentersSquared);
