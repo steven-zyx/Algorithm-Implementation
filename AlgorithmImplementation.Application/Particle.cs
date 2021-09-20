@@ -18,7 +18,7 @@ namespace AlgorithmImplementation.Application
 
         public Particle()
         {
-            _s = Util.Ran.NextDouble() / 20;
+            _s = Util.Ran.NextDouble() / 25;
             _mass = _s * 50;
             _rx = Util.Ran.NextDouble() * (1 - _s) / 1 + _s;
             _ry = Util.Ran.NextDouble() * (1 - _s) / 1 + _s;
@@ -44,11 +44,8 @@ namespace AlgorithmImplementation.Application
             double y = (_ry - _s) * bound;
             double diameter = (_s + _s) * bound;
 
-            double redness = 255 - _mass * 100;
-            Color c = Color.FromArgb(255, (int)redness, (int)redness);
             Rectangle r = new Rectangle((int)x, (int)y, (int)diameter, (int)diameter);
             g.DrawEllipse(new Pen(Color.Black), r);
-            g.FillEllipse(new SolidBrush(c), r);
         }
 
         public void Move(double time)

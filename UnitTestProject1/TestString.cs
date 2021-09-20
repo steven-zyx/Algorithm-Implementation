@@ -295,6 +295,28 @@ namespace AlgorithmUnitTest.TestString
         [TestMethod]
         public void TestBruteForce_Apporoach2()
             => DoSubstringSearch(BruteForceSubstringSearch.Search_Approach2);
+
+        [TestMethod]
+        public void TestKMP()
+        {
+            Func<string, string, int> SearchMethod = (text, pattern) =>
+              {
+                  KMP client = new KMP(pattern);
+                  return client.Search(text);
+              };
+            DoSubstringSearch(SearchMethod);
+        }
+
+        [TestMethod]
+        public void TestKMP_Simple()
+        {
+            string pattern = "ABABAC";
+            KMP client = new KMP(pattern);
+
+            Assert.AreEqual(0, client.Search("ABABAC"));
+            Assert.AreEqual(6, client.Search("ABABAD"));
+            Assert.AreEqual(2, client.Search("ABABABACAC"));
+        }
     }
 
     public class TestStringST
