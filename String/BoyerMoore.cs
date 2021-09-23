@@ -4,19 +4,15 @@ using System.Text;
 
 namespace String
 {
-    public class BoyerMoore
+    public class BoyerMoore : SubStringSearch
     {
         protected const int R = 256;
         protected string _pattern;
-        protected int M;
-        protected int N;
         protected int[] _right;
 
-        public BoyerMoore(string pattern)
+        public BoyerMoore(string pattern) : base(pattern)
         {
             _pattern = pattern;
-            M = pattern.Length;
-
             _right = new int[R];
             for (int i = 0; i < R; i++)
                 _right[i] = -1;
@@ -24,16 +20,14 @@ namespace String
                 _right[pattern[j]] = j;
         }
 
-        public int Search(string text)
+        public override int Search(string text)
         {
-            N = text.Length;
-
+            int N = text.Length;
             int skip = 0;
             for (int i = 0; i <= N - M; i += skip)
             {
                 skip = 0;
                 for (int j = M - 1; j >= 0; j--)
-                {
                     if (!text[i + j].Equals(_pattern[j]))
                     {
                         skip = j - _right[text[i + j]];
@@ -41,7 +35,6 @@ namespace String
                             skip = 1;
                         break;
                     }
-                }
                 if (skip == 0)
                     return i;
             }

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Utils;
 using System.Text;
+using System.Reflection;
 
 
 namespace AlgorithmUnitTest.TestString
@@ -273,14 +274,18 @@ namespace AlgorithmUnitTest.TestString
     [TestClass]
     public class TestSubstringSearch : TestStringBase
     {
-        public void DoSubstringSearch(Func<string, string, int> SearchMethod)
+        protected void DoSubstringSearch<T>() where T : SubStringSearch
         {
+            SubStringSearch client = null;
             for (int i = 0; i < 100_000; i++)
             {
                 string text = Util.GenerateLongString(_alphabet.Charcters, 1_000);
                 string pattern = Util.GenerateLongString(_alphabet.Charcters, 3);
                 int correct = text.IndexOf(pattern);
-                int index = SearchMethod(text, pattern);
+
+                client = Activator.CreateInstance(typeof(T), pattern) as SubStringSearch;
+                int index = client.Search(text);
+
                 if (correct >= 0)
                     Assert.AreEqual(correct, index);
                 else
@@ -289,23 +294,13 @@ namespace AlgorithmUnitTest.TestString
         }
 
         [TestMethod]
-        public void TestBruteForce_Approach1()
-            => DoSubstringSearch(BruteForceSubstringSearch.Search_Approach1);
+        public void TestBruteForce_Approach1() => DoSubstringSearch<BruteForceSubstringSearch_Approach1>();
 
         [TestMethod]
-        public void TestBruteForce_Apporoach2()
-            => DoSubstringSearch(BruteForceSubstringSearch.Search_Approach2);
+        public void TestBruteForce_Apporoach2() => DoSubstringSearch<BruteForceSubstringSearch_Approach2>();
 
         [TestMethod]
-        public void TestKMP()
-        {
-            Func<string, string, int> SearchMethod = (text, pattern) =>
-              {
-                  KMP client = new KMP(pattern);
-                  return client.Search(text);
-              };
-            DoSubstringSearch(SearchMethod);
-        }
+        public void TestKMP() => DoSubstringSearch<KMP>();
 
         [TestMethod]
         public void TestKMP_Simple()
@@ -319,15 +314,7 @@ namespace AlgorithmUnitTest.TestString
         }
 
         [TestMethod]
-        public void TestBoyerMoore()
-        {
-            Func<string, string, int> SearchMethod = (text, pattern) =>
-              {
-                  BoyerMoore client = new BoyerMoore(pattern);
-                  return client.Search(text);
-              };
-            DoSubstringSearch(SearchMethod);
-        }
+        public void TestBoyerMoore() => DoSubstringSearch<BoyerMoore>();
     }
 
     public class TestStringST
