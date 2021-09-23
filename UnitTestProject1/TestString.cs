@@ -328,6 +328,9 @@ namespace AlgorithmUnitTest.TestString
         public void TestKMP() => DoSubstringSearch<KMP>();
 
         [TestMethod]
+        public void TestKMP_FindAll() => DoSubStringFindAll<KMP>();
+
+        [TestMethod]
         public void TestKMP_Simple()
         {
             string pattern = "ABABAC";
@@ -342,7 +345,13 @@ namespace AlgorithmUnitTest.TestString
         public void TestBoyerMoore() => DoSubstringSearch<BoyerMoore>();
 
         [TestMethod]
+        public void TestBoyerMoore_FindAll() => DoSubStringFindAll<BoyerMoore>();
+
+        [TestMethod]
         public void TestRabinKarp() => DoSubstringSearch<RabinKarp>();
+
+        [TestMethod]
+        public void TestRabinKarp_FindAll() => DoSubStringFindAll<RabinKarp>();
 
         [TestMethod]
         public void TestRabinKarp_Simple()

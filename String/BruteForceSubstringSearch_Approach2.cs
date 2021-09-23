@@ -45,9 +45,8 @@ namespace String
 
                 if (j == M)
                 {
-                    yield return i - j + 1;
-                    i -= j;
-                    i++;
+                    i = i - j + 1;
+                    yield return i;
                     j = 0;
                 }
             }

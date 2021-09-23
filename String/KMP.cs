@@ -33,5 +33,20 @@ namespace String
             else
                 return text.Length;
         }
+
+        public override IEnumerable<int> FindAll(string text)
+        {
+            int j = 0, N = text.Length;
+            for (int i = 0; i < N; i++)
+            {
+                j = _dfa[text[i], j];
+                if (j == M)
+                {
+                    i = i - M + 1;
+                    yield return i;
+                    j = 0;
+                }
+            }
+        }
     }
 }

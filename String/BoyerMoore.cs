@@ -23,7 +23,7 @@ namespace String
         public override int Search(string text)
         {
             int N = text.Length;
-            int skip = 0;
+            int skip;
             for (int i = 0; i <= N - M; i += skip)
             {
                 skip = 0;
@@ -39,6 +39,29 @@ namespace String
                     return i;
             }
             return N;
+        }
+
+        public override IEnumerable<int> FindAll(string text)
+        {
+            int N = text.Length;
+            int skip;
+            for (int i = 0; i <= N - M; i += skip)
+            {
+                skip = 0;
+                for (int j = M - 1; j >= 0; j--)
+                    if (!text[i + j].Equals(_pattern[j]))
+                    {
+                        skip = j - _right[text[i + j]];
+                        if (skip < 1)
+                            skip = 1;
+                        break;
+                    }
+                if (skip == 0)
+                {
+                    yield return i;
+                    i++;
+                }
+            }
         }
     }
 }

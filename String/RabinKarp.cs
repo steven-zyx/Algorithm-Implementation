@@ -35,6 +35,21 @@ namespace String
             return N;
         }
 
+        public override IEnumerable<int> FindAll(string text)
+        {
+            int N = text.Length;
+            ulong fp = ComputeHash(text.Substring(0, M));
+            if (fp == _hash)
+                yield return 0;
+            for (int i = M; i < N; i++)
+            {
+                fp = (fp + Q - text[i - M] * RM % Q) % Q;
+                fp = (fp * R + text[i]) % Q;
+                if (fp == _hash)
+                    yield return i - M + 1;
+            }
+        }
+
         protected ulong ComputeHash(string pattern)
         {
             ulong h = 0;
