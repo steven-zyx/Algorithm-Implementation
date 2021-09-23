@@ -315,6 +315,18 @@ namespace AlgorithmUnitTest.TestString
 
         [TestMethod]
         public void TestBoyerMoore() => DoSubstringSearch<BoyerMoore>();
+
+        [TestMethod]
+        public void TestRabinKarp() => DoSubstringSearch<RabinKarp>();
+
+        [TestMethod]
+        public void TestRabinKarp_Simple()
+        {
+            string pattern = "AB";
+            RabinKarp client = new RabinKarp(pattern);
+            Assert.AreEqual(0, client.Search("ABCD"));
+            Assert.AreEqual(1, client.Search("0AB"));
+        }
     }
 
     public class TestStringST
