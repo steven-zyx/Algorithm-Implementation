@@ -317,6 +317,17 @@ namespace AlgorithmUnitTest.TestString
             Assert.AreEqual(6, client.Search("ABABAD"));
             Assert.AreEqual(2, client.Search("ABABABACAC"));
         }
+
+        [TestMethod]
+        public void TestBoyerMoore()
+        {
+            Func<string, string, int> SearchMethod = (text, pattern) =>
+              {
+                  BoyerMoore client = new BoyerMoore(pattern);
+                  return client.Search(text);
+              };
+            DoSubstringSearch(SearchMethod);
+        }
     }
 
     public class TestStringST
