@@ -25,5 +25,19 @@ namespace String
             }
             return N;
         }
+
+        public override IEnumerable<int> FindAll(string text)
+        {
+            int N = text.Length;
+            for (int i = 0; i <= N - M; i++)
+            {
+                int j = 0;
+                for (; j < M; j++)
+                    if (!text[i + j].Equals(_pattern[j]))
+                        break;
+                if (j == M)
+                    yield return i;
+            }
+        }
     }
 }

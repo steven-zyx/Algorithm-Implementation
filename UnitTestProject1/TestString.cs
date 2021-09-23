@@ -293,11 +293,36 @@ namespace AlgorithmUnitTest.TestString
             }
         }
 
+        protected void DoSubStringFindAll<T>() where T : SubStringSearch
+        {
+            SubStringSearch client = null;
+            for (int i = 0; i < 100_000; i++)
+            {
+                string text = Util.GenerateLongString(_alphabet.Charcters, 1_000);
+                string pattern = Util.GenerateLongString(_alphabet.Charcters, 3);
+
+                client = Activator.CreateInstance(typeof(T), pattern) as SubStringSearch;
+                int correct = -1;
+                foreach (int position in client.FindAll(text).ToArray())
+                {
+                    correct = text.IndexOf(pattern, correct + 1);
+                    Assert.AreEqual(correct, position);
+                }
+                Assert.AreEqual(-1, text.IndexOf(pattern, correct + 1));
+            }
+        }
+
         [TestMethod]
         public void TestBruteForce_Approach1() => DoSubstringSearch<BruteForceSubstringSearch_Approach1>();
 
         [TestMethod]
-        public void TestBruteForce_Apporoach2() => DoSubstringSearch<BruteForceSubstringSearch_Approach2>();
+        public void TestBruteForce_Approach1_FindAll() => DoSubStringFindAll<BruteForceSubstringSearch_Approach1>();
+
+        [TestMethod]
+        public void TestBruteForce_Approach2() => DoSubstringSearch<BruteForceSubstringSearch_Approach2>();
+
+        [TestMethod]
+        public void TestBruteForce_Approach2_FindAll() => DoSubStringFindAll<BruteForceSubstringSearch_Approach2>();
 
         [TestMethod]
         public void TestKMP() => DoSubstringSearch<KMP>();

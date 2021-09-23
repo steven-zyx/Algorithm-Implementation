@@ -13,9 +13,11 @@ namespace String
             M = pattern.Length;
         }
 
-        public virtual int Search(string text)
+        public abstract int Search(string text);
+
+        public virtual IEnumerable<int> FindAll(string text)
         {
-            throw new NotFiniteNumberException();
+            throw new NotImplementedException();
         }
     }
 }

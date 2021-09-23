@@ -35,7 +35,6 @@ namespace String
             return N;
         }
 
-
         protected ulong ComputeHash(string pattern)
         {
             ulong h = 0;

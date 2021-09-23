@@ -29,5 +29,28 @@ namespace String
             else
                 return N;
         }
+
+        public override IEnumerable<int> FindAll(string text)
+        {
+            int N = text.Length, j = 0;
+            for (int i = 0; i < N; i++)
+            {
+                if (text[i].Equals(_pattern[j]))
+                    j++;
+                else
+                {
+                    i -= j;
+                    j = 0;
+                }
+
+                if (j == M)
+                {
+                    yield return i - j + 1;
+                    i -= j;
+                    i++;
+                    j = 0;
+                }
+            }
+        }
     }
 }
