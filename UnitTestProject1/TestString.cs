@@ -337,16 +337,19 @@ namespace AlgorithmUnitTest.TestString
         }
 
         [TestMethod]
-        public void TestBruteForce_Approach1() => DoSubstringSearch<BruteForceSubstringSearch_Approach1>();
+        public void TestBruteSearch1() => DoSubstringSearch<BruteSearch1>();
 
         [TestMethod]
-        public void TestBruteForce_Approach1_FindAll() => DoSubStringFindAll<BruteForceSubstringSearch_Approach1>();
+        public void TestBruteSearch1_FindAll() => DoSubStringFindAll<BruteSearch1>();
 
         [TestMethod]
-        public void TestBruteForce_Approach2() => DoSubstringSearch<BruteForceSubstringSearch_Approach2>();
+        public void TestBruteSearch1_BinaryStdIn() => DoBinaryStdInSearch<BruteSearch1>();
 
         [TestMethod]
-        public void TestBruteForce_Approach2_FindAll() => DoSubStringFindAll<BruteForceSubstringSearch_Approach2>();
+        public void TestBruteSearch2() => DoSubstringSearch<BruteSearch2>();
+
+        [TestMethod]
+        public void TestBruteSearch2_FindAll() => DoSubStringFindAll<BruteSearch2>();
 
         [TestMethod]
         public void TestKMP() => DoSubstringSearch<KMP>();

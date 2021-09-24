@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using BasicDataStrcture;
 
 namespace String
 {
-    public class BruteForceSubstringSearch_Approach1 : SubStringSearch
+    public class BruteSearch1 : SubStringSearch
     {
         protected string _pattern;
 
-        public BruteForceSubstringSearch_Approach1(string pattern) : base(pattern)
+        public BruteSearch1(string pattern) : base(pattern)
             => _pattern = pattern;
 
         public override int Search(string text)
@@ -24,6 +25,32 @@ namespace String
                     return i;
             }
             return N;
+        }
+
+        public override int Search(BinaryStdIn input)
+        {
+            Queue_N<char> buffer = new Queue_N<char>();
+            for (int i = 0; i < M - 1; i++)
+                buffer.Enqueue(input.ReadChar(8));
+
+            int position = 0;
+            while (!input.IsEmpty())
+            {
+                buffer.Enqueue(input.ReadChar(8));
+
+                int index = 0;
+                foreach (char c in buffer)
+                    if (!_pattern[index].Equals(c))
+                        break;
+                    else
+                        index++;
+                if (index == M)
+                    return position;
+
+                buffer.Dequeue();
+                position++;
+            }
+            return position + M - 1;
         }
 
         public override IEnumerable<int> FindAll(string text)

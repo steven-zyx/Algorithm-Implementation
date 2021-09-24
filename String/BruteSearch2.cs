@@ -4,11 +4,11 @@ using System.Text;
 
 namespace String
 {
-    public class BruteForceSubstringSearch_Approach2 : SubStringSearch
+    public class BruteSearch2 : SubStringSearch
     {
         protected string _pattern;
 
-        public BruteForceSubstringSearch_Approach2(string pattern) : base(pattern)
+        public BruteSearch2(string pattern) : base(pattern)
             => _pattern = pattern;
 
         public override int Search(string text)
