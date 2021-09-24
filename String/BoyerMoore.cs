@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using BasicDataStrcture;
+using System.Linq;
 
 namespace String
 {
@@ -39,6 +41,40 @@ namespace String
                     return i;
             }
             return N;
+        }
+
+        public override int Search(BinaryStdIn input)
+        {
+            Deque_N<char> buffer = new Deque_N<char>();
+            for (int i = 0; i < M; i++)
+                buffer.PushRight(input.ReadChar(8));
+
+            int skip = 0;
+            int position = 0;
+            do
+            {
+                int index = M - 1;
+                foreach (char c in buffer.FromRightToLeft())
+                    if (!_pattern[index].Equals(c))
+                    {
+                        skip = index - _right[c];
+                        if (skip < 1)
+                            skip = 1;
+                        break;
+                    }
+                    else
+                        index--;
+                if (skip == 0)
+                    return position;
+
+                for (; skip > 0 && !input.IsEmpty(); skip--)
+                {
+                    buffer.PopLeft();
+                    buffer.PushRight(input.ReadChar(8));
+                    position++;
+                }
+            } while (skip == 0);
+            return position + M;
         }
 
         public override IEnumerable<int> FindAll(string text)

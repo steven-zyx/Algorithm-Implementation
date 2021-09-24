@@ -375,6 +375,9 @@ namespace AlgorithmUnitTest.TestString
         public void TestBoyerMoore() => DoSubstringSearch<BoyerMoore>();
 
         [TestMethod]
+        public void TestBoyerMoore_BinaryStdIn() => DoBinaryStdInSearch<BoyerMoore>();
+
+        [TestMethod]
         public void TestBoyerMoore_FindAll() => DoSubStringFindAll<BoyerMoore>();
 
         [TestMethod]
