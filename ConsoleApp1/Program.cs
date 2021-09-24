@@ -56,7 +56,8 @@ namespace ConsoleApp1
             //WhiteList();
             //ShowRandomPhoneNumbers();
             //SubStringMatches();
-            //TestAction();
+            //ShowCyclicRotation();
+            TandemRepeatSearch();
             Console.ReadLine();
         }
 
@@ -731,23 +732,53 @@ namespace ConsoleApp1
             }
         }
 
-        public static void TestAction()
+        public static void ShowCyclicRotation()
         {
-            Action<int> method = x =>
+            while (true)
             {
-                Console.WriteLine(x);
-            };
+                string text1 = Console.ReadLine();
+                string text2 = Console.ReadLine();
 
+                if (text1.Length != text2.Length)
+                {
+                    Console.WriteLine(false);
+                    continue;
+                }
 
-            var previousMethod = method;
-            method = x =>
+                string source = text1 + text1;
+                KMP client = new KMP(text2);
+                Console.WriteLine(client.Search(source) < source.Length);
+            }
+        }
+
+        public static void TandemRepeatSearch()
+        {
+            while (true)
             {
-                if (previousMethod != null)
-                    previousMethod(x);
-                Console.WriteLine(x + 1);
-            };
+                string source = Console.ReadLine();
+                string pattern = Console.ReadLine();
 
-            method(4);
+                KMP client = new KMP(pattern);
+                int[] result = client.FindAll(source).ToArray();
+                (int index, int count) current = (result[0], 1);
+                (int index, int count) longest = current;
+
+                for (int i = 1; i < result.Length; i++)
+                {
+                    if (result[i] - result[i - 1] == pattern.Length)
+                    {
+                        current.count++;
+                        if (current.count > longest.count)
+                            longest = current;
+                    }
+                    else
+                    {
+                        current.index = result[i];
+                        current.count = 1;
+                    }
+                }
+                Console.WriteLine($"start index:{longest.index}\trepeat:{longest.count}");
+            }
         }
     }
 }
