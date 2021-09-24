@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using BasicDataStrcture;
 
 namespace String
 {
@@ -33,6 +34,30 @@ namespace String
                     return i - M + 1;
             }
             return N;
+        }
+
+        public override int Search(BinaryStdIn input)
+        {
+            Queue_N<char> buffer = new Queue_N<char>();
+            for (int i = 0; i < M; i++)
+                buffer.Enqueue(input.ReadChar(8));
+
+            ulong fp = ComputeHash(string.Join("", buffer));
+            if (fp == _hash)
+                return 0;
+
+            int position = M;
+            while (!input.IsEmpty())
+            {
+                char c = input.ReadChar(8);
+                buffer.Enqueue(c);
+                fp = (fp + Q - buffer.Dequeue() * RM % Q) % Q;
+                fp = (fp * R + c) % Q;
+                position++;
+                if (fp == _hash)
+                    return position - M;
+            }
+            return position;
         }
 
         public override IEnumerable<int> FindAll(string text)

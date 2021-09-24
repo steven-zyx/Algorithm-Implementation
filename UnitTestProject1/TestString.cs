@@ -378,6 +378,9 @@ namespace AlgorithmUnitTest.TestString
         public void TestRabinKarp() => DoSubstringSearch<RabinKarp>();
 
         [TestMethod]
+        public void TestRabinKarp_BinaryStdIn() => DoBinaryStdInSearch<RabinKarp>();
+
+        [TestMethod]
         public void TestRabinKarp_FindAll() => DoSubStringFindAll<RabinKarp>();
 
         [TestMethod]
