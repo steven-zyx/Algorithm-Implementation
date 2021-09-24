@@ -35,10 +35,10 @@ namespace String
                 return text.Length;
         }
 
-        public int Search(BinaryStdIn input)
+        public override int Search(BinaryStdIn input)
         {
             int position = 0, j = 0;
-            while (input.IsEmpty())
+            while (!input.IsEmpty())
             {
                 char c = input.ReadChar(8);
                 j = _dfa[c, j];

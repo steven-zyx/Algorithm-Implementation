@@ -297,7 +297,7 @@ namespace AlgorithmUnitTest.TestString
         {
             string sourceFile = Util.DesktopPath + "sourcefile.txt";
             SubStringSearch client = null;
-            for (int i = 0; i < 100_000; i++)
+            for (int i = 0; i < 2_000; i++)
             {
                 string text = Util.GenerateLongString(_alphabet.Charcters, 1_000);
                 string pattern = Util.GenerateLongString(_alphabet.Charcters, 3);
