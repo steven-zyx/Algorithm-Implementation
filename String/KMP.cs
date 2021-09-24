@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using String;
 
 namespace String
 {
@@ -32,6 +33,20 @@ namespace String
                 return i - M;
             else
                 return text.Length;
+        }
+
+        public int Search(BinaryStdIn input)
+        {
+            int position = 0, j = 0;
+            while (input.IsEmpty())
+            {
+                char c = input.ReadChar(8);
+                j = _dfa[c, j];
+                position++;
+                if (j == M)
+                    return position - M;
+            }
+            return position;
         }
 
         public override IEnumerable<int> FindAll(string text)

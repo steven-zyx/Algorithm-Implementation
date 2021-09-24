@@ -15,7 +15,9 @@ namespace String
 
         public abstract int Search(string text);
 
-        public virtual IEnumerable<int> FindAll(string text)
+        public abstract IEnumerable<int> FindAll(string text);
+
+        public virtual int Search(BinaryStdIn input)
         {
             throw new NotImplementedException();
         }

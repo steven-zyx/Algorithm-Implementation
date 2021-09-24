@@ -293,6 +293,30 @@ namespace AlgorithmUnitTest.TestString
             }
         }
 
+        protected void DoBinaryStdInSearch<T>() where T : SubStringSearch
+        {
+            string sourceFile = Util.DesktopPath + "sourcefile.txt";
+            SubStringSearch client = null;
+            for (int i = 0; i < 100_000; i++)
+            {
+                string text = Util.GenerateLongString(_alphabet.Charcters, 1_000);
+                string pattern = Util.GenerateLongString(_alphabet.Charcters, 3);
+                int correct = text.IndexOf(pattern);
+
+                File.WriteAllText(sourceFile, text);
+                client = Activator.CreateInstance(typeof(T), pattern) as SubStringSearch;
+                using (BinaryStdIn input = new BinaryStdIn(sourceFile))
+                {
+                    int index = client.Search(input);
+                    if (correct >= 0)
+                        Assert.AreEqual(correct, index);
+                    else
+                        Assert.AreEqual(text.Length, index);
+                }
+                File.Delete(sourceFile);
+            }
+        }
+
         protected void DoSubStringFindAll<T>() where T : SubStringSearch
         {
             SubStringSearch client = null;
@@ -326,6 +350,9 @@ namespace AlgorithmUnitTest.TestString
 
         [TestMethod]
         public void TestKMP() => DoSubstringSearch<KMP>();
+
+        [TestMethod]
+        public void TestKMP_BinaryStdIn() => DoBinaryStdInSearch<KMP>();
 
         [TestMethod]
         public void TestKMP_FindAll() => DoSubStringFindAll<KMP>();
