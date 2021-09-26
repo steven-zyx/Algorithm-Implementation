@@ -57,7 +57,8 @@ namespace ConsoleApp1
             //ShowRandomPhoneNumbers();
             //SubStringMatches();
             //ShowCyclicRotation();
-            TandemRepeatSearch();
+            //TandemRepeatSearch();
+            TestGoTo();
             Console.ReadLine();
         }
 
@@ -779,6 +780,22 @@ namespace ConsoleApp1
                 }
                 Console.WriteLine($"start index:{longest.index}\trepeat:{longest.count}");
             }
+        }
+
+        public static void TestGoTo()
+        {
+            string txt = "AABAAA";
+
+            int i = -1;
+            sm: i++;
+            s0: if (txt[i] != 'A') goto sm;
+            s1: if (txt[i] != 'A') goto s0;
+            s2: if (txt[i] != 'B') goto s0;
+            s3: if (txt[i] != 'A') goto s2;
+            s4: if (txt[i] != 'A') goto s0;
+            s5: if (txt[i] != 'A') goto s3;
+
+            Console.WriteLine(i - 8);
         }
     }
 }
