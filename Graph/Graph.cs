@@ -14,17 +14,21 @@ namespace AlgorithmImplementation.Graph
 
         protected Bag_L<int>[] _adjacencyList;
 
-        public Graph(int[] data)
+        public Graph(int v)
         {
-            V = data[0];
+            V = v;
             _adjacencyList = new Bag_L<int>[V];
             for (int i = 0; i < V; i++)
                 _adjacencyList[i] = new Bag_L<int>();
+        }
+
+        public Graph(int[] data) : this(data[0])
+        {
             for (int i = 2; i < data.Length; i += 2)
                 AddEdge(data[i], data[i + 1]);
         }
 
-        public void AddEdge(int v, int w)
+        public virtual void AddEdge(int v, int w)
         {
             _adjacencyList[v].Add(w);
             _adjacencyList[w].Add(v);
