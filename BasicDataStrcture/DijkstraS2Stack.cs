@@ -28,10 +28,13 @@ namespace BasicDataStrcture
                 if (_operation.ContainsKey(part)) operaters.Push(part);
                 else if (part == ")")
                 {
+                    string operater = operaters.Pop();
                     double y = 0;
-                    if (part != "sqrt")
+                    if (operater != "sqrt")
                         y = values.Pop();
-                    values.Push(_operation[operaters.Pop()](values.Pop(), y));
+                    else
+                        ;
+                    values.Push(_operation[operater](values.Pop(), y));
                 }
                 else if (part != "(") values.Push(double.Parse(part));
             }

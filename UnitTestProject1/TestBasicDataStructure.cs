@@ -613,7 +613,7 @@ namespace AlgorithmUnitTest.TestBasicDataStructure
             (string expression, double result)[] source =
             {
                 ("( 1 + 2 )",3),
-                ("sqrt ( ( ( ( 1 + 2 ) / 3 ) * 4 ) + 13 )",5)
+                ("( sqrt ( ( ( ( 1 + 2 ) / 3 ) * 4 ) + 21 ) )",5)
             };
             DijkstraS2Stack client = new DijkstraS2Stack();
             foreach (var pair in source)
