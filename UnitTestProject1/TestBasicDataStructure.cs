@@ -606,5 +606,18 @@ namespace AlgorithmUnitTest.TestBasicDataStructure
             stack.Push(100);
             Assert.ThrowsException<InvalidOperationException>(() => enumerator.MoveNext());
         }
+
+        [TestMethod]
+        public void TestDijkStraS2Stack()
+        {
+            (string expression, double result)[] source =
+            {
+                ("( 1 + 2 )",3),
+                ("sqrt ( ( ( ( 1 + 2 ) / 3 ) * 4 ) + 13 )",5)
+            };
+            DijkstraS2Stack client = new DijkstraS2Stack();
+            foreach (var pair in source)
+                Assert.AreEqual(pair.result, client.Evaluate(pair.expression));
+        }
     }
 }
