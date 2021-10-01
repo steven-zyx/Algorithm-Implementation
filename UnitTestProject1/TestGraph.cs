@@ -9,16 +9,9 @@ using Utils;
 
 namespace AlgorithmUnitTest.TestGraph
 {
-    [TestClass]
-    public class TestGraph
+    public abstract class TestGraph
     {
         protected Graph _simpleG;
-
-        public TestGraph()
-        {
-            int[] data = { 7, 5, 0, 1, 1, 2, 2, 3, 3, 0, 4, 5 };
-            _simpleG = new Graph(data);
-        }
 
         [TestMethod]
         public void TestDFS()
@@ -34,19 +27,16 @@ namespace AlgorithmUnitTest.TestGraph
             Assert.IsFalse(client.Marked[6]);
             Assert.AreEqual(4, client.CountInComponent);
         }
+    }
 
-        [TestMethod]
-        public void TestFindingPaths()
+
+    [TestClass]
+    public class TestUndirectedGraph : TestGraph
+    {
+        public TestUndirectedGraph()
         {
-            FindingPaths client = new FindingPaths(_simpleG, 0);
-            client.Process();
-            Assert.AreEqual(1, client.PathTo(0).Count());
-            Assert.IsTrue(client.PathTo(1).Count() >= 1);
-            Assert.IsTrue(client.PathTo(3).Count() >= 1);
-            Assert.AreEqual(3, client.PathTo(2).Count());
-            Assert.IsNull(client.PathTo(4));
-            Assert.IsNull(client.PathTo(5));
-            Assert.IsNull(client.PathTo(6));
+            int[] data = { 7, 5, 0, 1, 1, 2, 2, 3, 3, 0, 4, 5 };
+            _simpleG = new Graph(data);
         }
 
         [TestMethod]
@@ -57,6 +47,20 @@ namespace AlgorithmUnitTest.TestGraph
             Assert.AreEqual(1, client.PathTo(0).Count());
             Assert.AreEqual(2, client.PathTo(1).Count());
             Assert.AreEqual(2, client.PathTo(3).Count());
+            Assert.AreEqual(3, client.PathTo(2).Count());
+            Assert.IsNull(client.PathTo(4));
+            Assert.IsNull(client.PathTo(5));
+            Assert.IsNull(client.PathTo(6));
+        }
+
+        [TestMethod]
+        public void TestFindingPaths()
+        {
+            FindingPaths client = new FindingPaths(_simpleG, 0);
+            client.Process();
+            Assert.AreEqual(1, client.PathTo(0).Count());
+            Assert.IsTrue(client.PathTo(1).Count() >= 1);
+            Assert.IsTrue(client.PathTo(3).Count() >= 1);
             Assert.AreEqual(3, client.PathTo(2).Count());
             Assert.IsNull(client.PathTo(4));
             Assert.IsNull(client.PathTo(5));
@@ -167,6 +171,30 @@ namespace AlgorithmUnitTest.TestGraph
             Assert.AreEqual(1, graph.Adj("cosmetics").Count());
             Assert.AreEqual(2, graph.Adj("house").Count());
             Assert.AreEqual(2, graph.Adj("food").Count());
+        }
+    }
+
+    [TestClass]
+    public class TestDirectedGraph : TestGraph
+    {
+        public TestDirectedGraph()
+        {
+            int[] data = { 7, 5, 0, 1, 1, 2, 2, 3, 3, 0, 4, 5 };
+            _simpleG = new Digraph(data);
+        }
+
+        [TestMethod]
+        public void TestBFS()
+        {
+            BreadthFirstSearch client = new BreadthFirstSearch(_simpleG, 0);
+            client.Process();
+            Assert.AreEqual(1, client.PathTo(0).Count());
+            Assert.AreEqual(2, client.PathTo(1).Count());
+            Assert.AreEqual(4, client.PathTo(3).Count());
+            Assert.AreEqual(3, client.PathTo(2).Count());
+            Assert.IsNull(client.PathTo(4));
+            Assert.IsNull(client.PathTo(5));
+            Assert.IsNull(client.PathTo(6));
         }
     }
 }
