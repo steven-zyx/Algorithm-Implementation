@@ -784,18 +784,17 @@ namespace ConsoleApp1
 
         public static void TestGoTo()
         {
-            string txt = "AABAAA";
+            string txt = "AABABABAAABAAAB";
+            txt += "AABAAA";
 
-            int i = -1;
-            sm: i++;
-            s0: if (txt[i] != 'A') goto sm;
-            s1: if (txt[i] != 'A') goto s0;
-            s2: if (txt[i] != 'B') goto s0;
-            s3: if (txt[i] != 'A') goto s2;
-            s4: if (txt[i] != 'A') goto s0;
-            s5: if (txt[i] != 'A') goto s3;
-
-            Console.WriteLine(i - 8);
+            int i = 0;
+            s0: if (txt[i++] != 'A') goto s0;
+            s1: if (txt[i++] != 'A') goto s0;
+            s2: if (txt[i++] != 'B') goto s2;
+            s3: if (txt[i++] != 'A') goto s0;
+            s4: if (txt[i++] != 'A') goto s0;
+            s5: if (txt[i++] != 'A') goto s3;
+            Console.WriteLine(i - 6);
         }
     }
 }
