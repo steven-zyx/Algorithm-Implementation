@@ -196,5 +196,32 @@ namespace AlgorithmUnitTest.TestGraph
             Assert.IsNull(client.PathTo(5));
             Assert.IsNull(client.PathTo(6));
         }
+
+        [TestMethod]
+        public void TestMultipleSourceReachability()
+        {
+            int[] sources = { 0 };
+            DirectedDFS client = new DirectedDFS(_simpleG, sources);
+            Assert.IsTrue(client.Marked[0]);
+            Assert.IsTrue(client.Marked[1]);
+            Assert.IsTrue(client.Marked[2]);
+            Assert.IsTrue(client.Marked[3]);
+            Assert.IsFalse(client.Marked[4]);
+            Assert.IsFalse(client.Marked[5]);
+            Assert.IsFalse(client.Marked[6]);
+
+            sources = new int[] { 0, 4, 6 };
+            client = new DirectedDFS(_simpleG, sources);
+            for (int i = 0; i < _simpleG.V; i++)
+                Assert.IsTrue(client.Marked[i]);
+        }
+
+        [TestMethod]
+        public void TestFindCycle()
+        {
+            DirectedCycle client = new DirectedCycle(_simpleG);
+            Assert.IsTrue(client.HasCycle);
+            Assert.AreEqual("01230", string.Join("", client.Cycle));
+        }
     }
 }

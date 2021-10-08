@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BasicDataStrcture
 {
-    public class Stack_N<T> : IStack<T>, IEnumerable
+    public class Stack_N<T> : IStack<T>, IEnumerable<T>
     {
         private Node<T> _top;
         private int _count = 0;
@@ -44,14 +44,19 @@ namespace BasicDataStrcture
             return data;
         }
 
-        public IEnumerator GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
         {
             Node<T> current = _top;
             for (int i = 0; i < _count; i++)
             {
-                yield return current;
+                yield return current.Value;
                 current = current.Next;
             }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
