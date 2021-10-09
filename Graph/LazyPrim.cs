@@ -8,7 +8,7 @@ using BasicDataStrcture;
 
 namespace AlgorithmImplementation.Graph
 {
-    public class LazyPrim
+    public class LazyPrim : IMST
     {
         protected EdgeWeightedGraph _g;
         protected bool[] _marked;

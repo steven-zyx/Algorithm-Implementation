@@ -283,10 +283,8 @@ namespace AlgorithmUnitTest.TestGraph
             _simpleWeG = new EdgeWeightedGraph(8, edges);
         }
 
-        [TestMethod]
-        public void TestLazyPrim()
+        private void FindMST(IMST client)
         {
-            LazyPrim client = new LazyPrim(_simpleWeG);
             HashSet<double> weights = client.Edges().Select(x => x.Weight).ToHashSet();
             Assert.IsTrue(weights.Contains(0.16));
             Assert.IsTrue(weights.Contains(0.19));
@@ -296,6 +294,20 @@ namespace AlgorithmUnitTest.TestGraph
             Assert.IsTrue(weights.Contains(0.35));
             Assert.IsTrue(weights.Contains(0.40));
             Assert.AreEqual(1.81, client.Weight);
+        }
+
+        [TestMethod]
+        public void TestLazyPrim()
+        {
+            LazyPrim client = new LazyPrim(_simpleWeG);
+            FindMST(client);
+        }
+
+        [TestMethod]
+        public void TestEagerPrim()
+        {
+            EagerPrim client = new EagerPrim(_simpleWeG);
+            FindMST(client);
         }
     }
 }

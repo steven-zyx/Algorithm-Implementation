@@ -24,6 +24,8 @@ namespace Sorting
                 _inverse[i] = -1;
         }
 
+        public V Get(int index) => _keys[index];
+
         public void Insert(int k, V item)
         {
             _keys[k] = item;
