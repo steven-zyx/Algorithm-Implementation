@@ -177,6 +177,8 @@ namespace AlgorithmUnitTest.TestGraph
     [TestClass]
     public class TestDirectedGraph : TestGraph
     {
+        protected Digraph _simpleDiG => _simpleG as Digraph;
+
         public TestDirectedGraph()
         {
             int[] data = { 7, 5, 0, 1, 1, 2, 2, 3, 3, 0, 4, 5 };
@@ -201,7 +203,7 @@ namespace AlgorithmUnitTest.TestGraph
         public void TestMultipleSourceReachability()
         {
             int[] sources = { 0 };
-            DirectedDFS client = new DirectedDFS(_simpleG, sources);
+            DirectedDFS client = new DirectedDFS(_simpleDiG, sources);
             Assert.IsTrue(client.Marked[0]);
             Assert.IsTrue(client.Marked[1]);
             Assert.IsTrue(client.Marked[2]);
@@ -211,7 +213,7 @@ namespace AlgorithmUnitTest.TestGraph
             Assert.IsFalse(client.Marked[6]);
 
             sources = new int[] { 0, 4, 6 };
-            client = new DirectedDFS(_simpleG, sources);
+            client = new DirectedDFS(_simpleDiG, sources);
             for (int i = 0; i < _simpleG.V; i++)
                 Assert.IsTrue(client.Marked[i]);
         }
@@ -219,9 +221,36 @@ namespace AlgorithmUnitTest.TestGraph
         [TestMethod]
         public void TestFindCycle()
         {
-            DirectedCycle client = new DirectedCycle(_simpleG);
+            DirectedCycle client = new DirectedCycle(_simpleDiG);
             Assert.IsTrue(client.HasCycle);
             Assert.AreEqual("01230", string.Join("", client.Cycle));
+        }
+
+        [TestMethod]
+        public void TestTopologicalOrder()
+        {
+            _simpleG = new Digraph(new int[] { 7, 5, 0, 1, 1, 2, 2, 3, 4, 5 });
+            Topological client = new Topological(_simpleDiG);
+            Assert.IsTrue(client.IsDAG());
+            Assert.AreEqual("6450123", string.Join("", client.Order()));
+        }
+
+        [TestMethod]
+        public void TestStronglyConncectedComponent()
+        {
+            SCC client = new SCC(_simpleDiG);
+            Assert.AreEqual(4, client.Count);
+            Assert.IsTrue(client.StronglyConnected(0, 1));
+            Assert.IsTrue(client.StronglyConnected(0, 2));
+            Assert.IsTrue(client.StronglyConnected(0, 3));
+            Assert.IsTrue(client.StronglyConnected(1, 2));
+            Assert.IsTrue(client.StronglyConnected(1, 3));
+            Assert.IsTrue(client.StronglyConnected(2, 3));
+            Assert.IsFalse(client.StronglyConnected(4, 5));
+            Assert.IsFalse(client.StronglyConnected(4, 2));
+            Assert.IsFalse(client.StronglyConnected(5, 1));
+            Assert.IsFalse(client.StronglyConnected(6, 0));
+            Assert.IsFalse(client.StronglyConnected(6, 5));
         }
     }
 }

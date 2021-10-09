@@ -9,13 +9,13 @@ namespace AlgorithmImplementation.Graph
 {
     public class DirectedCycle
     {
-        protected Graph _g;
+        protected Digraph _g;
         protected bool[] _marked;
         protected bool[] _onStack;
         protected int[] _edgeTo;
         public Stack_N<int> Cycle { get; protected set; }
 
-        public DirectedCycle(Graph g)
+        public DirectedCycle(Digraph g)
         {
             _g = g;
             _marked = new bool[g.V];

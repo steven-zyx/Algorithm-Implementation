@@ -12,7 +12,7 @@ namespace AlgorithmImplementation.Graph
 
         protected Graph _g;
 
-        public DirectedDFS(Graph g, IEnumerable<int> sources)
+        public DirectedDFS(Digraph g, IEnumerable<int> sources)
         {
             _g = g;
             Marked = new bool[g.V];
