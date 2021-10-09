@@ -556,7 +556,7 @@ namespace AlgorithmUnitTest.TestSorting
             int count = 5_000_000;
             int[] source = Util.GenerateRandomArray(0, count);
 
-            IndexMinPQ pq = new IndexMinPQ(count);
+            IndexMinPQ<int> pq = new IndexMinPQ<int>(count);
             for (int i = 0; i < count; i++)
                 pq.Insert(i, source[i]);
 
@@ -578,7 +578,7 @@ namespace AlgorithmUnitTest.TestSorting
             int[] source = Util.GenerateRandomArray(0, count);
             int[] source2 = Util.GenerateRandomArray(0, count);
 
-            IndexMinPQ pq = new IndexMinPQ(count);
+            IndexMinPQ<int> pq = new IndexMinPQ<int>(count);
             for (int i = 0; i < count; i++)
                 pq.Insert(i, source[i]);
 

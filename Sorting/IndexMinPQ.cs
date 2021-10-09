@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Sorting
 {
-    public class IndexMinPQ
+    public class IndexMinPQ<V> where V : IComparable<V>
     {
         private int[] _pq;
-        private int[] _keys;
+        private V[] _keys;
         private int[] _inverse;
         private int _count = 0;
 
@@ -16,15 +16,15 @@ namespace Sorting
             _pq = new int[maxN + 1];
             for (int i = 0; i < _pq.Length; i++)
                 _pq[i] = -1;
-            _keys = new int[maxN];
-            for (int i = 0; i < _keys.Length; i++)
-                _keys[i] = -1;
+            _keys = new V[maxN];
+            //for (int i = 0; i < _keys.Length; i++)
+            //    _keys[i] = default(V);
             _inverse = new int[maxN];
             for (int i = 0; i < _inverse.Length; i++)
                 _inverse[i] = -1;
         }
 
-        public void Insert(int k, int item)
+        public void Insert(int k, V item)
         {
             _keys[k] = item;
             _pq[++_count] = k;
@@ -32,7 +32,7 @@ namespace Sorting
             Swim(_count);
         }
 
-        public void Change(int k, int item)
+        public void Change(int k, V item)
         {
             _keys[k] = item;
             Swim(_inverse[k]);
@@ -50,7 +50,7 @@ namespace Sorting
             Swim(i);
         }
 
-        public int Min => _keys[MinIndex];
+        public V Min => _keys[MinIndex];
 
         public int MinIndex => _pq[1];
 
@@ -67,7 +67,7 @@ namespace Sorting
 
         public int Size => _count;
 
-        private bool Less(int i, int j) => _keys[_pq[i]] < _keys[_pq[j]];
+        private bool Less(int i, int j) => _keys[_pq[i]].CompareTo(_keys[_pq[j]]) < 0;
 
         private void Exchange(int i, int j)
         {
