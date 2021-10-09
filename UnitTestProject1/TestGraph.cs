@@ -253,4 +253,49 @@ namespace AlgorithmUnitTest.TestGraph
             Assert.IsFalse(client.StronglyConnected(6, 5));
         }
     }
+
+    [TestClass]
+    public class TestWeightedGraph
+    {
+        protected EdgeWeightedGraph _simpleWeG;
+
+        public TestWeightedGraph()
+        {
+            (int, int, double)[] edges = new (int, int, double)[]
+            {
+                (4,5,0.35),
+                (4,7,0.37),
+                (5,7,0.28),
+                (0,7,0.16),
+                (1,5,0.32),
+                (0,4,0.38),
+                (2,3,0.17),
+                (1,7,0.19),
+                (0,2,0.26),
+                (1,2,0.36),
+                (1,3,0.29),
+                (2,7,0.34),
+                (6,2,0.40),
+                (3,6,0.52),
+                (6,0,0.58),
+                (6,4,0.93)
+            };
+            _simpleWeG = new EdgeWeightedGraph(8, edges);
+        }
+
+        [TestMethod]
+        public void TestLazyPrim()
+        {
+            LazyPrim client = new LazyPrim(_simpleWeG);
+            HashSet<double> weights = client.Edges().Select(x => x.Weight).ToHashSet();
+            Assert.IsTrue(weights.Contains(0.16));
+            Assert.IsTrue(weights.Contains(0.19));
+            Assert.IsTrue(weights.Contains(0.26));
+            Assert.IsTrue(weights.Contains(0.17));
+            Assert.IsTrue(weights.Contains(0.28));
+            Assert.IsTrue(weights.Contains(0.35));
+            Assert.IsTrue(weights.Contains(0.40));
+            Assert.AreEqual(1.81, client.Weight);
+        }
+    }
 }
