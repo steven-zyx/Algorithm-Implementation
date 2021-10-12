@@ -58,7 +58,9 @@ namespace ConsoleApp1
             //SubStringMatches();
             //ShowCyclicRotation();
             //TandemRepeatSearch();
-            TestGoTo();
+            //TestGoTo();
+
+            NFA client = new NFA("x(ab|cd)*y");
             Console.ReadLine();
         }
 
