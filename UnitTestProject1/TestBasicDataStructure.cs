@@ -619,5 +619,40 @@ namespace AlgorithmUnitTest.TestBasicDataStructure
             foreach (var pair in source)
                 Assert.AreEqual(pair.result, client.Evaluate(pair.expression));
         }
+
+        [TestMethod]
+        public void TestUnionFind()
+        {
+            UnionFind client = new UnionFind(10);
+            client.Union(4, 3);
+            client.Union(3, 8);
+            client.Union(6, 5);
+            client.Union(9, 4);
+            client.Union(2, 1);
+            client.Union(5, 0);
+            client.Union(7, 2);
+            client.Union(6, 1);
+            client.Union(1, 0);
+            client.Union(6, 7);
+
+            int[][] connectedVertices = new int[2][]
+            {
+                new int[]{4,3,8,9 },
+                new int[]{0,6,5,2,1,7 }
+            };
+            foreach (int[] vertices in connectedVertices)
+                foreach (int vertex in vertices)
+                    foreach (int other in vertices)
+                    {
+                        Assert.IsTrue(client.Connected(vertex, other));
+                        Assert.IsTrue(client.Connected(other, vertex));
+                    }
+            foreach (int vertex in connectedVertices[0])
+                foreach (int other in connectedVertices[1])
+                {
+                    Assert.IsFalse(client.Connected(vertex, other));
+                    Assert.IsFalse(client.Connected(other, vertex));
+                }
+        }
     }
 }
