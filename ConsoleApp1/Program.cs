@@ -58,7 +58,9 @@ namespace ConsoleApp1
             //SubStringMatches();
             //ShowCyclicRotation();
             //TandemRepeatSearch();
-            TestGoTo();
+            //TestGoTo();
+            //ShowKeyWordInContext();
+            ShowLongestRepeatedSubString();
             Console.ReadLine();
         }
 
@@ -795,6 +797,34 @@ namespace ConsoleApp1
             s4: if (txt[i++] != 'A') goto s0;
             s5: if (txt[i++] != 'A') goto s3;
             Console.WriteLine(i - 6);
+        }
+
+        public static void ShowKeyWordInContext()
+        {
+            string text = @"
+it was the best of times it was the worst of times
+it was the age of wisdom it was the age of foolishness
+it was the epoch of belief it was the epoch of incredulity
+it was the season of light it was the season of darkness
+it was the spring of hope it was the winter of despair";
+            text = text.Replace("\r\n", " ");
+
+            KeywordInContext client = new KeywordInContext(text);
+            foreach (var context in client.ContextList("it was the"))
+                Console.WriteLine(context);
+        }
+
+        public static void ShowLongestRepeatedSubString()
+        {
+            string text = @"
+it was the best of times it was the worst of times
+it was the age of wisdom it was the age of foolishness
+it was the epoch of belief it was the epoch of incredulity
+it was the season of light it was the season of darkness
+it was the spring of hope it was the winter of despair";
+            text = text.Replace("\r\n", " ");
+
+            Console.WriteLine(LongestRepeatedSubstring.Find(text));
         }
     }
 }

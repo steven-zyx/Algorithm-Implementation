@@ -16,6 +16,13 @@ namespace Searching
             _count = 0;
         }
 
+        public BinarySearchSET(K[] keys)
+        {
+            _count = keys.Length;
+            _keys = new K[_count * 2];
+            Array.Copy(keys, _keys, _count);
+        }
+
         public virtual void Put(K key)
         {
             int index = Rank(key);
