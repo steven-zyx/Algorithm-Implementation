@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Sorting
 {
-    public class QuickSort<T> where T : IComparable
+    public class QuickSort<T> where T : IComparable<T>
     {
         private T[] _source;
 

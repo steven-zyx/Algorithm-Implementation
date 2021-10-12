@@ -309,5 +309,12 @@ namespace AlgorithmUnitTest.TestGraph
             EagerPrim client = new EagerPrim(_simpleWeG);
             FindMST(client);
         }
+
+        [TestMethod]
+        public void TestKruskal()
+        {
+            Kruskal client = new Kruskal(_simpleWeG);
+            FindMST(client);
+        }
     }
 }
