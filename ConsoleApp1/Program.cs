@@ -60,7 +60,7 @@ namespace ConsoleApp1
             //TandemRepeatSearch();
             //TestGoTo();
             //ShowKeyWordInContext();
-            ShowLongestRepeatedSubString();
+            //ShowLongestRepeatedSubString();
             Console.ReadLine();
         }
 

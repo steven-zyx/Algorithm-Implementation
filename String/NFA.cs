@@ -11,28 +11,32 @@ namespace String
     public class NFA
     {
         protected Digraph _g;
+        protected DirectedDFS _MSC;
+        protected string _regex;
 
         public NFA(string regex)
         {
-            if (regex[0] != '(' || regex[regex.Length - 1] != ')')
-                regex = '(' + regex + ')';
+            _regex = regex;
+            if (_regex[0] != '(' || _regex[_regex.Length - 1] != ')')
+                _regex = '(' + _regex + ')';
 
-            int l = regex.Length;
+            int l = _regex.Length;
             _g = new Digraph(l + 1);
 
             Stack_N<int> op = new Stack_N<int>();
             int leftP = 0;
             for (int i = 0; i < l; i++)
-            {
-                switch (regex[i])
+                switch (_regex[i])
                 {
                     case '(':
                         op.Push(i);
+                        _g.AddEdge(i, i + 1);
                         break;
                     case ')':
-                        if (op.Peek() == '|')
+                        if (_regex[op.Peek()] == '|')
                             _g.AddEdge(op.Pop(), i);
                         leftP = op.Pop();
+                        _g.AddEdge(i, i + 1);
                         break;
                     case '|':
                         _g.AddEdge(op.Peek(), i + 1);
@@ -40,19 +44,29 @@ namespace String
                         break;
                     case '*':
                         _g.AddEdge(i, leftP);
+                        _g.AddEdge(i, i + 1);
                         break;
                     default:
                         leftP = i;
                         break;
                 }
-                if (regex[i] != '|')
-                    _g.AddEdge(i, i + 1);
-            }
         }
 
         public bool Recognize(string text)
         {
-            throw new NotImplementedException();
+            List<int> source = new List<int>(_g.V) { 0 };
+            foreach (char c in text)
+            {
+                _MSC = new DirectedDFS(_g, source);
+                source.Clear();
+                for (int i = 0; i < _g.V - 1; i++)
+                    if (_MSC.Marked[i] && _regex[i] == c)
+                        source.Add(i + 1);
+                if (source.Count == 0)
+                    return false;
+            }
+            _MSC = new DirectedDFS(_g, source);
+            return _MSC.Marked[_g.V - 1];
         }
     }
 }

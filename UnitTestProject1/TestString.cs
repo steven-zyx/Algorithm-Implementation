@@ -119,6 +119,19 @@ namespace AlgorithmUnitTest.TestString
             client.InplaceSort(source, 30);
             Assert.IsTrue(source.IsSorted());
         }
+
+        [TestMethod]
+        public void TestRegex()
+        {
+            NFA client = new NFA("X(AB|CD)*Y");
+            string[] matchCase = { "XABY", "XCDY", "XABABCDCDY", "XCDABABCDY" };
+            string[] unmatchCase = { "AB", "XY" };
+
+            foreach (string text in matchCase)
+                Assert.IsTrue(client.Recognize(text));
+            foreach (string text in unmatchCase)
+                Assert.IsFalse(client.Recognize(text));
+        }
     }
 
     [TestClass]
