@@ -44,6 +44,8 @@ namespace BasicDataStrcture
             return data;
         }
 
+        public T Peek() => _top.Value;
+
         public IEnumerator<T> GetEnumerator()
         {
             Node<T> current = _top;
