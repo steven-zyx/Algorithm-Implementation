@@ -16,25 +16,84 @@ namespace String
 
         public NFA(string regex)
         {
+            _regex = regex;
+
+            //Handle specified set: [abc]
             List<char> characters = new List<char>();
-            for (int i = 0; i < regex.Length; i++)
-                if (regex[i] == '[')
+            for (int i = 0; i < _regex.Length; i++)
+            {
+                if (_regex[i] == '[')
                 {
                     characters.Add('(');
                     i++;
-                    while (regex[i + 1] != ']')
+                    while (_regex[i + 1] != ']')
                     {
-                        characters.Add(regex[i]);
+                        characters.Add(_regex[i]);
                         characters.Add('|');
                         i++;
                     }
-                    characters.Add(regex[i]);
+                    characters.Add(_regex[i]);
                     i++;
                     characters.Add(')');
+                    continue;
                 }
-                else
-                    characters.Add(regex[i]);
+                characters.Add(_regex[i]);
+            }
             _regex = new string(characters.ToArray());
+
+            //Handle multiple times: {3},{3,5},{3,}
+            characters.Clear();
+            int leftP = 0;
+            Stack<int> leftBrackets = new Stack<int>();
+            for (int i = 0; i < _regex.Length; i++)
+            {
+                if (_regex[i] == '(')
+                    leftBrackets.Push(i);
+                else if (_regex[i] == ')')
+                    leftP = leftBrackets.Pop();
+                else if (_regex[i] == '{')
+                {
+                    int start = i - 1;
+                    if (_regex[i - 1] == ')')
+                        start = leftP;
+                    int end = i - 1;
+
+                    i++;
+                    int nextPosition = _regex.IndexOfAny(new char[] { ',', '}' }, i);
+                    int dupRepeat = int.Parse(_regex.Substring(i, nextPosition - i));
+                    for (int n = 1; n < dupRepeat; n++)
+                        for (int j = start; j <= end; j++)
+                            characters.Add(_regex[j]);
+
+                    i = nextPosition;
+                    if (_regex[i] != '}')
+                    {
+                        i++;
+                        if (_regex[i] == '}')
+                        {
+                            for (int j = start; j <= end; j++)
+                                characters.Add(_regex[j]);
+                            characters.Add('*');
+                        }
+                        else
+                        {
+                            nextPosition = _regex.IndexOf('}', i);
+                            int defRepeat = int.Parse(_regex.Substring(i, nextPosition - i));
+                            for (int n = 0; n < defRepeat - dupRepeat; n++)
+                            {
+                                for (int j = start; j <= end; j++)
+                                    characters.Add(_regex[j]);
+                                characters.Add('?');
+                            }
+                            i = nextPosition;
+                        }
+                    }
+                    continue;
+                }
+                characters.Add(_regex[i]);
+            }
+            _regex = new string(characters.ToArray());
+
             if (_regex[0] != '(' || _regex[_regex.Length - 1] != ')')
                 _regex = '(' + _regex + ')';
 
@@ -42,7 +101,6 @@ namespace String
             _g = new Digraph(l + 1);
 
             Stack_N<int> op = new Stack_N<int>();
-            int leftP = 0;
             for (int i = 0; i < l; i++)
                 switch (_regex[i])
                 {

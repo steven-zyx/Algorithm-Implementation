@@ -159,6 +159,34 @@ namespace AlgorithmUnitTest.TestString
             DoTestRegex("A(BC)?D",
                 new string[] { "ABCD", "AD" },
                 new string[] { "ABC", "A", "BCD", "D", "", "AXYD" });
+
+            DoTestRegex("AB{3}C",
+                new string[] { "ABBBC" },
+                new string[] { "ABBC", "ABC", "AC", "AB", "ABB", "BC", "BBC", "" });
+
+            DoTestRegex("A(BC){2}D",
+                new string[] { "ABCBCD" },
+                new string[] { "AD", "ABCD", "ABCBCBCD", "ABCBC", "BCBCD" });
+
+            DoTestRegex("AB{3,}C",
+                new string[] { "ABBBC", "ABBBBBBBBBC" },
+                new string[] { "ABC", "ABBC", "AC", "" });
+
+            DoTestRegex("A(BC){2,}D",
+                new string[] { "ABCBCD", "ABCBCBCBCD" },
+                new string[] { "ABCD", "ABC", "BCD", "AD", "" });
+
+            DoTestRegex("AB{3,5}C",
+                new string[] { "ABBBC", "ABBBBC", "ABBBBBC" },
+                new string[] { "ABC", "ABBC", "ABBBBBBC", "AB", "BC", "AC", "" });
+
+            DoTestRegex("A(BC){2,4}D",
+                new string[] { "ABCBCD", "ABCBCBCD", "ABCBCBCBCD" },
+                new string[] { "ABCD", "ABCBCBCBCBCD", "AD", "ABC", "BCD", "" });
+
+            DoTestRegex("A[BCD]{2,4}E",
+                new string[] { "ABCE", "ADCBE", "ABCDBE", "ACCCCE", "ADDE" },
+                new string[] { "AE", "ABCDBCE", "ABE", "ACE", "ABCDBCDE", "", "ABC", "CDE" });
         }
     }
 
