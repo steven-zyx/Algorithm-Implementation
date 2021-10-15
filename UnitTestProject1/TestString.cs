@@ -120,17 +120,25 @@ namespace AlgorithmUnitTest.TestString
             Assert.IsTrue(source.IsSorted());
         }
 
+        private void DoTestRegex(string regex, string[] matchCases, string[] unmatchCases)
+        {
+            NFA client = new NFA(regex);
+            foreach (string text in matchCases)
+                Assert.IsTrue(client.Recognize(text));
+            foreach (string text in unmatchCases)
+                Assert.IsFalse(client.Recognize(text));
+        }
+
         [TestMethod]
         public void TestRegex()
         {
-            NFA client = new NFA("X(AB|CD)*Y");
-            string[] matchCase = { "XABY", "XCDY", "XABABCDCDY", "XCDABABCDY" };
-            string[] unmatchCase = { "AB", "XY" };
+            DoTestRegex("X(AB|CD)*Y",
+                new string[] { "XABY", "XCDY", "XABABCDCDY", "XCDABABCDY", "XY" },
+                new string[] { "AB", "XXYY", "Y", "X", "XAB", "ABY" });
 
-            foreach (string text in matchCase)
-                Assert.IsTrue(client.Recognize(text));
-            foreach (string text in unmatchCase)
-                Assert.IsFalse(client.Recognize(text));
+            DoTestRegex("X(A|B|C)*Y",
+                new string[] { "XABCBCACBY", "XY", "XAAAAAAAAY" },
+                new string[] { "XDY", "XA", "AY", "" });
         }
     }
 

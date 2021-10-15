@@ -33,17 +33,23 @@ namespace String
                         _g.AddEdge(i, i + 1);
                         break;
                     case ')':
-                        if (_regex[op.Peek()] == '|')
-                            _g.AddEdge(op.Pop(), i);
+                        List<int> pipes = new List<int>();
+                        while (_regex[op.Peek()] == '|')
+                            pipes.Add(op.Pop());
                         leftP = op.Pop();
+                        foreach (int pipe in pipes)
+                        {
+                            _g.AddEdge(leftP, pipe + 1);
+                            _g.AddEdge(pipe, i);
+                        }
                         _g.AddEdge(i, i + 1);
                         break;
                     case '|':
-                        _g.AddEdge(op.Peek(), i + 1);
                         op.Push(i);
                         break;
                     case '*':
                         _g.AddEdge(i, leftP);
+                        _g.AddEdge(leftP, i);
                         _g.AddEdge(i, i + 1);
                         break;
                     default:
