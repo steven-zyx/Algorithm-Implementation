@@ -139,6 +139,10 @@ namespace AlgorithmUnitTest.TestString
             DoTestRegex("X(A|B|C)*Y",
                 new string[] { "XABCBCACBY", "XY", "XAAAAAAAAY" },
                 new string[] { "XDY", "XA", "AY", "" });
+
+            DoTestRegex("A.*B",
+                new string[] { "AXFSDFVCVSDFB", "AB", "AAAAABBBBB" },
+                new string[] { "B", "A", "1B", "A1", "" });
         }
     }
 

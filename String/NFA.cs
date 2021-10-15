@@ -66,7 +66,7 @@ namespace String
                 _MSC = new DirectedDFS(_g, source);
                 source.Clear();
                 for (int i = 0; i < _g.V - 1; i++)
-                    if (_MSC.Marked[i] && _regex[i] == c)
+                    if (_MSC.Marked[i] && (_regex[i] == c || _regex[i] == '.'))
                         source.Add(i + 1);
                 if (source.Count == 0)
                     return false;
