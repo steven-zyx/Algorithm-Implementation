@@ -52,6 +52,10 @@ namespace String
                         _g.AddEdge(leftP, i);
                         _g.AddEdge(i, i + 1);
                         break;
+                    case '+':
+                        _g.AddEdge(i, leftP);
+                        _g.AddEdge(i, i + 1);
+                        break;
                     default:
                         leftP = i;
                         break;
