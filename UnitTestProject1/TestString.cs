@@ -147,6 +147,10 @@ namespace AlgorithmUnitTest.TestString
             DoTestRegex("A.+B",
                 new string[] { "AXFSDFVCVSDFB", "A1B", "AAAAABBBBB" },
                 new string[] { "AB", "B", "A", "1B", "A1", "" });
+
+            DoTestRegex("A[XYZ]B",
+                new string[] { "AXB", "AYB", "AZB" },
+                new string[] { "AB", "A1B", "AX", "XB", "X", "" });
         }
     }
 

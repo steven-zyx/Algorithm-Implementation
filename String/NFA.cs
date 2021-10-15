@@ -16,7 +16,25 @@ namespace String
 
         public NFA(string regex)
         {
-            _regex = regex;
+            List<char> characters = new List<char>();
+            for (int i = 0; i < regex.Length; i++)
+                if (regex[i] == '[')
+                {
+                    characters.Add('(');
+                    i++;
+                    while (regex[i + 1] != ']')
+                    {
+                        characters.Add(regex[i]);
+                        characters.Add('|');
+                        i++;
+                    }
+                    characters.Add(regex[i]);
+                    i++;
+                    characters.Add(')');
+                }
+                else
+                    characters.Add(regex[i]);
+            _regex = new string(characters.ToArray());
             if (_regex[0] != '(' || _regex[_regex.Length - 1] != ')')
                 _regex = '(' + _regex + ')';
 
