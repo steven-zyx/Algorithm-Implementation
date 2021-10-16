@@ -61,6 +61,7 @@ namespace ConsoleApp1
             //TestGoTo();
             //ShowKeyWordInContext();
             //ShowLongestRepeatedSubString();
+            ShowRegexProof();
             Console.ReadLine();
         }
 
@@ -825,6 +826,31 @@ it was the spring of hope it was the winter of despair";
             text = text.Replace("\r\n", " ");
 
             Console.WriteLine(LongestRepeatedSubstring.Find(text));
+        }
+
+        public static void ShowRegexProof()
+        {
+            Console.WriteLine("Enter regex:");
+            NFAProof client = new NFAProof(Console.ReadLine());
+
+            while (true)
+            {
+                Console.WriteLine("\nEnter text:");
+                string text = Console.ReadLine();
+
+                IEnumerable<int> proof = client.ShowProof(text);
+                if (proof != null)
+                {
+                    foreach (int stage in proof)
+                        Console.Write(stage + " ");
+                    Console.WriteLine();
+                    foreach (char c in client.ShowProofCharacters(text))
+                        Console.Write(c + " ");
+                    Console.WriteLine();
+                }
+                else
+                    Console.WriteLine("unmatched.");
+            }
         }
     }
 }

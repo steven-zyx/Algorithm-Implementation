@@ -169,7 +169,7 @@ namespace String
                 }
         }
 
-        public bool Recognize(string text)
+        public virtual bool Recognize(string text)
         {
             List<int> source = new List<int>(_g.V) { 0 };
             foreach (char c in text)

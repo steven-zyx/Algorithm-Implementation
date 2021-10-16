@@ -203,6 +203,7 @@ namespace AlgorithmUnitTest.TestString
             DoTestRegex("A[^b-y09]B",
                 new string[] { "AaB", "AzB", "A1B", "A8B" },
                 new string[] { "AbB", "AeB", "AyB", "A0B", "A9B", "AB", "", "Aa", "aB" });
+
         }
     }
 
