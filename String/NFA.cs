@@ -13,6 +13,7 @@ namespace String
         protected Digraph _g;
         protected DirectedDFS _MSC;
         protected string _regex;
+        protected readonly (int, int)[] _charRange = { (48, 57), (65, 90), (97, 122) };
 
         public NFA(string regex)
         {
@@ -26,14 +27,40 @@ namespace String
                 {
                     characters.Add('(');
                     i++;
-                    while (_regex[i + 1] != ']')
+
+                    bool complement = false;
+                    if (_regex[i] == '^')
                     {
-                        characters.Add(_regex[i]);
-                        characters.Add('|');
+                        complement = true;
                         i++;
                     }
-                    characters.Add(_regex[i]);
-                    i++;
+
+                    bool[] set = new bool[256];
+                    while (_regex[i] != ']')
+                    {
+                        if (_regex[i] == '-')
+                            for (int n = _regex[i - 1] + 1; n < _regex[i + 1]; n++)
+                                set[n] = true;
+                        else
+                            set[_regex[i]] = true;
+                        i++;
+                    }
+
+                    if (complement)
+                        foreach (var range in _charRange)
+                            for (int n = range.Item1; n <= range.Item2; n++)
+                                set[n] = !set[n];
+                    foreach (var range in _charRange)
+                        for (int n = range.Item1; n <= range.Item2; n++)
+                        {
+                            if (set[n])
+                            {
+                                characters.Add((char)n);
+                                characters.Add('|');
+                            }
+                        }
+                    characters.RemoveAt(characters.Count - 1);
+
                     characters.Add(')');
                     continue;
                 }

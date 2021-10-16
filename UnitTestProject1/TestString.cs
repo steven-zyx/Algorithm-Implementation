@@ -187,6 +187,22 @@ namespace AlgorithmUnitTest.TestString
             DoTestRegex("A[BCD]{2,4}E",
                 new string[] { "ABCE", "ADCBE", "ABCDBE", "ACCCCE", "ADDE" },
                 new string[] { "AE", "ABCDBCE", "ABE", "ACE", "ABCDBCDE", "", "ABC", "CDE" });
+
+            DoTestRegex("A[0-9]B",
+                new string[] { "A1B", "A9B" },
+                new string[] { "AB", "ACB", "A1", "1B", "" });
+
+            DoTestRegex("A[0b-x1]B",
+                new string[] { "A1B", "A0B", "AbB", "AxB", "AeB" },
+                new string[] { "A2B", "A9B", "AaB", "AzB", "AAB", "AZB", "A0", "0B", "AB", "" });
+
+            DoTestRegex("A[^BC]D",
+                new string[] { "A1D", "A9D", "ADD", "AZD" },
+                new string[] { "ABD", "ACD", "A1", "1D", "AD", "" });
+
+            DoTestRegex("A[^b-y09]B",
+                new string[] { "AaB", "AzB", "A1B", "A8B" },
+                new string[] { "AbB", "AeB", "AyB", "A0B", "A9B", "AB", "", "Aa", "aB" });
         }
     }
 
