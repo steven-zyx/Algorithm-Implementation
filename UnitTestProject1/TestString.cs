@@ -203,7 +203,39 @@ namespace AlgorithmUnitTest.TestString
             DoTestRegex("A[^b-y09]B",
                 new string[] { "AaB", "AzB", "A1B", "A8B" },
                 new string[] { "AbB", "AeB", "AyB", "A0B", "A9B", "AB", "", "Aa", "aB" });
+        }
 
+        [TestMethod]
+        public void TestOneLevelREs()
+        {
+            string character = @"[^|*()]";
+            string closure = @"([^|*()]+\*)";
+            string pipe = @"(\|[^|*()]+)";
+            string brackets = string.Format(@"\(({0}|{1})+({0}|{1}|{2})*\)", character, closure, pipe);
+            string regex = string.Format(@"^(\|?{3}\*?|{0}|{1}|{2})*$", character, closure, pipe, brackets);
+            Regex client = new Regex(regex);
+
+            string[] matchCases = new string[]
+            {
+                @"(0.*1)*",
+                @"(1.*0)*",
+                @"01.*|(01|10)*"
+            };
+            string[] unmatchCases = new string[]
+            {
+                @"0(|0)1",
+                @"0(0|)1",
+                @"01.**10",
+                @"01.||10",
+                @"01.|*10",
+                @"01(01|(10|1))",
+                @"01(*1)10"
+            };
+
+            foreach (string text in matchCases)
+                Assert.IsTrue(client.IsMatch(text));
+            foreach (string text in unmatchCases)
+                Assert.IsFalse(client.IsMatch(text));
         }
     }
 
