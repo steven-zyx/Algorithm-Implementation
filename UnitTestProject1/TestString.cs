@@ -129,6 +129,15 @@ namespace AlgorithmUnitTest.TestString
                 Assert.IsFalse(client.Recognize(text));
         }
 
+        private void DoTestRegex2(string regex, string[] matchCases, string[] unmatchCases)
+        {
+            Regex client = new Regex(regex);
+            foreach (string text in matchCases)
+                Assert.IsTrue(client.IsMatch(text));
+            foreach (string text in unmatchCases)
+                Assert.IsFalse(client.IsMatch(text));
+        }
+
         [TestMethod]
         public void TestRegex()
         {
@@ -213,7 +222,6 @@ namespace AlgorithmUnitTest.TestString
             string pipe = @"(\|[^|*()]+)";
             string brackets = string.Format(@"\(({0}|{1})+({0}|{1}|{2})*\)", character, closure, pipe);
             string regex = string.Format(@"^(\|?{3}\*?|{0}|{1}|{2})*$", character, closure, pipe, brackets);
-            Regex client = new Regex(regex);
 
             string[] matchCases = new string[]
             {
@@ -232,10 +240,19 @@ namespace AlgorithmUnitTest.TestString
                 @"01(*1)10"
             };
 
-            foreach (string text in matchCases)
-                Assert.IsTrue(client.IsMatch(text));
-            foreach (string text in unmatchCases)
-                Assert.IsFalse(client.IsMatch(text));
+            DoTestRegex2(regex, matchCases, unmatchCases);
+        }
+
+        [TestMethod]
+        public void ChallengingREs()
+        {
+            DoTestRegex2(@"^1?(01|0)*$",
+                new string[] { "01010000", "", "0000" },
+                new string[] { "110", "011", "11" });
+
+            DoTestRegex2(@"^((1?0{2,})|(0{1,}1?0{1,})|(0{2,}1?))$",
+                new string[] { "001", "010", "100", "0000001000000", "000001", "100000" },
+                new string[] { "11", "1100", "10" });
         }
     }
 
