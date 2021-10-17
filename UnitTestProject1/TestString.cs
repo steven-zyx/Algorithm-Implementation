@@ -253,6 +253,25 @@ namespace AlgorithmUnitTest.TestString
             DoTestRegex2(@"^((1?0{2,})|(0{1,}1?0{1,})|(0{2,}1?))$",
                 new string[] { "001", "010", "100", "0000001000000", "000001", "100000" },
                 new string[] { "11", "1100", "10" });
+
+            DoTestRegex2(@"^(1.)*1?$",
+                new string[] { "1010", "1111", "10101", "111010", "" },
+                new string[] { "0000", "0101", "1000" });
+
+            string no11 = "(^10.*1$)";
+            string no111 = "(^11.+1$)|(^1.+11$)";
+            string others = "(^0.*$)|(^1.*0$)|(^$)";
+            DoTestRegex2(no11 + "|" + no111 + "|" + others,
+                new string[] { "011", "110", "0111", "1110", "1111", "101", "1011", "1101", "11011", "11101110" },
+                new string[] { "11", "111" });
+        }
+
+        [TestMethod]
+        public void TestBinaryDivisibility()
+        {
+            DoTestRegex2(@"^.*0$",
+                new string[] { "1100", "0110", "11110" },
+                new string[] { "", "111", "001", "1000001" });
         }
     }
 
