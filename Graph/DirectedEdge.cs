@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AlgorithmImplementation.Graph
 {
-    public class DirectedEdge
+    public class DirectedEdge : IComparable<DirectedEdge>
     {
         public int From { get; }
         public int To { get; }
@@ -18,6 +18,16 @@ namespace AlgorithmImplementation.Graph
             From = v;
             To = w;
             Weight = weight;
+        }
+
+        public int CompareTo(DirectedEdge other)
+        {
+            if (Weight < other.Weight)
+                return -1;
+            else if (Weight > other.Weight)
+                return 0;
+            else
+                return 1;
         }
     }
 }

@@ -29,7 +29,6 @@ namespace AlgorithmUnitTest.TestGraph
         }
     }
 
-
     [TestClass]
     public class TestUndirectedGraph : TestGraph
     {
@@ -315,6 +314,59 @@ namespace AlgorithmUnitTest.TestGraph
         {
             Kruskal client = new Kruskal(_simpleWeG);
             FindMST(client);
+        }
+    }
+
+    [TestClass]
+    public class TestDirectedWeightedGraph
+    {
+        protected EdgeWeightedDigraph _simpleWeDiG;
+
+        public TestDirectedWeightedGraph()
+        {
+            (int, int, double)[] edges = new (int, int, double)[]
+            {
+                (4, 5, 0.35),
+                (5, 4, 0.35),
+                (4, 7, 0.37),
+                (5, 7, 0.28),
+                (7, 5, 0.28),
+                (5, 1, 0.32),
+                (0, 4, 0.38),
+                (0, 2, 0.26),
+                (7, 3, 0.39),
+                (1, 3, 0.29),
+                (2, 7, 0.34),
+                (6, 2, 0.40),
+                (3, 6, 0.52),
+                (6, 0, 0.58),
+                (6, 4, 0.93)
+            };
+            _simpleWeDiG = new EdgeWeightedDigraph(8, edges);
+        }
+
+        [TestMethod]
+        public void TestShortestPath()
+        {
+            ShortestPath client = new ShortestPath(_simpleWeDiG, 0);
+            (int vertex, double dist, string route)[] answer =
+            {
+                (1, 1.05, "045"),
+                (2, 0.26, "0"),
+                (3, 0.99, "027"),
+                (4, 0.38, "0"),
+                (5, 0.73, "04"),
+                (6, 1.51, "0273"),
+                (7, 0.60, "02")
+            };
+
+            foreach (var pair in answer)
+            {
+                double dist = Math.Round(client.DistTo[pair.vertex], 10);
+                Assert.AreEqual(pair.dist, dist);
+                IEnumerable<int> route = client.PathTo(pair.vertex).Select(x => x.From);
+                Assert.AreEqual(pair.route, string.Join("", route));
+            }
         }
     }
 }
