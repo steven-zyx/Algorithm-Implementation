@@ -368,5 +368,17 @@ namespace AlgorithmUnitTest.TestGraph
                 Assert.AreEqual(pair.route, string.Join("", route));
             }
         }
+
+        [TestMethod]
+        public void TestShortestPath_Source_Sink()
+        {
+            ShortestPath_Source_Sink client = new ShortestPath_Source_Sink(_simpleWeDiG, 0, 6);
+
+            double dist = Math.Round(client.DistTo[6], 10);
+            Assert.AreEqual(1.51, dist);
+
+            IEnumerable<int> route = client.PathTo(6).Select(x => x.From);
+            Assert.AreEqual("0273", string.Join("", route));
+        }
     }
 }

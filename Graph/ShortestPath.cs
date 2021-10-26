@@ -28,6 +28,11 @@ namespace AlgorithmImplementation.Graph
             _pq = new IndexMinPQ<double>(g.V);
             _g = g;
 
+            Process(s);
+        }
+
+        protected virtual void Process(int s)
+        {
             Relax(s);
             while (_pq.Size > 0)
                 Relax(_pq.DelMin());
