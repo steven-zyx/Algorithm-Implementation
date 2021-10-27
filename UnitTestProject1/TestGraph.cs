@@ -456,5 +456,41 @@ namespace AlgorithmUnitTest.TestGraph
                 Assert.AreEqual(pair.route, string.Join("", route));
             }
         }
+
+        [TestMethod]
+        public void TestParallelJobScheduling()
+        {
+            (int job, int duration, int[] followings)[] problem =
+            {
+                (0, 41, new int[] { 1, 7, 9}),
+                (1, 51, new int[] { 2 }),
+                (2, 50, null),
+                (3, 36, null),
+                (4, 38, null),
+                (5, 45, null),
+                (6, 21, new int[] { 3, 8 }),
+                (7, 32, new int[] { 3, 8 }),
+                (8, 32, new int[] { 2 }),
+                (9, 29, new int[] { 4, 6 })
+            };
+
+            ParallelJobScheduling client = new ParallelJobScheduling(problem);
+
+            (int job, int startTime)[] answer =
+            {
+                (0, 0),
+                (1, 41),
+                (2, 123),
+                (3, 91),
+                (4, 70),
+                (5, 0),
+                (6, 70),
+                (7, 41),
+                (8, 91),
+                (9, 41)
+            };
+            foreach (var pair in answer)
+                Assert.AreEqual(pair.startTime, client.StartTime(pair.job));
+        }
     }
 }
