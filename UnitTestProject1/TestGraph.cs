@@ -322,6 +322,8 @@ namespace AlgorithmUnitTest.TestGraph
     {
         protected EdgeWeightedDigraph _simpleWeDiG;
 
+        protected EdgeWeightedDigraph _simpleWeDAG;
+
         public TestDirectedWeightedGraph()
         {
             (int, int, double)[] edges = new (int, int, double)[]
@@ -343,6 +345,24 @@ namespace AlgorithmUnitTest.TestGraph
                 (6, 4, 0.93)
             };
             _simpleWeDiG = new EdgeWeightedDigraph(8, edges);
+
+            edges = new (int, int, double)[]
+            {
+                (5, 4, 0.35),
+                (4, 7, 0.37),
+                (5, 7, 0.28),
+                (5, 1, 0.32),
+                (4, 0, 0.38),
+                (0, 2, 0.26),
+                (3, 7, 0.39),
+                (1, 3, 0.29),
+                (7, 2, 0.34),
+                (6, 2, 0.40),
+                (3, 6, 0.52),
+                (6, 0, 0.58),
+                (6, 4, 0.93)
+            };
+            _simpleWeDAG = new EdgeWeightedDigraph(8, edges);
         }
 
         [TestMethod]
@@ -379,6 +399,34 @@ namespace AlgorithmUnitTest.TestGraph
 
             IEnumerable<int> route = client.PathTo(6).Select(x => x.From);
             Assert.AreEqual("0273", string.Join("", route));
+        }
+
+        [TestMethod]
+        public void TestShortestPath_DAG()
+        {
+            ShortestPath_DAG client = new ShortestPath_DAG(_simpleWeDAG, 5);
+            Assert.IsTrue(client.IsDAG);
+
+            (int vertex, double dist, string route)[] answer =
+            {
+                (0, 0.73, "54"),
+                (1, 0.32, "5"),
+                (2, 0.62, "57"),
+                (3, 0.61, "51"),
+                (4, 0.35, "5"),
+                (5, 0.00, ""),
+                (6, 1.13, "513"),
+                (7, 0.28, "5")
+            };
+
+            foreach (var pair in answer)
+            {
+                double dist = Math.Round(client.DistTo[pair.vertex], 10);
+                Assert.AreEqual(pair.dist, dist);
+
+                IEnumerable<int> route = client.PathTo(pair.vertex).Select(x => x.From);
+                Assert.AreEqual(pair.route, string.Join("", route));
+            }
         }
     }
 }

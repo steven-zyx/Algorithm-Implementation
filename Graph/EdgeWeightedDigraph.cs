@@ -43,5 +43,14 @@ namespace AlgorithmImplementation.Graph
         }
 
         public IEnumerable<DirectedEdge> Adj(int v) => _adjacencyList[v];
+
+        public Digraph Convert()
+        {
+            Digraph dg = new Digraph(V);
+            foreach (Bag_L<DirectedEdge> edges in _adjacencyList)
+                foreach (DirectedEdge e in edges)
+                    dg.AddEdge(e.From, e.To);
+            return dg;
+        }
     }
 }

@@ -38,7 +38,7 @@ namespace AlgorithmImplementation.Graph
                     _edgeTo[w] = v;
                     DFS(w);
                 }
-                else if (_onStack[v])
+                else if (_onStack[w])
                 {
                     Cycle = new Stack_N<int>();
                     Cycle.Push(w);
