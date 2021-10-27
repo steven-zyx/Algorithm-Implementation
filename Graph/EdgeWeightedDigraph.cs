@@ -23,17 +23,19 @@ namespace AlgorithmImplementation.Graph
                 _adjacencyList[i] = new Bag_L<DirectedEdge>();
         }
 
-        public EdgeWeightedDigraph(int v, IEnumerable<(int, int, double)> edges) : this(v)
+        public EdgeWeightedDigraph((int, int, double)[] edges) : this(edges.Length)
         {
             foreach (var edge in edges)
                 AddEdge(edge.Item1, edge.Item2, edge.Item3);
         }
 
-        public void AddEdge(int v, int w, double weight)
+        public void AddEdge(DirectedEdge e)
         {
-            _adjacencyList[v].Add(new DirectedEdge(v, w, weight));
+            _adjacencyList[e.From].Add(e);
             E++;
         }
+
+        public void AddEdge(int v, int w, double weight) => AddEdge(new DirectedEdge(v, w, weight));
 
         public IEnumerable<DirectedEdge> Edges()
         {

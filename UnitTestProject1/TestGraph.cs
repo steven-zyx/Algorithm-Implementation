@@ -324,6 +324,10 @@ namespace AlgorithmUnitTest.TestGraph
 
         protected EdgeWeightedDigraph _simpleWeDAG;
 
+        protected EdgeWeightedDigraph _simpleWeDig_N;
+
+        protected EdgeWeightedDigraph _simpleWeDig_NC;
+
         public TestDirectedWeightedGraph()
         {
             (int, int, double)[] edges = new (int, int, double)[]
@@ -344,7 +348,7 @@ namespace AlgorithmUnitTest.TestGraph
                 (6, 0, 0.58),
                 (6, 4, 0.93)
             };
-            _simpleWeDiG = new EdgeWeightedDigraph(8, edges);
+            _simpleWeDiG = new EdgeWeightedDigraph(edges);
 
             edges = new (int, int, double)[]
             {
@@ -362,7 +366,30 @@ namespace AlgorithmUnitTest.TestGraph
                 (6, 0, 0.58),
                 (6, 4, 0.93)
             };
-            _simpleWeDAG = new EdgeWeightedDigraph(8, edges);
+            _simpleWeDAG = new EdgeWeightedDigraph(edges);
+
+            edges = new (int, int, double)[]
+            {
+                (4, 5, 0.35 ),
+                (5, 4, 0.35 ),
+                (4, 7, 0.37 ),
+                (5, 7, 0.28 ),
+                (7, 5, 0.28 ),
+                (5, 1, 0.32 ),
+                (0, 4, 0.38 ),
+                (0, 2, 0.26 ),
+                (7, 3, 0.39 ),
+                (1, 3, 0.29 ),
+                (2, 7, 0.34 ),
+                (6, 2, -1.20),
+                (3, 6, 0.52 ),
+                (6, 0, -1.40),
+                (6, 4, -1.25)
+            };
+            _simpleWeDig_N = new EdgeWeightedDigraph(edges);
+
+            edges[1].Item3 = -0.66;
+            _simpleWeDig_NC = new EdgeWeightedDigraph(edges);
         }
 
         [TestMethod]
@@ -491,6 +518,49 @@ namespace AlgorithmUnitTest.TestGraph
             };
             foreach (var pair in answer)
                 Assert.AreEqual(pair.startTime, client.StartTime(pair.job));
+        }
+
+        [TestMethod]
+        public void TestShortestPath_NativeCycle()
+        {
+            ShortestPath_NagetiveCycle client = new ShortestPath_NagetiveCycle(_simpleWeDig_N, 0);
+            (int vertex, double dist, string route)[] answer =
+            {
+                (1, 0.93, "0273645"),
+                (5, 0.61, "027364"),
+                (4, 0.26, "02736"),
+                (6, 1.51, "0273"),
+                (3, 0.99, "027"),
+                (7, 0.60, "02"),
+                (2, 0.26, "0"),
+                (0, 0.00, "")
+            };
+
+            foreach (var triple in answer)
+            {
+                double dist = Math.Round(client.DistTo[triple.vertex], 10);
+                Assert.AreEqual(triple.dist, dist);
+
+                IEnumerable<int> route = client.PathTo(triple.vertex).Select(x => x.From);
+                Assert.AreEqual(triple.route, string.Join("", route));
+            }
+
+            client = new ShortestPath_NagetiveCycle(_simpleWeDig_NC, 0);
+            Assert.IsTrue(client.HasCycle);
+            string cycleRoute = string.Join("", client.Cycle);
+            Assert.AreEqual("454", cycleRoute);
+        }
+
+        [TestMethod]
+        public void TestNegetiveCycleDetection()
+        {
+            NegetiveCycleDetection client = new NegetiveCycleDetection(_simpleWeDig_NC);
+            Assert.IsTrue(client.HasCycle);
+            string cycleRoute = string.Join("", client.Cycle);
+            Assert.AreEqual("454", cycleRoute);
+
+            client = new NegetiveCycleDetection(_simpleWeDig_N);
+            Assert.IsFalse(client.HasCycle);
         }
     }
 }
