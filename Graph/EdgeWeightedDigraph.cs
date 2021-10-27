@@ -15,7 +15,7 @@ namespace AlgorithmImplementation.Graph
 
         protected Bag_L<DirectedEdge>[] _adjacencyList;
 
-        protected EdgeWeightedDigraph(int v)
+        internal EdgeWeightedDigraph(int v)
         {
             V = v;
             _adjacencyList = new Bag_L<DirectedEdge>[V];
@@ -29,7 +29,7 @@ namespace AlgorithmImplementation.Graph
                 AddEdge(edge.Item1, edge.Item2, edge.Item3);
         }
 
-        protected void AddEdge(int v, int w, double weight)
+        public void AddEdge(int v, int w, double weight)
         {
             _adjacencyList[v].Add(new DirectedEdge(v, w, weight));
             E++;

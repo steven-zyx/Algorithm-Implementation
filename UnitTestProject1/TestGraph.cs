@@ -428,5 +428,33 @@ namespace AlgorithmUnitTest.TestGraph
                 Assert.AreEqual(pair.route, string.Join("", route));
             }
         }
+
+        [TestMethod]
+        public void TestLongestPath_DAG()
+        {
+            LongestPath_DAG client = new LongestPath_DAG(_simpleWeDAG, 5);
+            Assert.IsTrue(client.IsDAG);
+
+            (int vertex, double dist, string route)[] answer =
+            {
+                (0, 2.44, "51364"),
+                (1, 0.32, "5"),
+                (2, 2.77, "513647"),
+                (3, 0.61, "51"),
+                (4, 2.06, "5136"),
+                (5, 0.00, ""),
+                (6, 1.13, "513"),
+                (7, 2.43, "51364")
+            };
+
+            foreach (var pair in answer)
+            {
+                double dist = Math.Round(client.DistTo(pair.vertex), 10);
+                Assert.AreEqual(pair.dist, dist);
+
+                IEnumerable<int> route = client.PathTo(pair.vertex).Select(x => x.From);
+                Assert.AreEqual(pair.route, string.Join("", route));
+            }
+        }
     }
 }
