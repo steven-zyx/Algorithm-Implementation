@@ -6,14 +6,8 @@ using System.Threading.Tasks;
 
 namespace AlgorithmImplementation.Graph
 {
-    public class ShortestPath_NagetiveCycle
+    public class ShortestPath_NagetiveCycle : ShortestPath4WeightedDigraph
     {
-        protected EdgeWeightedDigraph _g;
-
-        public double[] DistTo { get; protected set; }
-
-        protected DirectedEdge[] _edgeTo;
-
         protected Queue<int> _freshV;
 
         protected int _cost;
@@ -24,15 +18,8 @@ namespace AlgorithmImplementation.Graph
 
         public IEnumerable<int> Cycle => _client.Cycle;
 
-        public ShortestPath_NagetiveCycle(EdgeWeightedDigraph g, int s)
+        public ShortestPath_NagetiveCycle(EdgeWeightedDigraph g, int s) : base(g, s)
         {
-            _g = g;
-            DistTo = new double[_g.V];
-            for (int i = 0; i < g.V; i++)
-                DistTo[i] = double.PositiveInfinity;
-            DistTo[s] = 0;
-            _edgeTo = new DirectedEdge[g.V];
-
             _cost = 0;
             _client = new NegetiveCycleDetection(_g);
 
@@ -65,16 +52,6 @@ namespace AlgorithmImplementation.Graph
                 if (++_cost % _g.V == 0)
                     DetectCycle();
             }
-        }
-
-        public bool HasPathTo(int v) => DistTo[v] != double.PositiveInfinity;
-
-        public IEnumerable<DirectedEdge> PathTo(int v)
-        {
-            Stack<DirectedEdge> edges = new Stack<DirectedEdge>();
-            for (; _edgeTo[v] != null; v = _edgeTo[v].From)
-                edges.Push(_edgeTo[v]);
-            return edges;
         }
     }
 }

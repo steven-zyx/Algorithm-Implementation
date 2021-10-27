@@ -500,9 +500,6 @@ namespace AlgorithmUnitTest.TestGraph
                 (8, 32, new int[] { 2 }),
                 (9, 29, new int[] { 4, 6 })
             };
-
-            ParallelJobScheduling client = new ParallelJobScheduling(problem);
-
             (int job, int startTime)[] answer =
             {
                 (0, 0),
@@ -516,8 +513,32 @@ namespace AlgorithmUnitTest.TestGraph
                 (8, 91),
                 (9, 41)
             };
+
+            ParallelJobScheduling_Simple client_S = new ParallelJobScheduling_Simple(problem);
             foreach (var pair in answer)
-                Assert.AreEqual(pair.startTime, client.StartTime(pair.job));
+                Assert.AreEqual(pair.startTime, client_S.StartTime(pair.job));
+
+            (int job, int time, int relativeTo)[] deadlines =
+            {
+                (2, 12, 4),
+                (2, 70, 7)
+            };
+            ParallelJobScheduling_Deadlines client_D = new ParallelJobScheduling_Deadlines(problem, deadlines);
+            answer[4].startTime = 111;
+            answer[7].startTime = 53;
+            foreach (var pair in answer)
+                Assert.AreEqual(pair.startTime, client_D.StartTime(pair.job));
+
+            (int job, int time, int relativeTo)[] deadlines2 =
+            {
+                (2, 12, 4),
+                (2, 70, 7),
+                (4, 80, 0)
+            };
+            client_D = new ParallelJobScheduling_Deadlines(problem, deadlines2);
+            Assert.IsTrue(client_D.HasCycle);
+            HashSet<int> cycle = client_D.Cycle.ToHashSet();
+            Assert.IsTrue(cycle.IsSupersetOf(new int[] { 0, 10, 9, 19, 6, 16, 8, 18, 2, 4, }));
         }
 
         [TestMethod]

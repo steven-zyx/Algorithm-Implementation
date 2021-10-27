@@ -46,7 +46,7 @@ namespace AlgorithmImplementation.Graph
                     _distTo[w] = _distTo[v] + e.Weight;
                     DFS(w);
                 }
-                else if (_onStack[w] && _distTo[v] + e.Weight <= _distTo[w])
+                else if (_onStack[w] && _distTo[v] + e.Weight < _distTo[w])
                 {
                     Cycle = new Stack<int>();
                     Cycle.Push(w);

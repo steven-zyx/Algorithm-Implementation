@@ -7,27 +7,13 @@ using Sorting;
 
 namespace AlgorithmImplementation.Graph
 {
-    public class ShortestPath
+    public class ShortestPath : ShortestPath4WeightedDigraph
     {
-        public double[] DistTo { get; protected set; }
-        protected DirectedEdge[] _edgeTo { get; set; }
-
         protected IndexMinPQ<double> _pq;
 
-        protected EdgeWeightedDigraph _g;
-
-
-        public ShortestPath(EdgeWeightedDigraph g, int s)
+        public ShortestPath(EdgeWeightedDigraph g, int s) : base(g, s)
         {
-            DistTo = new double[g.V];
-            for (int i = 0; i < g.V; i++)
-                DistTo[i] = double.PositiveInfinity;
-            DistTo[s] = 0;
-
-            _edgeTo = new DirectedEdge[g.V];
             _pq = new IndexMinPQ<double>(g.V);
-            _g = g;
-
             Process(s);
         }
 
@@ -54,16 +40,6 @@ namespace AlgorithmImplementation.Graph
                         _pq.Insert(w, DistTo[w]);
                 }
             }
-        }
-
-        public bool HasPathTo(int v) => DistTo[v] != double.PositiveInfinity;
-
-        public IEnumerable<DirectedEdge> PathTo(int v)
-        {
-            Stack<DirectedEdge> route = new Stack<DirectedEdge>();
-            for (; _edgeTo[v] != null; v = _edgeTo[v].From)
-                route.Push(_edgeTo[v]);
-            return route;
         }
     }
 }

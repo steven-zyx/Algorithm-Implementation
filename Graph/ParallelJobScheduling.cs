@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace AlgorithmImplementation.Graph
 {
-    public class ParallelJobScheduling
+    public abstract class ParallelJobScheduling
     {
-        protected LongestPath_DAG _client;
+        protected LongestPath4WeightedDigraph _client;
 
-        public ParallelJobScheduling((int job, int duration, int[] followings)[] problem)
+        protected (EdgeWeightedDigraph g, int s) Construct(
+            (int job, int duration, int[] followings)[] problem,
+            (int job, int time, int relativeTo)[] deadlines)
         {
             int n = problem.Length;
             int s = 2 * n, t = 2 * n + 1;
@@ -27,7 +29,11 @@ namespace AlgorithmImplementation.Graph
                         g.AddEdge(w, u, 0);
             }
 
-            _client = new LongestPath_DAG(g, s);
+            if (deadlines != null)
+                foreach (var deadline in deadlines)
+                    g.AddEdge(deadline.job, deadline.relativeTo, -deadline.time);
+
+            return (g, s);
         }
 
         public int StartTime(int job)

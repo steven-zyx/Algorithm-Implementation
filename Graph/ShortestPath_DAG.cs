@@ -6,29 +6,15 @@ using System.Threading.Tasks;
 
 namespace AlgorithmImplementation.Graph
 {
-    public class ShortestPath_DAG
+    public class ShortestPath_DAG : ShortestPath4WeightedDigraph
     {
-        protected EdgeWeightedDigraph _g;
-        public double[] DistTo { get; protected set; }
-
-        public DirectedEdge[] _edgeTo;
-
-        public bool IsDAG { get; }
-
-        public ShortestPath_DAG(EdgeWeightedDigraph g, int s)
+        public ShortestPath_DAG(EdgeWeightedDigraph g, int s) : base(g, s)
         {
-            _g = g;
             Topological client = new Topological(_g.Convert());
             IsDAG = client.IsDAG();
 
             if (IsDAG)
             {
-                DistTo = new double[_g.V];
-                for (int i = 0; i < _g.V; i++)
-                    DistTo[i] = double.PositiveInfinity;
-                DistTo[s] = 0;
-                _edgeTo = new DirectedEdge[_g.V];
-
                 int[] order = client.Order().ToArray();
                 int start = 0;
                 for (; start < _g.V; start++)
@@ -52,14 +38,6 @@ namespace AlgorithmImplementation.Graph
             }
         }
 
-        public bool HashPathTo(int v) => DistTo[v] != double.PositiveInfinity;
-
-        public IEnumerable<DirectedEdge> PathTo(int v)
-        {
-            Stack<DirectedEdge> route = new Stack<DirectedEdge>();
-            for (; _edgeTo[v] != null; v = _edgeTo[v].From)
-                route.Push(_edgeTo[v]);
-            return route;
-        }
+        public bool IsDAG { get; }
     }
 }
