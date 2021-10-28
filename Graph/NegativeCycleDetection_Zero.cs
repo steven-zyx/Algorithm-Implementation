@@ -6,20 +6,13 @@ using System.Threading.Tasks;
 
 namespace AlgorithmImplementation.Graph
 {
-    public class NegetiveCycleDetection : NegativeCycleDetectionBase
+    public class NegativeCycleDetection_Zero : NegativeCycleDetectionBase
     {
-        public NegetiveCycleDetection(EdgeWeightedDigraph g)
+        public NegativeCycleDetection_Zero(EdgeWeightedDigraph g)
         {
             Initialize(g);
-            for (int i = 0; i < g.V; i++)
-                _distTo[i] = double.PositiveInfinity;
-
-            for (int v = 0; v < g.V; v++)
-                if (_distTo[v] == double.PositiveInfinity)
-                {
-                    _distTo[v] = 0;
-                    DFS(v);
-                }
+            for (int v = 0; v < g.V && !HasCycle; v++)
+                DFS(v);
         }
 
         protected void DFS(int v)
@@ -48,6 +41,5 @@ namespace AlgorithmImplementation.Graph
             }
             _onStack[v] = false;
         }
-
     }
 }

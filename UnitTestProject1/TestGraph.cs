@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System.IO;
 using Utils;
+using System.Reflection;
 
 namespace AlgorithmUnitTest.TestGraph
 {
@@ -348,7 +349,7 @@ namespace AlgorithmUnitTest.TestGraph
                 (6, 0, 0.58),
                 (6, 4, 0.93)
             };
-            _simpleWeDiG = new EdgeWeightedDigraph(edges);
+            _simpleWeDiG = new EdgeWeightedDigraph(8, edges);
 
             edges = new (int, int, double)[]
             {
@@ -366,7 +367,7 @@ namespace AlgorithmUnitTest.TestGraph
                 (6, 0, 0.58),
                 (6, 4, 0.93)
             };
-            _simpleWeDAG = new EdgeWeightedDigraph(edges);
+            _simpleWeDAG = new EdgeWeightedDigraph(8, edges);
 
             edges = new (int, int, double)[]
             {
@@ -386,16 +387,16 @@ namespace AlgorithmUnitTest.TestGraph
                 (6, 0, -1.40),
                 (6, 4, -1.25)
             };
-            _simpleWeDig_N = new EdgeWeightedDigraph(edges);
+            _simpleWeDig_N = new EdgeWeightedDigraph(8, edges);
 
             edges[1].Item3 = -0.66;
-            _simpleWeDig_NC = new EdgeWeightedDigraph(edges);
+            _simpleWeDig_NC = new EdgeWeightedDigraph(8, edges);
         }
 
         [TestMethod]
         public void TestShortestPath()
         {
-            ShortestPath client = new ShortestPath(_simpleWeDiG, 0);
+            WeightedDijkstra client = new WeightedDijkstra(_simpleWeDiG, 0);
             (int vertex, double dist, string route)[] answer =
             {
                 (1, 1.05, "045"),
@@ -419,7 +420,7 @@ namespace AlgorithmUnitTest.TestGraph
         [TestMethod]
         public void TestShortestPath_Source_Sink()
         {
-            ShortestPath_Source_Sink client = new ShortestPath_Source_Sink(_simpleWeDiG, 0, 6);
+            WeightedDijkstra_Source_Sink client = new WeightedDijkstra_Source_Sink(_simpleWeDiG, 0, 6);
 
             double dist = Math.Round(client.DistTo[6], 10);
             Assert.AreEqual(1.51, dist);
@@ -572,16 +573,20 @@ namespace AlgorithmUnitTest.TestGraph
             Assert.AreEqual("454", cycleRoute);
         }
 
-        [TestMethod]
-        public void TestNegetiveCycleDetection()
+        private void DoTestNegetiveCycleDetection(Func<EdgeWeightedDigraph, NegativeCycleDetectionBase> fCreateInstance)
         {
-            NegetiveCycleDetection client = new NegetiveCycleDetection(_simpleWeDig_NC);
+            NegativeCycleDetectionBase client = fCreateInstance(_simpleWeDig_NC);
             Assert.IsTrue(client.HasCycle);
-            string cycleRoute = string.Join("", client.Cycle);
-            Assert.AreEqual("454", cycleRoute);
+            Assert.IsTrue(client.Cycle.ToHashSet().IsSupersetOf(new int[] { 4, 5 }));
 
-            client = new NegetiveCycleDetection(_simpleWeDig_N);
+            client = fCreateInstance(_simpleWeDig_N);
             Assert.IsFalse(client.HasCycle);
         }
+
+        [TestMethod]
+        public void TestNegetiveCycleDetection() => DoTestNegetiveCycleDetection(x => new NegetiveCycleDetection(x));
+
+        [TestMethod]
+        public void TestNegativeCycleDetection_Zero() => DoTestNegetiveCycleDetection(x => new NegativeCycleDetection_Zero(x));
     }
 }

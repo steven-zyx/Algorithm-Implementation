@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace AlgorithmImplementation.Graph
 {
-    public class ShortestPath_Source_Sink : ShortestPath
+    public class WeightedDijkstra_Source_Sink : WeightedDijkstra
     {
         protected int _t;
 
-        public ShortestPath_Source_Sink(EdgeWeightedDigraph g, int s, int t) : base(g, s)
+        public WeightedDijkstra_Source_Sink(EdgeWeightedDigraph g, int s, int t) : base(g, s)
         {
             _t = t;
         }

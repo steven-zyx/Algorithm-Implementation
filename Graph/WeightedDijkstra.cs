@@ -7,11 +7,11 @@ using Sorting;
 
 namespace AlgorithmImplementation.Graph
 {
-    public class ShortestPath : ShortestPath4WeightedDigraph
+    public class WeightedDijkstra : ShortestPath4WeightedDigraph
     {
         protected IndexMinPQ<double> _pq;
 
-        public ShortestPath(EdgeWeightedDigraph g, int s) : base(g, s)
+        public WeightedDijkstra(EdgeWeightedDigraph g, int s) : base(g, s)
         {
             _pq = new IndexMinPQ<double>(g.V);
             Process(s);
