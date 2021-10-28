@@ -12,6 +12,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using String;
 using AlgorithmImplementation.Application;
+using AlgorithmImplementation.Graph;
 
 namespace ConsoleApp1
 {
@@ -61,7 +62,8 @@ namespace ConsoleApp1
             //TestGoTo();
             //ShowKeyWordInContext();
             //ShowLongestRepeatedSubString();
-            ShowRegexProof();
+            //ShowRegexProof();
+            ShowArbitrage();
             Console.ReadLine();
         }
 
@@ -851,6 +853,80 @@ it was the spring of hope it was the winter of despair";
                 else
                     Console.WriteLine("unmatched.");
             }
+        }
+
+        public static void ShowArbitrage()
+        {
+            Dictionary<int, string> indexName = new Dictionary<int, string>()
+            {
+                { 0, "USD" },
+                { 1, "EUR" },
+                { 2, "GBP" },
+                { 3, "CHF" },
+                { 4, "CAD" },
+            };
+            double[,] conversion = new double[5, 5]
+            {
+                { 1, 0.741, 0.657, 1.061, 1.005 },
+                { 1.349, 1, 0.888, 1.433, 1.366 },
+                { 1.521, 1.126, 1, 1.614, 1.538 },
+                { 0.942, 0.698, 0.619, 1, 0.953 },
+                { 0.995, 0.732, 0.650, 1.049, 1 }
+            };
+
+            StringBuilder sb = new StringBuilder("Conversion rate table:\r\n");
+            int row = conversion.GetLength(0);
+            int column = conversion.GetLength(1);
+            for (int r = 0; r < row; r++)
+            {
+                sb.Append(indexName[r]);
+                sb.Append(":\t");
+                for (int c = 0; c < column; c++)
+                {
+                    sb.Append(conversion[r, c]);
+                    sb.Append("\t");
+                }
+                sb.Append("\r\n");
+            }
+            Console.WriteLine(sb.ToString());
+
+            Arbitrage client = new Arbitrage(conversion);
+            sb = new StringBuilder("\r\nArbitrage:\r\n");
+            foreach (int index in client.Route)
+            {
+                sb.Append(" --> ");
+                sb.Append(indexName[index]);
+            }
+            Console.WriteLine(sb.ToString());
+
+            sb = new StringBuilder("Value:\r\n1");
+            int[] route = client.Route.ToArray();
+            double arbiRate = 1;
+            for (int i = 1; i < route.Length; i++)
+            {
+                double rate = conversion[route[i - 1], route[i]];
+                arbiRate *= rate;
+                sb.Append(" * ");
+                sb.Append(Math.Round(rate, 3));
+            }
+            sb.Append(" = ");
+            sb.Append(Math.Round(arbiRate, 5));
+            Console.WriteLine(sb.ToString());
+
+            sb = new StringBuilder("Path length:\r\n(0");
+            double nLength = 0;
+            for (int i = 1; i < route.Length; i++)
+            {
+                double rate = conversion[route[i - 1], route[i]];
+                double pathLength = Math.Log(rate);
+                nLength += pathLength;
+                sb.Append(") + (");
+                sb.Append(Math.Round(pathLength, 3));
+            }
+            sb.Append(") = (");
+            sb.Append(Math.Round(nLength, 5));
+            sb.Append(")");
+            Console.WriteLine(sb.ToString());
         }
     }
 }

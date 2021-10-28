@@ -538,7 +538,7 @@ namespace AlgorithmUnitTest.TestGraph
             client_D = new ParallelJobScheduling_Deadlines(problem, deadlines2);
             Assert.IsTrue(client_D.HasCycle);
             HashSet<int> cycle = client_D.Cycle.ToHashSet();
-            Assert.IsTrue(cycle.IsSupersetOf(new int[] { 0, 10, 9, 19, 6, 16, 8, 18, 2, 4, }));
+            Assert.IsTrue(cycle.IsSupersetOf(new int[] { 0, 10, 2, 4, }));
         }
 
         [TestMethod]
