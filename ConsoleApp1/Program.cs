@@ -63,7 +63,8 @@ namespace ConsoleApp1
             //ShowKeyWordInContext();
             //ShowLongestRepeatedSubString();
             //ShowRegexProof();
-            ShowArbitrage();
+            //ShowArbitrage();
+            ShowMaxFlow();
             Console.ReadLine();
         }
 
@@ -874,59 +875,27 @@ it was the spring of hope it was the winter of despair";
                 { 0.995, 0.732, 0.650, 1.049, 1 }
             };
 
-            StringBuilder sb = new StringBuilder("Conversion rate table:\r\n");
-            int row = conversion.GetLength(0);
-            int column = conversion.GetLength(1);
-            for (int r = 0; r < row; r++)
-            {
-                sb.Append(indexName[r]);
-                sb.Append(":\t");
-                for (int c = 0; c < column; c++)
-                {
-                    sb.Append(conversion[r, c]);
-                    sb.Append("\t");
-                }
-                sb.Append("\r\n");
-            }
-            Console.WriteLine(sb.ToString());
-
             Arbitrage client = new Arbitrage(conversion);
-            sb = new StringBuilder("\r\nArbitrage:\r\n");
-            foreach (int index in client.Route)
-            {
-                sb.Append(" --> ");
-                sb.Append(indexName[index]);
-            }
-            Console.WriteLine(sb.ToString());
+            StringBuilder sb = client.ShowResult(conversion, indexName);
+            Console.WriteLine(sb);
+        }
 
-            sb = new StringBuilder("Value:\r\n1");
-            int[] route = client.Route.ToArray();
-            double arbiRate = 1;
-            for (int i = 1; i < route.Length; i++)
+        public static void ShowMaxFlow()
+        {
+            (int from, int to, int cap)[] problem =
             {
-                double rate = conversion[route[i - 1], route[i]];
-                arbiRate *= rate;
-                sb.Append(" * ");
-                sb.Append(Math.Round(rate, 3));
-            }
-            sb.Append(" = ");
-            sb.Append(Math.Round(arbiRate, 5));
-            Console.WriteLine(sb.ToString());
-
-            sb = new StringBuilder("Path length:\r\n(0");
-            double nLength = 0;
-            for (int i = 1; i < route.Length; i++)
-            {
-                double rate = conversion[route[i - 1], route[i]];
-                double pathLength = Math.Log(rate);
-                nLength += pathLength;
-                sb.Append(") + (");
-                sb.Append(Math.Round(pathLength, 3));
-            }
-            sb.Append(") = (");
-            sb.Append(Math.Round(nLength, 5));
-            sb.Append(")");
-            Console.WriteLine(sb.ToString());
+                (0, 2, 3),
+                (0, 1, 2),
+                (1, 4, 1),
+                (1, 3, 3),
+                (2, 3, 1),
+                (2, 4, 1),
+                (3, 5, 2),
+                (4, 5, 3)
+            };
+            FordFolkerson client = new FordFolkerson(problem, 0, 5);
+            StringBuilder sb = client.ShowResult();
+            Console.WriteLine(sb);
         }
     }
 }
