@@ -513,6 +513,7 @@ namespace ConsoleApp1
             else
                 return (double)a / b;
         }
+
         public static double Divide(decimal a, long b)
         {
             if (b == 0)
