@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AlgorithmImplementation.Graph
 {
-    public class ShortestPath_NagetiveCycle : ShortestPath4WeightedDigraph
+    public class BellmanFord : ShortestPath4WeightedDigraph
     {
         protected Queue<int> _freshV;
 
@@ -18,7 +18,7 @@ namespace AlgorithmImplementation.Graph
 
         public IEnumerable<int> Cycle => _client.Cycle;
 
-        public ShortestPath_NagetiveCycle(EdgeWeightedDigraph g, int s) : base(g, s)
+        public BellmanFord(EdgeWeightedDigraph g, int s) : base(g, s)
         {
             _cost = 0;
             _client = new NegetiveCycleDetection(_g);

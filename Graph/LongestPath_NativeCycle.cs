@@ -11,11 +11,11 @@ namespace AlgorithmImplementation.Graph
         public LongestPath_NativeCycle(EdgeWeightedDigraph g, int s)
         {
             EdgeWeightedDigraph nagetiveG = Negate(g);
-            _client = new ShortestPath_NagetiveCycle(nagetiveG, s);
+            _client = new BellmanFord(nagetiveG, s);
         }
 
-        public bool HasCycle => (_client as ShortestPath_NagetiveCycle).HasCycle;
+        public bool HasCycle => (_client as BellmanFord).HasCycle;
 
-        public IEnumerable<int> Cycle => (_client as ShortestPath_NagetiveCycle).Cycle;
+        public IEnumerable<int> Cycle => (_client as BellmanFord).Cycle;
     }
 }

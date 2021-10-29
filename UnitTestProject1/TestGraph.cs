@@ -545,7 +545,7 @@ namespace AlgorithmUnitTest.TestGraph
         [TestMethod]
         public void TestShortestPath_NativeCycle()
         {
-            ShortestPath_NagetiveCycle client = new ShortestPath_NagetiveCycle(_simpleWeDig_N, 0);
+            BellmanFord client = new BellmanFord(_simpleWeDig_N, 0);
             (int vertex, double dist, string route)[] answer =
             {
                 (1, 0.93, "0273645"),
@@ -567,7 +567,7 @@ namespace AlgorithmUnitTest.TestGraph
                 Assert.AreEqual(triple.route, string.Join("", route));
             }
 
-            client = new ShortestPath_NagetiveCycle(_simpleWeDig_NC, 0);
+            client = new BellmanFord(_simpleWeDig_NC, 0);
             Assert.IsTrue(client.HasCycle);
             string cycleRoute = string.Join("", client.Cycle);
             Assert.AreEqual("454", cycleRoute);
