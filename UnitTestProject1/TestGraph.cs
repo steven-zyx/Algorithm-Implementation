@@ -178,11 +178,15 @@ namespace AlgorithmUnitTest.TestGraph
     public class TestDirectedGraph : TestGraph
     {
         protected Digraph _simpleDiG => _simpleG as Digraph;
+        protected Digraph _simpleDAG;
 
         public TestDirectedGraph()
         {
             int[] data = { 7, 5, 0, 1, 1, 2, 2, 3, 3, 0, 4, 5 };
             _simpleG = new Digraph(data);
+
+            data = new int[] { 13, 15, 0, 1, 0, 5, 0, 6, 2, 0, 2, 3, 3, 5, 5, 4, 6, 4, 6, 9, 7, 6, 8, 7, 9, 10, 9, 11, 9, 12, 11, 12 };
+            _simpleDAG = new Digraph(data);
         }
 
         [TestMethod]
@@ -229,8 +233,7 @@ namespace AlgorithmUnitTest.TestGraph
         [TestMethod]
         public void TestTopologicalOrder()
         {
-            _simpleG = new Digraph(new int[] { 7, 5, 0, 1, 1, 2, 2, 3, 4, 5 });
-            Topological client = new Topological(_simpleDiG);
+            Topological client = new Topological(_simpleDAG);
             Assert.IsTrue(client.IsDAG());
             Assert.AreEqual("6450123", string.Join("", client.Order()));
         }
@@ -251,6 +254,26 @@ namespace AlgorithmUnitTest.TestGraph
             Assert.IsFalse(client.StronglyConnected(5, 1));
             Assert.IsFalse(client.StronglyConnected(6, 0));
             Assert.IsFalse(client.StronglyConnected(6, 5));
+        }
+
+        [TestMethod]
+        public void TestLongestPathDAG()
+        {
+            LongestPath_DAG_Unweighted client = new LongestPath_DAG_Unweighted(_simpleDAG, 0, 12);
+            Assert.AreEqual("0691112", string.Join("", client.Path));
+        }
+
+        [TestMethod]
+        public void TestLCAofDAG()
+        {
+            LCAofDAG client = new LCAofDAG(_simpleDAG, 1, 3);
+            Assert.AreEqual(2, client.LCA);
+
+            client = new LCAofDAG(_simpleDAG, 12, 10);
+            Assert.AreEqual(9, client.LCA);
+
+            client = new LCAofDAG(_simpleDAG, 3, 7);
+
         }
     }
 
