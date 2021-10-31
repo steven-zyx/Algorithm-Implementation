@@ -16,13 +16,24 @@ namespace AlgorithmImplementation.Graph
 
         public Topological(Digraph g)
         {
+            Init(g);
+            for (int v = 0; v < _g.V; v++)
+                if (!_marked[v])
+                    DFS(v);
+        }
+
+        public Topological(Digraph g, int s)
+        {
+            Init(g);
+            DFS(s);
+        }
+
+        protected void Init(Digraph g)
+        {
             _client = new DirectedCycle(g);
             _g = g;
             _marked = new bool[g.V];
             _order = new Stack_N<int>();
-            for (int v = 0; v < _g.V; v++)
-                if (!_marked[v])
-                    DFS(v);
         }
 
         protected void DFS(int v)

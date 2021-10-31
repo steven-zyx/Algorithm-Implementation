@@ -235,7 +235,7 @@ namespace AlgorithmUnitTest.TestGraph
         {
             Topological client = new Topological(_simpleDAG);
             Assert.IsTrue(client.IsDAG());
-            Assert.AreEqual("6450123", string.Join("", client.Order()));
+            Assert.AreEqual("8723015649101112", string.Join("", client.Order()));
         }
 
         [TestMethod]
@@ -263,18 +263,18 @@ namespace AlgorithmUnitTest.TestGraph
             Assert.AreEqual("0691112", string.Join("", client.Path));
         }
 
-        [TestMethod]
-        public void TestLCAofDAG()
+        private void DoTestLCAofDAG(Func<int, int, int> fCalculate)
         {
-            LCAofDAG client = new LCAofDAG(_simpleDAG, 1, 3);
-            Assert.AreEqual(2, client.LCA);
-
-            client = new LCAofDAG(_simpleDAG, 12, 10);
-            Assert.AreEqual(9, client.LCA);
-
-            client = new LCAofDAG(_simpleDAG, 3, 7);
-
+            Assert.AreEqual(2, fCalculate(1, 3));
+            Assert.AreEqual(9, fCalculate(12, 10));
+            Assert.AreEqual(-1, fCalculate(3, 7));
         }
+
+        [TestMethod]
+        public void TestLCAofDAG() => DoTestLCAofDAG((v1, v2) => (new LCAofDAG(_simpleDAG, v1, v2)).LCA);
+
+        [TestMethod]
+        public void TestLCAofDAG_2() => DoTestLCAofDAG((v1, v2) => (new LCAofDAG_2(_simpleDAG, v1, v2)).LCA);
     }
 
     [TestClass]
