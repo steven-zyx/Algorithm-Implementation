@@ -271,10 +271,25 @@ namespace AlgorithmUnitTest.TestGraph
         }
 
         [TestMethod]
-        public void TestLCAofDAG() => DoTestLCAofDAG((v1, v2) => (new LCAofDAG(_simpleDAG, v1, v2)).LCA);
+        public void TestLCAofDAG_Wrong1() => DoTestLCAofDAG((v1, v2) => (new LCAofDAG_Wrong1(_simpleDAG, v1, v2)).LCA);
 
         [TestMethod]
-        public void TestLCAofDAG_2() => DoTestLCAofDAG((v1, v2) => (new LCAofDAG_2(_simpleDAG, v1, v2)).LCA);
+        public void TestLCAofDAG_Wrong2() => DoTestLCAofDAG((v1, v2) => (new LCAofDAG_Wrong2(_simpleDAG, v1, v2)).LCA);
+
+        [TestMethod]
+        public void TestLCAofDAG()
+        {
+            Func<int, int, int> fCalculate = (v1, v2) =>
+              {
+                  LCAofDAG client = new LCAofDAG(_simpleDAG, v1, v2);
+                  int[] LCAs = client.LCAs().ToArray();
+                  if (LCAs.Length > 0)
+                      return LCAs[0];
+                  else
+                      return -1;
+              };
+            DoTestLCAofDAG(fCalculate);
+        }
     }
 
     [TestClass]

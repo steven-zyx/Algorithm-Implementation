@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace AlgorithmImplementation.Graph
 {
-    public class LCAofDAG_2
+    public class LCAofDAG_Wrong2
     {
         public int LCA { get; }
 
-        public LCAofDAG_2(Digraph g, int v1, int v2)
+        public LCAofDAG_Wrong2(Digraph g, int v1, int v2)
         {
             Digraph reverseG = g.Reverse();
             int[] tp1 = (new Topological(reverseG, v1)).Order().ToArray();

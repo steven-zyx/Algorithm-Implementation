@@ -8,27 +8,42 @@ namespace AlgorithmImplementation.Graph
 {
     public class LCAofDAG
     {
-        public int LCA { get; }
+        protected HashSet<int> _LCAs;
 
         public LCAofDAG(Digraph g, int v1, int v2)
         {
-            LongestPath_DAG_Unweighted longClient = new LongestPath_DAG_Unweighted(g, v1);
-            int[] lp1 = longClient.Path.ToArray();
-            longClient = new LongestPath_DAG_Unweighted(g, v2);
-            int[] lp2 = longClient.Path.ToArray();
+            Func<int, HashSet<int>> fGetAncesters = v =>
+             {
+                 Topological client = new Topological(g);
+                 HashSet<int> ancesters = new HashSet<int>();
+                 foreach (int vertex in client.Order())
+                     if (vertex != v)
+                         ancesters.Add(vertex);
+                     else
+                         break;
+                 return ancesters;
+             };
 
-            if (lp1[0] != lp2[0])
+            int[] commonAncesters = fGetAncesters(v1).Intersect(fGetAncesters(v2)).ToArray();
+            int maxHeigth1 = 0, maxHeight2 = 0;
+            LongestPath_DAG_Unweighted client1 = new LongestPath_DAG_Unweighted(g, v1);
+            LongestPath_DAG_Unweighted client2 = new LongestPath_DAG_Unweighted(g, v2);
+            foreach (int v in commonAncesters)
             {
-                LCA = -1;
-                return;
+                maxHeigth1 = Math.Max(maxHeigth1, client1.Height[v]);
+                maxHeight2 = Math.Max(maxHeight2, client2.Height[v]);
             }
 
-            for (int i = 1; i < g.V; i++)
-                if (lp1[i] != lp2[i])
-                {
-                    LCA = lp1[i - 1];
-                    return;
-                }
+            _LCAs = new HashSet<int>();
+            foreach (int v in commonAncesters)
+            {
+                if (client1.Height[v] == maxHeigth1)
+                    _LCAs.Add(v);
+                if (client2.Height[v] == maxHeight2)
+                    _LCAs.Add(v);
+            }
         }
+
+        public IEnumerable<int> LCAs() => _LCAs;
     }
 }

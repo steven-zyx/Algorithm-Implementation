@@ -10,15 +10,15 @@ namespace AlgorithmImplementation.Graph
     {
         protected Digraph _g;
         protected Topological _client;
-        protected int[] _height;
         protected Stack<int> _path;
+        public int[] Height { get; protected set; }
 
         public LongestPath_DAG_Unweighted(Digraph g, int t) : this(g, -1, t) { }
 
         public LongestPath_DAG_Unweighted(Digraph g, int s, int t)
         {
             _g = g;
-            _height = new int[_g.V];
+            Height = new int[_g.V];
             _path = new Stack<int>();
             _client = new Topological(_g);
 
@@ -27,16 +27,16 @@ namespace AlgorithmImplementation.Graph
                 s = order[0];
             foreach (int v in order)
                 foreach (int w in g.Adj(v))
-                    _height[w] = Math.Max(_height[w], _height[v] + 1);
+                    Height[w] = Math.Max(Height[w], Height[v] + 1);
 
             int index = _g.V - 1;
             for (; index >= 0; index--)
                 if (order[index] == t)
                     break;
 
-            int currentH = _height[t];
+            int currentH = Height[t];
             for (; index >= 0; index--)
-                if (_height[order[index]] == currentH)
+                if (Height[order[index]] == currentH)
                 {
                     _path.Push(order[index]);
                     currentH--;
