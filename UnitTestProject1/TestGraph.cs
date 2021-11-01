@@ -179,6 +179,7 @@ namespace AlgorithmUnitTest.TestGraph
     {
         protected Digraph _simpleDiG => _simpleG as Digraph;
         protected Digraph _simpleDAG;
+        protected Digraph _simpleDAG2;
 
         public TestDirectedGraph()
         {
@@ -187,6 +188,9 @@ namespace AlgorithmUnitTest.TestGraph
 
             data = new int[] { 13, 15, 0, 1, 0, 5, 0, 6, 2, 0, 2, 3, 3, 5, 5, 4, 6, 4, 6, 9, 7, 6, 8, 7, 9, 10, 9, 11, 9, 12, 11, 12 };
             _simpleDAG = new Digraph(data);
+
+            data = new int[] { 15, 14, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 1, 10, 10, 11, 11, 12, 8, 9, 9, 7, 8, 13, 13, 14, 14, 0, 0, 12 };
+            _simpleDAG2 = new Digraph(data);
         }
 
         [TestMethod]
@@ -289,6 +293,26 @@ namespace AlgorithmUnitTest.TestGraph
                       return -1;
               };
             DoTestLCAofDAG(fCalculate);
+        }
+
+        [TestMethod]
+        public void TestBFS_Height()
+        {
+            BreadthFirstSearchHeight client = new BreadthFirstSearchHeight(_simpleDAG2, 1);
+            Assert.AreEqual(6, client.Height[7]);
+            Assert.AreEqual(3, client.Height[12]);
+
+            client = new BreadthFirstSearchHeight(_simpleDAG2, 8);
+            Assert.AreEqual(2, client.Height[7]);
+            Assert.AreEqual(4, client.Height[12]);
+        }
+
+        [TestMethod]
+        public void TestShortestAncestralPath()
+        {
+            ShortestAncestralPath client = new ShortestAncestralPath(_simpleDAG2, 1, 8);
+            string path = string.Join(",", client.ShortestAncestralPaths().First());
+            Assert.AreEqual("1,10,11,12,0,14,13,8", path);
         }
     }
 
