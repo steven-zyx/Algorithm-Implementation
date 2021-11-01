@@ -12,6 +12,8 @@ namespace AlgorithmImplementation.Graph
 
         protected Graph _g;
 
+        public DirectedDFS(Digraph g, int s) : this(g, new int[] { s }) { }
+
         public DirectedDFS(Digraph g, IEnumerable<int> sources)
         {
             _g = g;

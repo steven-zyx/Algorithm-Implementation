@@ -24,7 +24,11 @@ namespace AlgorithmImplementation.Graph
                  return ancesters;
              };
 
-            int[] commonAncesters = fGetAncesters(v1).Intersect(fGetAncesters(v2)).ToArray();
+            Digraph reverseG = g.Reverse();
+            DirectedDFS dfs1 = new DirectedDFS(reverseG, v1);
+            DirectedDFS dfs2 = new DirectedDFS(reverseG, v2);
+
+            int[] commonAncesters = fGetAncesters(v1).Intersect(fGetAncesters(v2)).Where(x => dfs1.Marked[x] && dfs2.Marked[x]).ToArray();
             int maxHeigth1 = 0, maxHeight2 = 0;
             LongestPath_DAG_Unweighted client1 = new LongestPath_DAG_Unweighted(g, v1);
             LongestPath_DAG_Unweighted client2 = new LongestPath_DAG_Unweighted(g, v2);
