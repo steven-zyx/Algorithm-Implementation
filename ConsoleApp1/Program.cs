@@ -64,7 +64,8 @@ namespace ConsoleApp1
             //ShowLongestRepeatedSubString();
             //ShowRegexProof();
             //ShowArbitrage();
-            ShowMaxFlow();
+            //ShowMaxFlow();
+            Show2Satisfiability();
             Console.ReadLine();
         }
 
@@ -897,6 +898,18 @@ it was the spring of hope it was the winter of despair";
             FordFolkerson client = new FordFolkerson(problem, 0, 5);
             StringBuilder sb = client.ShowResult();
             Console.WriteLine(sb);
+        }
+
+        public static void Show2Satisfiability()
+        {
+            while (true)
+            {
+                Console.WriteLine("Enter expression and variable count:");
+                string expression = Console.ReadLine(); //(x0||x2)&&(x0||!x3)&&(x1||!x3)&&(x1||!x4)&&(x2||!x4)&&(x0||!x5)&&(x1||!x5)&&(x2||!x5)&&(x3||x6)&&(x4||x6)&&(x5||x6)
+                int n = int.Parse(Console.ReadLine());
+                TwoSatisfiability client = new TwoSatisfiability(expression, n);
+                Console.WriteLine(client.ShowAssignment());
+            }
         }
     }
 }
