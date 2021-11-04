@@ -26,6 +26,5 @@ namespace AlgorithmImplementation.Graph
                 else if (u != w)
                     HasCycle = true;
         }
-
     }
 }

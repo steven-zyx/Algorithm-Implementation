@@ -404,6 +404,22 @@ namespace AlgorithmUnitTest.TestGraph
             Kruskal client = new Kruskal(_simpleWeG);
             FindMST(client);
         }
+
+        [TestMethod]
+        public void TestCycleDetection()
+        {
+            CycleDetection_WeightedGraph client = new CycleDetection_WeightedGraph(_simpleWeG);
+            Assert.IsTrue(client.HasCycle);
+
+            HashSet<int> vertices = new HashSet<int>();
+            foreach (Edge e in client.Cycle)
+            {
+                int v = e.Either(), w = e.Other(v);
+                vertices.Add(v);
+                vertices.Add(w);
+            }
+            vertices.IsSupersetOf(new int[] { 0, 4, 6 });
+        }
     }
 
     [TestClass]
