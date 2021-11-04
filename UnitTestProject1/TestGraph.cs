@@ -427,6 +427,38 @@ namespace AlgorithmUnitTest.TestGraph
             Vyssotsky client = new Vyssotsky(_simpleWeG);
             FindMST(client);
         }
+
+        [TestMethod]
+        public void TestReverseDelete()
+        {
+            ReverseDelete client = new ReverseDelete(_simpleWeG);
+            FindMST(client);
+        }
+
+        [TestMethod]
+        public void TestCriticalEdges()
+        {
+            (int, int, double)[] edges = new (int, int, double)[]
+            {
+                (0, 1, 1),
+                (0, 2, 2),
+                (1, 2, 2)
+            };
+            EdgeWeightedGraph g1 = new EdgeWeightedGraph(3, edges);
+            CriticalEdges client = new CriticalEdges(g1);
+            Assert.AreEqual(1, client.Critical().Count());
+
+            edges = new (int, int, double)[]
+            {
+                (0, 1, 2),
+                (1, 2, 3),
+                (2, 3, 2),
+                (3, 0, 3)
+            };
+            EdgeWeightedGraph g2 = new EdgeWeightedGraph(4, edges);
+            client = new CriticalEdges(g2);
+            Assert.AreEqual(2, client.Critical().Count());
+        }
     }
 
     [TestClass]
