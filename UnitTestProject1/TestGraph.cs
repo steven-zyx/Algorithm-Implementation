@@ -243,6 +243,14 @@ namespace AlgorithmUnitTest.TestGraph
         }
 
         [TestMethod]
+        public void TestQueueBasedTopological()
+        {
+            Topological_QueueBased client = new Topological_QueueBased(_simpleDAG);
+            Assert.IsTrue(client.IsDAG);
+            Assert.AreEqual("2830751694111012", string.Join("", client.Order()));
+        }
+
+        [TestMethod]
         public void TestStronglyConncectedComponent()
         {
             SCC client = new SCC(_simpleDiG);
@@ -313,6 +321,24 @@ namespace AlgorithmUnitTest.TestGraph
             ShortestAncestralPath client = new ShortestAncestralPath(_simpleDAG2, 1, 8);
             string path = string.Join(",", client.ShortestAncestralPaths().First());
             Assert.AreEqual("1,10,11,12,0,14,13,8", path);
+        }
+
+        [TestMethod]
+        public void TestArithmaticDAG()
+        {
+            //( 3 * 4 ) / 5 + 2 + ( 3 * 4 )
+            string[] values = { "+", "/", "+", "5", "*", "2", "3", "4" };
+            int[] data = { values.Length, 8, 0, 2, 0, 1, 1, 3, 1, 4, 2, 5, 2, 4, 4, 7, 4, 6 };
+            Digraph g = new Digraph(data);
+            ArithmaticDAG client = new ArithmaticDAG(g, values);
+            Assert.AreEqual(16.4, Math.Round(client.Result, 10));
+
+            //( ( 3 * 4 ) + ( 3 * 4 ) + ( 3 * 4 ) + ( 3 * 4 ) ) / 6
+            values = new string[] { "/", "+", "6", "*", "3", "4" };
+            data = new int[] { values.Length, 8, 0, 2, 0, 1, 1, 3, 1, 3, 1, 3, 1, 3, 3, 5, 3, 4 };
+            g = new Digraph(data);
+            client = new ArithmaticDAG(g, values);
+            Assert.AreEqual(8, Math.Round(client.Result, 10));
         }
     }
 
