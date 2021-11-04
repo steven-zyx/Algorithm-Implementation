@@ -458,6 +458,43 @@ namespace AlgorithmUnitTest.TestGraph
             EdgeWeightedGraph g2 = new EdgeWeightedGraph(4, edges);
             client = new CriticalEdges(g2);
             Assert.AreEqual(2, client.Critical().Count());
+
+            edges = new (int, int, double)[]
+            {
+                (0, 1, 3),
+                (1, 2, 3),
+                (2, 3, 2),
+                (3, 0, 3)
+            };
+            EdgeWeightedGraph g3 = new EdgeWeightedGraph(4, edges);
+            client = new CriticalEdges(g3);
+            Assert.AreEqual(1, client.Critical().Count());
+        }
+
+        [TestMethod]
+        public void TestCertification()
+        {
+            EagerPrim mstClient = new EagerPrim(_simpleWeG);
+            Certification certClient = new Certification(_simpleWeG, mstClient.Edges());
+            Assert.IsTrue(certClient.IsMSTEdges);
+
+            List<Edge> edges = mstClient.Edges().ToList();
+            int v = edges[2].Either(), w = edges[2].Other(v);
+            edges[2] = new Edge(v, w, edges[2].Weight - 0.1);
+            certClient = new Certification(_simpleWeG, edges);
+            Assert.IsFalse(certClient.IsMSTEdges);
+
+            edges = mstClient.Edges().ToList();
+            v = edges[5].Either();
+            w = edges[5].Other(v);
+            edges[5] = new Edge(v, 2, edges[5].Weight + 0.1);
+            certClient = new Certification(_simpleWeG, edges);
+            Assert.IsFalse(certClient.IsMSTEdges);
+
+            edges = mstClient.Edges().ToList();
+            edges.RemoveAt(2);
+            certClient = new Certification(_simpleWeG, edges);
+            Assert.IsFalse(certClient.IsMSTEdges);
         }
     }
 
