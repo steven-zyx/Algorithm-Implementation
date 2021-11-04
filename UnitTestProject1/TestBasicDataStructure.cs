@@ -654,5 +654,24 @@ namespace AlgorithmUnitTest.TestBasicDataStructure
                     Assert.IsFalse(client.Connected(other, vertex));
                 }
         }
+
+        [TestMethod]
+        public void TestBagRemoving()
+        {
+            int[] source = { 1, 2, 3, };
+            Bag_L<int> bag = new Bag_L<int>();
+            foreach (int value in source)
+                bag.Add(value);
+            Assert.AreEqual("321", string.Join("", bag));
+
+            bag.Remove(1);
+            Assert.AreEqual("32", string.Join("", bag));
+
+            bag.Remove(3);
+            Assert.AreEqual("2", string.Join("", bag));
+
+            bag.Remove(2);
+            Assert.AreEqual("", string.Join("", bag));
+        }
     }
 }

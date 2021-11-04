@@ -27,6 +27,24 @@ namespace BasicDataStrcture
             _count++;
         }
 
+        public bool Remove(V value)
+        {
+            bool changed = false;
+            Node<V> empty = new Node<V>(default(V), _root);
+            for (Node<V> node = empty; node.Next != null; node = node.Next)
+            {
+                if (node.Next.Value.Equals(value))
+                {
+                    node.Next = node.Next.Next;
+                    _count--;
+                    changed = true;
+                    break;
+                }
+            }
+            _root = empty.Next;
+            return changed;
+        }
+
         public IEnumerator<V> GetEnumerator()
         {
             for (Node<V> c = _root; c != null; c = c.Next)

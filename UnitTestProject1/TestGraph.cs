@@ -381,7 +381,7 @@ namespace AlgorithmUnitTest.TestGraph
             Assert.IsTrue(weights.Contains(0.28));
             Assert.IsTrue(weights.Contains(0.35));
             Assert.IsTrue(weights.Contains(0.40));
-            Assert.AreEqual(1.81, client.Weight);
+            Assert.AreEqual(1.81, Math.Round(client.Weight, 10));
         }
 
         [TestMethod]
@@ -419,6 +419,13 @@ namespace AlgorithmUnitTest.TestGraph
                 vertices.Add(w);
             }
             vertices.IsSupersetOf(new int[] { 0, 4, 6 });
+        }
+
+        [TestMethod]
+        public void TestVyssotsky()
+        {
+            Vyssotsky client = new Vyssotsky(_simpleWeG);
+            FindMST(client);
         }
     }
 
