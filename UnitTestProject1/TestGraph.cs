@@ -346,6 +346,7 @@ namespace AlgorithmUnitTest.TestGraph
     public class TestWeightedGraph
     {
         protected EdgeWeightedGraph _simpleWeG;
+        protected EdgeWeightedGraph_Matrix _simpleWeG_Matrix;
 
         public TestWeightedGraph()
         {
@@ -369,6 +370,7 @@ namespace AlgorithmUnitTest.TestGraph
                 (6,4,0.93)
             };
             _simpleWeG = new EdgeWeightedGraph(8, edges);
+            _simpleWeG_Matrix = new EdgeWeightedGraph_Matrix(8, edges);
         }
 
         private void FindMST(IMST client)
@@ -495,6 +497,13 @@ namespace AlgorithmUnitTest.TestGraph
             edges.RemoveAt(2);
             certClient = new Certification(_simpleWeG, edges);
             Assert.IsFalse(certClient.IsMSTEdges);
+        }
+
+        [TestMethod]
+        public void TestMatrix()
+        {
+            LazyPrim_SpaceEfficient client = new LazyPrim_SpaceEfficient(_simpleWeG_Matrix);
+            FindMST(client);
         }
     }
 

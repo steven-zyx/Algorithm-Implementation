@@ -8,6 +8,12 @@ namespace Sorting
     {
         private T[] _source;
         private int _count;
+        private IComparer<T> _comparer;
+
+        public MinPQ(int max, IComparer<T> comparer) : this(max)
+        {
+            _comparer = comparer;
+        }
 
         public MinPQ(int max)
         {
@@ -43,7 +49,6 @@ namespace Sorting
 
         public T Min => _source[1];
 
-
         private void Exchange(int a, int b)
         {
             T temp = _source[a];
@@ -51,7 +56,13 @@ namespace Sorting
             _source[b] = temp;
         }
 
-        private bool Less(int a, int b) => _source[a].CompareTo(_source[b]) < 0;
+        private bool Less(int a, int b)
+        {
+            if (_comparer == null)
+                return _source[a].CompareTo(_source[b]) < 0;
+            else
+                return _comparer.Compare(_source[a], _source[b]) < 0;
+        }
 
         private void Swim(int i)
         {
