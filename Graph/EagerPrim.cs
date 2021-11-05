@@ -24,30 +24,32 @@ namespace AlgorithmImplementation.Graph
             _marked = new bool[g.V];
             _minEdges = new Queue_N<Edge>();
 
-            _marked[0] = true;
-            foreach (Edge startE in _g.Adj(0))
-                _pq.Insert(startE.Other(0), startE);
-
+            Visit(0);
             while (!_pq.IsEmpty)
             {
                 Edge minEdge = _pq.Min;
-                int v = _pq.DelMin();
-                _marked[v] = true;
-                foreach (Edge e in _g.Adj(v))
-                {
-                    int w = e.Other(v);
-                    if (_marked[w])
-                        continue;
-                    if (_pq.Contains(w))
-                    {
-                        if (_pq.Get(w).Weight > e.Weight)
-                            _pq.Change(w, e);
-                    }
-                    else
-                        _pq.Insert(w, e);
-                }
                 _minEdges.Enqueue(minEdge);
                 Weight += minEdge.Weight;
+
+                Visit(_pq.DelMin());
+            }
+        }
+
+        protected void Visit(int v)
+        {
+            _marked[v] = true;
+            foreach (Edge e in _g.Adj(v))
+            {
+                int w = e.Other(v);
+                if (_marked[w])
+                    continue;
+                if (_pq.Contains(w))
+                {
+                    if (_pq.Get(w).Weight > e.Weight)
+                        _pq.Change(w, e);
+                }
+                else
+                    _pq.Insert(w, e);
             }
         }
 
