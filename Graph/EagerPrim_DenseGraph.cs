@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AlgorithmImplementation.Graph
 {
-    public class EagerPrim_DenseGraph
+    public class EagerPrim_DenseGraph : IMST
     {
         protected EdgeWeightedGraph _g;
         protected bool[] _marked;
@@ -24,7 +24,14 @@ namespace AlgorithmImplementation.Graph
             _edgeTo = new Edge[g.V];
             _minEdges = new Queue<Edge>();
 
+            int next = 0;
+            for (int i = 0; i < _g.V - 1; i++)
+                next = Visit(next);
         }
+
+        public double Weight => _minEdges.Sum(e => e.Weight);
+
+        public IEnumerable<Edge> Edges() => _minEdges;
 
         protected int Visit(int v)
         {
@@ -42,9 +49,11 @@ namespace AlgorithmImplementation.Graph
             }
 
             int next = 0;
-            for (int i = 0; i < _g.V; i++)
+            for (int i = 1; i < _g.V; i++)
                 if (!_marked[i] && _distTo[i] < _distTo[next])
                     next = i;
+
+            _minEdges.Enqueue(_edgeTo[next]);
             return next;
         }
     }

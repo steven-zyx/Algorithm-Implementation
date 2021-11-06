@@ -505,6 +505,13 @@ namespace AlgorithmUnitTest.TestGraph
             LazyPrim_SpaceEfficient client = new LazyPrim_SpaceEfficient(_simpleWeG_Matrix);
             FindMST(client);
         }
+
+        [TestMethod]
+        public void TestEagerPrimForDenseGraph()
+        {
+            EagerPrim_DenseGraph client = new EagerPrim_DenseGraph(_simpleWeG);
+            FindMST(client);
+        }
     }
 
     [TestClass]
