@@ -25,7 +25,7 @@ namespace AlgorithmImplementation.Graph
         protected void DFS(int v)
         {
             _onStack[v] = true;
-            foreach (DirectedEdge e in _g.Adj(v))
+            foreach (Edge e in _g.Adj(v))
             {
                 int w = e.To;
                 if (HasCycle)

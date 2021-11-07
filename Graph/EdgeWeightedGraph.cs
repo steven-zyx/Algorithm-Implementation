@@ -9,17 +9,17 @@ namespace AlgorithmImplementation.Graph
 {
     public class EdgeWeightedGraph
     {
-        protected Bag_L<Edge>[] _adjacencyList;
-
         public int V { get; }
 
         public int E { get; protected set; }
+
+        protected Bag_L<Edge>[] _adjacencyList;
 
         public EdgeWeightedGraph(int v)
         {
             V = v;
             _adjacencyList = new Bag_L<Edge>[V];
-            for (int i = 0; i < v; i++)
+            for (int i = 0; i < V; i++)
                 _adjacencyList[i] = new Bag_L<Edge>();
         }
 
@@ -29,7 +29,7 @@ namespace AlgorithmImplementation.Graph
                 AddEdge(edge.Item1, edge.Item2, edge.Item3);
         }
 
-        public void AddEdge(Edge e)
+        public virtual void AddEdge(Edge e)
         {
             int v = e.Either(), w = e.Other(v);
             _adjacencyList[v].Add(e);
@@ -39,7 +39,7 @@ namespace AlgorithmImplementation.Graph
 
         public void AddEdge(int v, int w, double weight) => AddEdge(new Edge(v, w, weight));
 
-        public void RemoveEdge(Edge e)
+        public virtual void RemoveEdge(Edge e)
         {
             int v = e.Either(), w = e.Other(v);
             _adjacencyList[v].Remove(e);
@@ -49,7 +49,7 @@ namespace AlgorithmImplementation.Graph
 
         public IEnumerable<Edge> Adj(int v) => _adjacencyList[v];
 
-        public IEnumerable<Edge> Edges()
+        public virtual IEnumerable<Edge> Edges()
         {
             for (int i = 0; i < V; i++)
                 foreach (Edge e in _adjacencyList[i])

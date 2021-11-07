@@ -19,7 +19,7 @@ namespace AlgorithmImplementation.Graph
                     _nearestV = v;
         }
 
-        public IEnumerable<DirectedEdge> PathFromStoT()
+        public IEnumerable<Edge> PathFromStoT()
         {
             for (int v = _nearestV; _edgeTo[v] != null; v = _edgeTo[v].From)
                 yield return _edgeTo[v];

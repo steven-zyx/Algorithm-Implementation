@@ -7,50 +7,35 @@ using BasicDataStrcture;
 
 namespace AlgorithmImplementation.Graph
 {
-    public class EdgeWeightedDigraph
+    public class EdgeWeightedDigraph : EdgeWeightedGraph
     {
-        public int V { get; }
+        public EdgeWeightedDigraph(int v) : base(v) { }
 
-        public int E { get; protected set; }
+        public EdgeWeightedDigraph(int v, IEnumerable<(int, int, double)> edges) : base(v, edges) { }
 
-        protected Bag_L<DirectedEdge>[] _adjacencyList;
-
-        internal EdgeWeightedDigraph(int v)
-        {
-            V = v;
-            _adjacencyList = new Bag_L<DirectedEdge>[V];
-            for (int i = 0; i < V; i++)
-                _adjacencyList[i] = new Bag_L<DirectedEdge>();
-        }
-
-        public EdgeWeightedDigraph(int v, (int, int, double)[] edges) : this(v)
-        {
-            foreach (var edge in edges)
-                AddEdge(edge.Item1, edge.Item2, edge.Item3);
-        }
-
-        public void AddEdge(DirectedEdge e)
+        public override void AddEdge(Edge e)
         {
             _adjacencyList[e.From].Add(e);
             E++;
         }
 
-        public void AddEdge(int v, int w, double weight) => AddEdge(new DirectedEdge(v, w, weight));
-
-        public IEnumerable<DirectedEdge> Edges()
+        public override void RemoveEdge(Edge e)
         {
-            foreach (var bag in _adjacencyList)
-                foreach (DirectedEdge edge in bag)
-                    yield return edge;
+            throw new NotImplementedException();
         }
 
-        public IEnumerable<DirectedEdge> Adj(int v) => _adjacencyList[v];
+        public override IEnumerable<Edge> Edges()
+        {
+            foreach (var bag in _adjacencyList)
+                foreach (Edge edge in bag)
+                    yield return edge;
+        }
 
         public Digraph Convert()
         {
             Digraph dg = new Digraph(V);
-            foreach (Bag_L<DirectedEdge> edges in _adjacencyList)
-                foreach (DirectedEdge e in edges)
+            foreach (Bag_L<Edge> edges in _adjacencyList)
+                foreach (Edge e in edges)
                     dg.AddEdge(e.From, e.To);
             return dg;
         }

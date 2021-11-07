@@ -28,7 +28,7 @@ namespace AlgorithmImplementation.Graph
 
         protected void Relax(int v)
         {
-            foreach (DirectedEdge e in _g.Adj(v))
+            foreach (Edge e in _g.Adj(v))
             {
                 int w = e.To;
                 if (DistTo[w] > DistTo[v] + e.Weight)

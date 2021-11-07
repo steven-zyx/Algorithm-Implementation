@@ -9,7 +9,7 @@ namespace AlgorithmImplementation.Graph
     public abstract class NegativeCycleDetectionBase
     {
         protected bool[] _onStack;
-        protected DirectedEdge[] _edgeTo;
+        protected Edge[] _edgeTo;
         protected double[] _distTo;
         protected EdgeWeightedDigraph _g;
 
@@ -21,7 +21,7 @@ namespace AlgorithmImplementation.Graph
         {
             _g = g;
             _onStack = new bool[_g.V];
-            _edgeTo = new DirectedEdge[_g.V];
+            _edgeTo = new Edge[_g.V];
             _distTo = new double[_g.V];
         }
     }

@@ -19,7 +19,7 @@ namespace AlgorithmImplementation.Graph
                 _clients[i] = new WeightedDijkstra(g, i);
         }
 
-        public IEnumerable<DirectedEdge> Path(int s, int t) => _clients[s].PathTo(t);
+        public IEnumerable<Edge> Path(int s, int t) => _clients[s].PathTo(t);
 
         public double Dist(int s, int t) => _clients[s].DistTo[t];
     }

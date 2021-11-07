@@ -29,7 +29,7 @@ namespace AlgorithmImplementation.Graph
                 AddEdge(edge.Item1, edge.Item2, edge.Item3);
         }
 
-        public void AddEdge(int v, int w, double weight)
+        public virtual void AddEdge(int v, int w, double weight)
         {
             _matrix[v, w] = weight;
             _matrix[w, v] = weight;
@@ -43,7 +43,7 @@ namespace AlgorithmImplementation.Graph
                     yield return i;
         }
 
-        public IEnumerable<(int v, int w)> Edges()
+        public virtual IEnumerable<(int v, int w)> Edges()
         {
             for (int i = 0; i < V; i++)
                 for (int j = 0; j < V; j++)
