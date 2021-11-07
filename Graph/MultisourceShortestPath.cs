@@ -7,22 +7,22 @@ using Sorting;
 
 namespace AlgorithmImplementation.Graph
 {
-    public class WeightedDijkstra : ShortestPath4WeightedDigraph
+    public class MultisourceShortestPath : ShortestPath4WeightedDigraph
     {
         protected IndexMinPQ<double> _pq;
 
-        public WeightedDijkstra(EdgeWeightedDigraph g, int s) : base(g)
+        public MultisourceShortestPath(EdgeWeightedDigraph g, IEnumerable<int> sources) : base(g)
         {
-            DistTo[s] = 0;
             _pq = new IndexMinPQ<double>(g.V);
-            Process(s);
-        }
+            foreach (int source in sources)
+            {
+                DistTo[source] = 0;
+                _pq.Insert(source, 0);
+            }
 
-        protected virtual void Process(int s)
-        {
-            Relax(s);
-            while (_pq.Size > 0)
+            do
                 Relax(_pq.DelMin());
+            while (_pq.Size > 0);
         }
 
         protected void Relax(int v)
@@ -34,7 +34,6 @@ namespace AlgorithmImplementation.Graph
                 {
                     DistTo[w] = DistTo[v] + e.Weight;
                     _edgeTo[w] = e;
-
                     if (_pq.Contains(w))
                         _pq.Change(w, DistTo[w]);
                     else

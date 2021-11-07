@@ -14,15 +14,17 @@ namespace AlgorithmImplementation.Graph
 
         protected EdgeWeightedDigraph _g;
 
-        public ShortestPath4WeightedDigraph(EdgeWeightedDigraph g, int s)
+        public ShortestPath4WeightedDigraph(EdgeWeightedDigraph g)
+        {
+            Init(g);
+        }
+
+        protected void Init(EdgeWeightedDigraph g)
         {
             _g = g;
-
             DistTo = new double[g.V];
             for (int i = 0; i < g.V; i++)
                 DistTo[i] = double.PositiveInfinity;
-            DistTo[s] = 0;
-
             _edgeTo = new DirectedEdge[g.V];
         }
 

@@ -171,6 +171,8 @@ namespace AlgorithmUnitTest.TestGraph
             Assert.AreEqual(1, graph.Adj("cosmetics").Count());
             Assert.AreEqual(2, graph.Adj("house").Count());
             Assert.AreEqual(2, graph.Adj("food").Count());
+
+            File.Delete(fileName);
         }
     }
 

@@ -8,8 +8,9 @@ namespace AlgorithmImplementation.Graph
 {
     public class ShortestPath_DAG : ShortestPath4WeightedDigraph
     {
-        public ShortestPath_DAG(EdgeWeightedDigraph g, int s) : base(g, s)
+        public ShortestPath_DAG(EdgeWeightedDigraph g, int s) : base(g)
         {
+            DistTo[s] = 0;
             Topological client = new Topological(_g.Convert());
             IsDAG = client.IsDAG();
 

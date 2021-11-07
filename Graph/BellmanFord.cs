@@ -18,8 +18,9 @@ namespace AlgorithmImplementation.Graph
 
         public IEnumerable<int> Cycle => _client.Cycle;
 
-        public BellmanFord(EdgeWeightedDigraph g, int s) : base(g, s)
+        public BellmanFord(EdgeWeightedDigraph g, int s) : base(g)
         {
+            DistTo[s] = 0;
             _cost = 0;
             _client = new NegetiveCycleDetection(_g);
 
