@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AlgorithmImplementation.Graph
 {
-    public abstract class ShortestPath4WeightedDigraph
+    public abstract class ShortestPath4WeightedDigraph : IShortestPath4WeightedDigraph
     {
-        public double[] DistTo;
+        public double[] DistTo { get; protected set; }
 
         protected Edge[] _edgeTo;
 

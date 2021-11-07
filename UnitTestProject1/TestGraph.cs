@@ -521,6 +521,8 @@ namespace AlgorithmUnitTest.TestGraph
     {
         protected EdgeWeightedDigraph _simpleWeDiG;
 
+        protected EdgeWeightedDigraph_Matrix _simpleWeDiG_Matrix;
+
         protected EdgeWeightedDigraph _simpleWeDAG;
 
         protected EdgeWeightedDigraph _simpleWeDig_N;
@@ -548,6 +550,7 @@ namespace AlgorithmUnitTest.TestGraph
                 (6, 4, 0.93)
             };
             _simpleWeDiG = new EdgeWeightedDigraph(8, edges);
+            _simpleWeDiG_Matrix = new EdgeWeightedDigraph_Matrix(8, edges);
 
             edges = new (int, int, double)[]
             {
@@ -591,7 +594,7 @@ namespace AlgorithmUnitTest.TestGraph
             _simpleWeDig_NC = new EdgeWeightedDigraph(8, edges);
         }
 
-        private void DoTestShortestPath_PositiveWeight(ShortestPath4WeightedDigraph client)
+        private void DoTestShortestPath_PositiveWeight(IShortestPath4WeightedDigraph client)
         {
             (int vertex, double dist, string route)[] answer =
             {
@@ -617,6 +620,9 @@ namespace AlgorithmUnitTest.TestGraph
         public void TestShortestPath() => DoTestShortestPath_PositiveWeight(new WeightedDijkstra(_simpleWeDiG, 0));
 
         [TestMethod]
+        public void TestShortestPaht_DenseGraph() => DoTestShortestPath_PositiveWeight(new WeightedDijkstra_Matrix(_simpleWeDiG_Matrix, 0));
+
+        [TestMethod]
         public void TestShortestPath_Source_Sink()
         {
             WeightedDijkstra_Source_Sink client = new WeightedDijkstra_Source_Sink(_simpleWeDiG, 0, 6);
@@ -628,7 +634,7 @@ namespace AlgorithmUnitTest.TestGraph
             Assert.AreEqual("0273", string.Join("", route));
         }
 
-        [TestMethod]
+        [TestMethod] 
         public void TestShortestPath_DAG()
         {
             ShortestPath_DAG client = new ShortestPath_DAG(_simpleWeDAG, 5);
