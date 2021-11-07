@@ -20,9 +20,8 @@ namespace AlgorithmImplementation.Graph
                 _pq.Insert(source, 0);
             }
 
-            do
+            while (_pq.Size > 0)
                 Relax(_pq.DelMin());
-            while (_pq.Size > 0);
         }
 
         protected void Relax(int v)
