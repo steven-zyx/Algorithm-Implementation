@@ -591,10 +591,8 @@ namespace AlgorithmUnitTest.TestGraph
             _simpleWeDig_NC = new EdgeWeightedDigraph(8, edges);
         }
 
-        [TestMethod]
-        public void TestShortestPath()
+        private void DoTestShortestPath_PositiveWeight(ShortestPath4WeightedDigraph client)
         {
-            WeightedDijkstra client = new WeightedDijkstra(_simpleWeDiG, 0);
             (int vertex, double dist, string route)[] answer =
             {
                 (1, 1.05, "045"),
@@ -614,6 +612,9 @@ namespace AlgorithmUnitTest.TestGraph
                 Assert.AreEqual(pair.route, string.Join("", route));
             }
         }
+
+        [TestMethod]
+        public void TestShortestPath() => DoTestShortestPath_PositiveWeight(new WeightedDijkstra(_simpleWeDiG, 0));
 
         [TestMethod]
         public void TestShortestPath_Source_Sink()

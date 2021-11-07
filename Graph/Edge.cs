@@ -30,6 +30,10 @@ namespace AlgorithmImplementation.Graph
                 throw new InvalidOperationException();
         }
 
+        public int From => _v;
+
+        public int To => _w;
+
         public int CompareTo(Edge other)
         {
             if (Weight < other.Weight)
