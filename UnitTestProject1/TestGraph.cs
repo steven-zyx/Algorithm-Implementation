@@ -623,6 +623,9 @@ namespace AlgorithmUnitTest.TestGraph
         public void TestShortestPaht_DenseGraph() => DoTestShortestPath_PositiveWeight(new WeightedDijkstra_Matrix(_simpleWeDiG_Matrix, 0));
 
         [TestMethod]
+        public void TestLazyDijkstra() => DoTestShortestPath_PositiveWeight(new LazyDijkstra(_simpleWeDiG, 0));
+
+        [TestMethod]
         public void TestShortestPath_Source_Sink()
         {
             WeightedDijkstra_Source_Sink client = new WeightedDijkstra_Source_Sink(_simpleWeDiG, 0, 6);
@@ -634,7 +637,7 @@ namespace AlgorithmUnitTest.TestGraph
             Assert.AreEqual("0273", string.Join("", route));
         }
 
-        [TestMethod] 
+        [TestMethod]
         public void TestShortestPath_DAG()
         {
             ShortestPath_DAG client = new ShortestPath_DAG(_simpleWeDAG, 5);
