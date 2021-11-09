@@ -28,7 +28,7 @@ namespace AlgorithmImplementation.Graph
                 _symbolG.AddEdge(negativeL, right);
             }
 
-            SCC_Extended scc = new SCC_Extended(_symbolG.DiG);
+            SCC_Extended scc = new SCC_Extended(_symbolG.G);
             foreach (string variable in _symbolG.Index.Keys)
                 if (IsPositive(variable))
                     if (scc.StronglyConnected(_symbolG.Index[variable], _symbolG.Index[GetNegative(variable)]))

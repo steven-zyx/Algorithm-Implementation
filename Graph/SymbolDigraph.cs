@@ -8,11 +8,11 @@ namespace AlgorithmImplementation.Graph
 {
     public class SymbolDigraph<T> : SymbolGraph2<T>
     {
-        public Digraph DiG => G as Digraph;
+        public new Digraph G => base.G as Digraph;
 
         public SymbolDigraph(int v) : base(v)
         {
-            G = new Digraph(v);
+            base.G = new Digraph(v);
         }
     }
 }

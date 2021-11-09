@@ -751,9 +751,9 @@ namespace AlgorithmUnitTest.TestGraph
         }
 
         [TestMethod]
-        public void TestShortestPath_NativeCycle()
+        private void DoTestShorestPath_NegativeWeight(Func<BellmanFord> fFeasible, Func<BellmanFord> fCycle)
         {
-            BellmanFord client = new BellmanFord(_simpleWeDig_N, 0);
+            BellmanFord client = fFeasible();
             (int vertex, double dist, string route)[] answer =
             {
                 (1, 0.93, "0273645"),
@@ -775,10 +775,26 @@ namespace AlgorithmUnitTest.TestGraph
                 Assert.AreEqual(triple.route, string.Join("", route));
             }
 
-            client = new BellmanFord(_simpleWeDig_NC, 0);
+            client = fCycle();
             Assert.IsTrue(client.HasCycle);
             string cycleRoute = string.Join("", client.Cycle);
             Assert.AreEqual("454", cycleRoute);
+        }
+
+        [TestMethod]
+        public void TestBellmanFord()
+        {
+            DoTestShorestPath_NegativeWeight(
+                () => new BellmanFord(_simpleWeDig_N, 0),
+                () => new BellmanFord(_simpleWeDig_NC, 0));
+        }
+
+        [TestMethod]
+        public void TestBellmanFord_ParentChecking()
+        {
+            DoTestShorestPath_NegativeWeight(
+                () => new BellmanFord_ParentChecking(_simpleWeDig_N, 0),
+                () => new BellmanFord_ParentChecking(_simpleWeDig_NC, 0));
         }
 
         private void DoTestNegetiveCycleDetection(Func<EdgeWeightedDigraph, NegativeCycleDetectionBase> fCreateInstance)
@@ -796,5 +812,17 @@ namespace AlgorithmUnitTest.TestGraph
 
         [TestMethod]
         public void TestNegativeCycleDetection_Zero() => DoTestNegetiveCycleDetection(x => new NegativeCycleDetection_Zero(x));
+
+        [TestMethod]
+        public void TestShortestpathInAGrid()
+        {
+            int[,] matrix =
+            {
+                { 1, 2, 3 },
+                { 4, 5, 6 },
+                { 7, 8, 9 }
+            };
+            ShortestPathInAGrid client = new ShortestPathInAGrid(matrix);
+        }
     }
 }

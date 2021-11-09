@@ -39,7 +39,7 @@ namespace AlgorithmImplementation.Graph
             _client = new NegetiveCycleDetection(spt);
         }
 
-        protected void Relax(int v)
+        protected virtual void Relax(int v)
         {
             foreach (Edge e in _g.Adj(v))
             {
