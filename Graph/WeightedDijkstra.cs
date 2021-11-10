@@ -25,7 +25,7 @@ namespace AlgorithmImplementation.Graph
                 Relax(_pq.DelMin());
         }
 
-        protected void Relax(int v)
+        protected virtual void Relax(int v)
         {
             foreach (Edge e in _g.Adj(v))
             {

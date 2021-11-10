@@ -823,6 +823,45 @@ namespace AlgorithmUnitTest.TestGraph
                 { 7, 8, 9 }
             };
             ShortestPathInAGrid client = new ShortestPathInAGrid(matrix);
+
+            IEnumerable<int> path = client.PathTo((2, 2));
+            Assert.AreEqual("12369", string.Join("", path));
+
+            path = client.PathTo((2, 1));
+            Assert.AreEqual("1258", string.Join("", path));
+        }
+
+        [TestMethod]
+        public void TestNeighbors()
+        {
+            (int vertex, double dist, string route)[] answer =
+            {
+                (1, 1.05, "045"),
+                (2, 0.26, "0"),
+                (3, 0.99, "027"),
+                (4, 0.38, "0"),
+                (5, 0.73, "04"),
+                (6, 1.51, "0273"),
+                (7, 0.60, "02")
+            };
+
+            double distance = 1;
+            Neighbors client = new Neighbors(_simpleWeDiG, 0, distance);
+            foreach (var pair in answer)
+            {
+                double dist = Math.Round(client.DistTo[pair.vertex], 10);
+                if (dist <= distance)
+                {
+                    Assert.AreEqual(pair.dist, dist);
+                    IEnumerable<int> route = client.PathTo(pair.vertex).Select(x => x.From);
+                    Assert.AreEqual(pair.route, string.Join("", route));
+                }
+                else
+                {
+                    Assert.AreEqual(double.PositiveInfinity, dist);
+                    Assert.AreEqual(0, client.PathTo(pair.vertex).Count());
+                }
+            }
         }
     }
 }
