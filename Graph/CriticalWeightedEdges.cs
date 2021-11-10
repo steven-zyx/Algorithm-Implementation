@@ -47,5 +47,17 @@ namespace AlgorithmImplementation.Graph
             for (int v = _t; !_duplicate[v] && _edgeTo[v] != null; v = _edgeTo[v].From)
                 yield return _edgeTo[v];
         }
+
+        public bool[,] Sensitivity()
+        {
+            bool[,] matrix = new bool[_g.V, _g.V];
+            foreach (Edge e in _g.Edges())
+                matrix[e.From, e.To] = true;
+
+            foreach (Edge e in CriticalEdges())
+                matrix[e.From, e.To] = false;
+
+            return matrix;
+        }
     }
 }

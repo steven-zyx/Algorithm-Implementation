@@ -867,7 +867,7 @@ namespace AlgorithmUnitTest.TestGraph
         [TestMethod]
         public void TestCriticalWeightedEdge()
         {
-            (int, int, double)[] edges =
+            (int from, int to, double weight)[] edges =
             {
                 (0, 1, 1),
                 (1, 2, 4),
@@ -883,6 +883,16 @@ namespace AlgorithmUnitTest.TestGraph
             Edge e = client.CriticalEdges().First();
             Assert.AreEqual(2, e.From);
             Assert.AreEqual(4, e.To);
+
+            bool[,] sensitivity = client.Sensitivity();
+
+            foreach (var item in edges)
+            {
+                if (item.from == 2 && item.to == 4)
+                    Assert.IsFalse(sensitivity[item.from, item.to]);
+                else
+                    Assert.IsTrue(sensitivity[item.from, item.to]);
+            }
         }
     }
 }
