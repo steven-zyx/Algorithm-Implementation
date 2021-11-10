@@ -863,5 +863,26 @@ namespace AlgorithmUnitTest.TestGraph
                 }
             }
         }
+
+        [TestMethod]
+        public void TestCriticalWeightedEdge()
+        {
+            (int, int, double)[] edges =
+            {
+                (0, 1, 1),
+                (1, 2, 4),
+                (0, 3, 2),
+                (3, 2, 3),
+                (2, 4, 5),
+                (3, 4, 9)
+            };
+            EdgeWeightedDigraph g = new EdgeWeightedDigraph(5, edges);
+            CriticalWeightedEdges client = new CriticalWeightedEdges(g, 0, 4);
+            Assert.AreEqual(1, client.CriticalEdges().Count());
+
+            Edge e = client.CriticalEdges().First();
+            Assert.AreEqual(2, e.From);
+            Assert.AreEqual(4, e.To);
+        }
     }
 }
