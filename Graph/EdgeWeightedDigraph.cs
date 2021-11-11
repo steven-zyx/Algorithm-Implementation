@@ -39,5 +39,13 @@ namespace AlgorithmImplementation.Graph
                     dg.AddEdge(e.From, e.To);
             return dg;
         }
+
+        public EdgeWeightedDigraph Reverse()
+        {
+            EdgeWeightedDigraph g = new EdgeWeightedDigraph(V);
+            foreach (Edge e in Edges())
+                g.AddEdge(e.To, e.From, e.Weight);
+            return g;
+        }
     }
 }

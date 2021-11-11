@@ -894,5 +894,15 @@ namespace AlgorithmUnitTest.TestGraph
                     Assert.IsTrue(sensitivity[item.from, item.to]);
             }
         }
+
+        [TestMethod]
+        public void TestBiDirectionalSearch()
+        {
+            BiDirectionalSearch client = new BiDirectionalSearch(_simpleWeDiG, 0, 6);
+            double spWeight = Math.Round(client.Distance, 10);
+            Assert.AreEqual(1.51, spWeight);
+            string shortestPath = string.Join("", client.Edges.Select(x => x.From));
+            Assert.AreEqual("0273", shortestPath);
+        }
     }
 }
