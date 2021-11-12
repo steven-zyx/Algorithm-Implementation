@@ -904,5 +904,31 @@ namespace AlgorithmUnitTest.TestGraph
             string shortestPath = string.Join("", client.Edges.Select(x => x.From));
             Assert.AreEqual("0273", shortestPath);
         }
+
+        [TestMethod]
+        public void TestDijkstraNegativeWeight()
+        {
+            WeightedDijkstra client = new WeightedDijkstra(_simpleWeDig_N, 0);
+            (int vertex, double dist, string route)[] answer =
+            {
+                (1, 0.93, "0273645"),
+                (5, 0.61, "027364"),
+                (4, 0.26, "02736"),
+                (6, 1.51, "0273"),
+                (3, 0.99, "027"),
+                (7, 0.60, "02"),
+                (2, 0.26, "0"),
+                (0, 0.00, "")
+            };
+
+            foreach (var triple in answer)
+            {
+                double dist = Math.Round(client.DistTo[triple.vertex], 10);
+                Assert.AreEqual(triple.dist, dist);
+
+                IEnumerable<int> route = client.PathTo(triple.vertex).Select(x => x.From);
+                Assert.AreEqual(triple.route, string.Join("", route));
+            }
+        }
     }
 }

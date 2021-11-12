@@ -65,7 +65,8 @@ namespace ConsoleApp1
             //ShowRegexProof();
             //ShowArbitrage();
             //ShowMaxFlow();
-            Show2Satisfiability();
+            //Show2Satisfiability();
+            LinearProgramming();
             Console.ReadLine();
         }
 
@@ -909,6 +910,39 @@ it was the spring of hope it was the winter of despair";
                 int n = int.Parse(Console.ReadLine());
                 TwoSatisfiability client = new TwoSatisfiability(expression, n);
                 Console.WriteLine(client.ShowAssignment());
+            }
+        }
+
+        private static void LinearProgramming()
+        {
+            Func<int, int, int, int, int, int, int, int, int, int, bool> conditions = (a, b, c, d, e, f, g, h, i, j) =>
+                      {
+                          if (c + j < d && b + i < d && a + g < d && b + h < c && a + f < b + h && a + e < b && h + j < i && e + i < f + j && f + j < g && b + i < c + j && a + g < b + i)
+                          {
+                              HashSet<int> variables = new HashSet<int>() { a, b, c, d, e, f, g, h, i, j };
+                              if (variables.Count == 10)
+                                  return true;
+                          }
+                          return false;
+                      };
+
+            Random ran = new Random(DateTime.Now.Millisecond);
+            while (true)
+            {
+                int a = ran.Next(0, 51);
+                int b = ran.Next(0, 51);
+                int c = ran.Next(0, 51);
+                int d = ran.Next(0, 51);
+                int e = ran.Next(0, 51);
+                int f = ran.Next(0, 51);
+                int g = ran.Next(0, 51);
+                int h = ran.Next(0, 51);
+                int i = ran.Next(0, 51);
+                int j = ran.Next(0, 51);
+                if (conditions(a, b, c, d, e, f, g, h, i, j) == true)
+                {
+
+                }
             }
         }
     }
