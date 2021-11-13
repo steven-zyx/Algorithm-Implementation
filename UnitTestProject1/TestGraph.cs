@@ -529,6 +529,8 @@ namespace AlgorithmUnitTest.TestGraph
 
         protected EdgeWeightedDigraph _simpleWeDig_NC;
 
+        protected EdgeWeightedDigraph _simpleWeDig_N_I;
+
         public TestDirectedWeightedGraph()
         {
             (int, int, double)[] edges = new (int, int, double)[]
@@ -592,6 +594,26 @@ namespace AlgorithmUnitTest.TestGraph
 
             edges[1].Item3 = -0.66;
             _simpleWeDig_NC = new EdgeWeightedDigraph(8, edges);
+
+            edges = new (int, int, double)[]
+            {
+                (4, 5, 35 ),
+                (5, 4, 35 ),
+                (4, 7, 37 ),
+                (5, 7, 28 ),
+                (7, 5, 28 ),
+                (5, 1, 32 ),
+                (0, 4, 38 ),
+                (0, 2, 26 ),
+                (7, 3, 39 ),
+                (1, 3, 29 ),
+                (2, 7, 34 ),
+                (6, 2, -120),
+                (3, 6, 52 ),
+                (6, 0, -140),
+                (6, 4, -125)
+            };
+            _simpleWeDig_N_I = new EdgeWeightedDigraph(8, edges);
         }
 
         private void DoTestShortestPath_PositiveWeight(IShortestPath4WeightedDigraph client)
@@ -750,7 +772,6 @@ namespace AlgorithmUnitTest.TestGraph
             Assert.IsTrue(cycle.IsSupersetOf(new int[] { 0, 10, 2, 4, }));
         }
 
-        [TestMethod]
         private void DoTestShorestPath_NegativeWeight(Func<BellmanFord> fFeasible, Func<BellmanFord> fCycle)
         {
             BellmanFord client = fFeasible();
@@ -921,6 +942,31 @@ namespace AlgorithmUnitTest.TestGraph
                 (0, 0.00, "")
             };
 
+            foreach (var triple in answer)
+            {
+                double dist = Math.Round(client.DistTo[triple.vertex], 10);
+                Assert.AreEqual(triple.dist, dist);
+
+                IEnumerable<int> route = client.PathTo(triple.vertex).Select(x => x.From);
+                Assert.AreEqual(triple.route, string.Join("", route));
+            }
+        }
+
+        [TestMethod]
+        public void TestFastBellmanFord()
+        {
+            FastBellmanFord client = new FastBellmanFord(_simpleWeDig_N_I, 0, 140);
+            (int vertex, double dist, string route)[] answer =
+            {
+                (0, 0, ""),
+                (1, 93, "0273645"),
+                (2, 26, "0"),
+                (3, 99, "027"),
+                (4, 26, "02736"),
+                (5, 61, "027364"),
+                (6, 151, "0273"),
+                (7, 60, "02")
+            };
             foreach (var triple in answer)
             {
                 double dist = Math.Round(client.DistTo[triple.vertex], 10);

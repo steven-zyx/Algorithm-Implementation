@@ -66,7 +66,7 @@ namespace ConsoleApp1
             //ShowArbitrage();
             //ShowMaxFlow();
             //Show2Satisfiability();
-            LinearProgramming();
+            //LinearProgramming();
             Console.ReadLine();
         }
 
