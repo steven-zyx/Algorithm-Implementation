@@ -6,39 +6,50 @@ using System.Threading.Tasks;
 
 namespace AlgorithmImplementation.Graph
 {
-    public class MonotonicDecreasingShorestPath : IMonotonicShortestPath
+    public class BitonicShortestPath : IMonotonicShortestPath
     {
         protected EdgeWeightedDigraph _g;
-        protected Queue<EdgeWeightedPath> _q;
-        protected EdgeWeightedPath[] _paths;
+        protected Queue<BitonicPath> _q;
+        protected BitonicPath[] _paths;
 
-        public MonotonicDecreasingShorestPath(EdgeWeightedDigraph g, int s)
+        public BitonicShortestPath(EdgeWeightedDigraph g, int s)
         {
             _g = g;
-            _q = new Queue<EdgeWeightedPath>();
-            _paths = new EdgeWeightedPath[g.V];
+            _q = new Queue<BitonicPath>();
+            _paths = new BitonicPath[g.V];
 
             foreach (Edge e in _g.Adj(s))
             {
                 int w = e.To;
-                _paths[w] = new EdgeWeightedPath()
+                _q.Enqueue(new BitonicPath()
                 {
-                    Edges = new List<Edge>() { e },
-                    Weight = e.Weight
-                };
-                _q.Enqueue(_paths[w]);
+                    Edges = new List<Edge> { e },
+                    Weight = e.Weight,
+                    Vertices = new HashSet<int>() { s, w },
+                    IsIncreasing = true
+                });
             }
+
             while (_q.Count() > 0)
                 Relax(_q.Dequeue());
         }
 
-        protected virtual void Relax(EdgeWeightedPath currentP)
+        public void Relax(BitonicPath currentP)
         {
+            double lastWeight = currentP.LastEdgeWeight;
             foreach (Edge e in _g.Adj(currentP.LastV))
-                if (e.Weight < currentP.LastEdgeWeight)
+            {
+                int w = e.To;
+                if (currentP.Vertices.Contains(w))
+                    continue;
+
+                if (currentP.IsIncreasing && e.Weight > lastWeight)
                 {
-                    int w = e.To;
-                    EdgeWeightedPath oldP = _paths[w];
+                    _q.Enqueue(currentP.CopyAndAdd(e));
+                }
+                else if (e.Weight < lastWeight)
+                {
+                    BitonicPath oldP = _paths[w];
                     if (oldP == null || currentP.Weight + e.Weight < oldP.Weight)
                     {
                         _paths[w] = currentP.CopyAndAdd(e);
@@ -49,7 +60,9 @@ namespace AlgorithmImplementation.Graph
                         _q.Enqueue(currentP.CopyAndAdd(e));
                     }
                 }
+            }
         }
+
 
         public double DistTo(int v)
         {

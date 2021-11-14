@@ -520,6 +520,13 @@ namespace AlgorithmUnitTest.TestGraph
     [TestClass]
     public class TestDirectedWeightedGraph
     {
+        enum Monotonicity
+        {
+            Increasing,
+            Decreasing,
+            Bitonic
+        }
+
         protected EdgeWeightedDigraph _simpleWeDiG;
 
         protected EdgeWeightedDigraph_Matrix _simpleWeDiG_Matrix;
@@ -978,8 +985,8 @@ namespace AlgorithmUnitTest.TestGraph
             }
         }
 
-        private void DoTestMonotonicDecreasingPath(
-            bool isDecreasing,
+        private void DoTestMonotonicPath(
+            Monotonicity mType,
             int vertex,
             (int from, int to, double dist)[] edges,
             (int t, double dist, string path)[] answers,
@@ -988,9 +995,13 @@ namespace AlgorithmUnitTest.TestGraph
             for (int i = 0; i < 10; i++)
             {
                 EdgeWeightedDigraph g = new EdgeWeightedDigraph(vertex, edges);
-                MonotonicDecreasingShorestPath client = isDecreasing ?
-                    new MonotonicDecreasingShorestPath(g, 0) :
-                    new MonotonicIncreasingShortestpath(g, 0);
+                IMonotonicShortestPath client;
+                if (mType == Monotonicity.Increasing)
+                    client = new MonotonicIncreasingShortestpath(g, 0);
+                else if (mType == Monotonicity.Decreasing)
+                    client = new MonotonicDecreasingShorestPath(g, 0);
+                else
+                    client = new BitonicShortestPath(g, 0);
 
                 foreach (var triple in answers)
                 {
@@ -1032,7 +1043,7 @@ namespace AlgorithmUnitTest.TestGraph
                 (5, -45, "032"),
             };
             int[] noAnswers = { 6 };
-            DoTestMonotonicDecreasingPath(true, 7, edges, answers, noAnswers);
+            DoTestMonotonicPath(Monotonicity.Decreasing, 7, edges, answers, noAnswers);
 
             edges = new (int from, int to, double dist)[]
             {
@@ -1050,7 +1061,7 @@ namespace AlgorithmUnitTest.TestGraph
                 (4, 9, "01"),
             };
             noAnswers = new int[0];
-            DoTestMonotonicDecreasingPath(true, 5, edges, answers, noAnswers);
+            DoTestMonotonicPath(Monotonicity.Decreasing, 5, edges, answers, noAnswers);
 
             edges = new (int from, int to, double dist)[]
             {
@@ -1068,7 +1079,7 @@ namespace AlgorithmUnitTest.TestGraph
                 (4, 15, "01")
             };
             noAnswers = new int[0];
-            DoTestMonotonicDecreasingPath(true, 5, edges, answers, noAnswers);
+            DoTestMonotonicPath(Monotonicity.Decreasing, 5, edges, answers, noAnswers);
 
             edges = new (int from, int to, double dist)[]
             {
@@ -1090,7 +1101,7 @@ namespace AlgorithmUnitTest.TestGraph
                 (4, 1, "01")
             };
             noAnswers = new int[0];
-            DoTestMonotonicDecreasingPath(true, 7, edges, answers, noAnswers);
+            DoTestMonotonicPath(Monotonicity.Decreasing, 7, edges, answers, noAnswers);
         }
 
         [TestMethod]
@@ -1115,7 +1126,7 @@ namespace AlgorithmUnitTest.TestGraph
                 (5, 25, "012"),
             };
             int[] noAnswers = { 6 };
-            DoTestMonotonicDecreasingPath(false, 7, edges, answers, noAnswers);
+            DoTestMonotonicPath(Monotonicity.Increasing, 7, edges, answers, noAnswers);
 
             edges = new (int from, int to, double dist)[]
             {
@@ -1133,7 +1144,7 @@ namespace AlgorithmUnitTest.TestGraph
                 (4, 17, "01"),
             };
             noAnswers = new int[0];
-            DoTestMonotonicDecreasingPath(false, 5, edges, answers, noAnswers);
+            DoTestMonotonicPath(Monotonicity.Increasing, 5, edges, answers, noAnswers);
 
             edges = new (int from, int to, double dist)[]
             {
@@ -1151,7 +1162,94 @@ namespace AlgorithmUnitTest.TestGraph
                 (4, 50, "01")
             };
             noAnswers = new int[0];
-            DoTestMonotonicDecreasingPath(false, 5, edges, answers, noAnswers);
+            DoTestMonotonicPath(Monotonicity.Increasing, 5, edges, answers, noAnswers);
+        }
+
+        [TestMethod]
+        public void TestBitonicPath()
+        {
+            (int from, int to, double dist)[] edges;
+            (int t, double dist, string path)[] answers;
+            int[] noAnswers;
+
+            edges = new (int from, int to, double dist)[]
+            {
+                (0, 1, 5),
+                (1, 2, 10),
+                (2, 0, 7)
+            };
+            answers = new (int t, double dist, string path)[0];
+            noAnswers = new int[] { 1, 2 };
+            DoTestMonotonicPath(Monotonicity.Bitonic, 3, edges, answers, noAnswers);
+
+            edges = new (int from, int to, double dist)[]
+            {
+                (0, 1, 5),
+                (1, 2, 20),
+                (2, 1, 10)
+            };
+            answers = new (int t, double dist, string path)[0];
+            noAnswers = new int[] { 0, 1, 2 };
+            DoTestMonotonicPath(Monotonicity.Bitonic, 3, edges, answers, noAnswers);
+
+            edges = new (int from, int to, double dist)[]
+            {
+                (0, 1, 10),
+                (1, 2, 5)
+            };
+            answers = new (int t, double dist, string path)[]
+            {
+                (2, 15, "01")
+            };
+            noAnswers = new int[] { 1 };
+            DoTestMonotonicPath(Monotonicity.Bitonic, 3, edges, answers, noAnswers);
+
+            edges = new (int from, int to, double dist)[]
+            {
+                (0, 1, 10),
+                (1, 2, 20),
+                (1, 3, 5),
+                (2, 4, 15)
+            };
+            answers = new (int t, double dist, string path)[]
+            {
+                (3, 15, "01"),
+                (4, 45, "012")
+            };
+            noAnswers = new int[] { 1, 2 };
+            DoTestMonotonicPath(Monotonicity.Bitonic, 5, edges, answers, noAnswers);
+
+            edges = new (int from, int to, double dist)[]
+            {
+                (0, 1, 5),
+                (1, 2, 10)
+            };
+            answers = new (int t, double dist, string path)[0];
+            noAnswers = new int[] { 1, 2 };
+            DoTestMonotonicPath(Monotonicity.Bitonic, 3, edges, answers, noAnswers);
+
+            edges = new (int from, int to, double dist)[]
+            {
+                (0, 1, 40),
+                (1, 3, 50),
+                (0, 2, 20),
+                (2, 3, 30),
+                (3, 4, 45),
+                (3, 5, 25),
+                (3, 6, 5),
+                (0, 7, 15),
+                (7, 3, 10),
+                (3, 8, 60)
+            };
+            answers = new (int t, double dist, string path)[]
+            {
+                (4, 135, "013"),
+                (5, 75, "023"),
+                (6, 30, "073"),
+                (3, 25, "07")
+            };
+            noAnswers = new int[] { 1, 2, 8 };
+            DoTestMonotonicPath(Monotonicity.Bitonic, 9, edges, answers, noAnswers);
         }
     }
 }

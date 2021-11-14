@@ -12,19 +12,17 @@ namespace AlgorithmImplementation.Graph
 
         protected override void Relax(EdgeWeightedPath currentP)
         {
-            int v = currentP.LastV;
-            double lastWeight = currentP.LastEdgeWeight;
-            foreach (Edge e in _g.Adj(v))
-                if (e.Weight > lastWeight)
+            foreach (Edge e in _g.Adj(currentP.LastV))
+                if (e.Weight > currentP.LastEdgeWeight)
                 {
                     int w = e.To;
-                    EdgeWeightedPath path = _paths[w];
-                    if (path == null || currentP.Weight + e.Weight < path.Weight)
+                    EdgeWeightedPath oldP = _paths[w];
+                    if (oldP == null || currentP.Weight + e.Weight < oldP.Weight)
                     {
                         _paths[w] = currentP.CopyAndAdd(e);
                         _q.Enqueue(_paths[w]);
                     }
-                    else if (currentP.LastEdgeWeight < path.LastEdgeWeight)
+                    else if (currentP.LastEdgeWeight < oldP.LastEdgeWeight)
                     {
                         _q.Enqueue(currentP.CopyAndAdd(e));
                     }
