@@ -7,6 +7,7 @@ using System.Linq;
 using System.IO;
 using Utils;
 using System.Reflection;
+using Utils;
 
 namespace AlgorithmUnitTest.TestGraph
 {
@@ -975,6 +976,182 @@ namespace AlgorithmUnitTest.TestGraph
                 IEnumerable<int> route = client.PathTo(triple.vertex).Select(x => x.From);
                 Assert.AreEqual(triple.route, string.Join("", route));
             }
+        }
+
+        private void DoTestMonotonicDecreasingPath(
+            bool isDecreasing,
+            int vertex,
+            (int from, int to, double dist)[] edges,
+            (int t, double dist, string path)[] answers,
+            int[] noAnswers)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                EdgeWeightedDigraph g = new EdgeWeightedDigraph(vertex, edges);
+                MonotonicDecreasingShorestPath client = isDecreasing ?
+                    new MonotonicDecreasingShorestPath(g, 0) :
+                    new MonotonicIncreasingShortestpath(g, 0);
+
+                foreach (var triple in answers)
+                {
+                    double dist = Math.Round(client.DistTo(triple.t), 10);
+                    Assert.AreEqual(triple.dist, dist);
+
+                    IEnumerable<int> route = client.PathTo(triple.t).Select(x => x.From);
+                    Assert.AreEqual(triple.path, string.Join("", route));
+                }
+                foreach (var v in noAnswers)
+                {
+                    Assert.AreEqual(double.PositiveInfinity, client.DistTo(v));
+                }
+
+                Util.Shuffle(edges);
+            }
+        }
+
+
+        [TestMethod]
+        public void TestMonotonicDecreasingPath()
+        {
+            (int from, int to, double dist)[] edges =
+            {
+                (0, 1, 10),
+                (1, 2, 1),
+                (0, 3, 20),
+                (3, 2, -30),
+                (2, 4, -5),
+                (2, 5, -35),
+                (2, 6, 10)
+            };
+            (int t, double dist, string path)[] answers =
+            {
+                (1, 10, "0"),
+                (2, -10, "03"),
+                (3, 20, "0"),
+                (4, 6, "012"),
+                (5, -45, "032"),
+            };
+            int[] noAnswers = { 6 };
+            DoTestMonotonicDecreasingPath(true, 7, edges, answers, noAnswers);
+
+            edges = new (int from, int to, double dist)[]
+            {
+                (0, 1, 6),
+                (0, 2, 15),
+                (2, 1, 12),
+                (1, 3, 9),
+                (1, 4, 3)
+            };
+            answers = new (int t, double dist, string path)[]
+            {
+                (1, 6, "0"),
+                (2, 15, "0"),
+                (3, 36, "021"),
+                (4, 9, "01"),
+            };
+            noAnswers = new int[0];
+            DoTestMonotonicDecreasingPath(true, 5, edges, answers, noAnswers);
+
+            edges = new (int from, int to, double dist)[]
+            {
+                (0, 1, 20),
+                (0, 2, 15),
+                (2, 1, 10),
+                (1, 3, 5),
+                (1, 4, -5)
+            };
+            answers = new (int t, double dist, string path)[]
+            {
+                (1, 20, "0"),
+                (2, 15, "0"),
+                (3, 25, "01"),
+                (4, 15, "01")
+            };
+            noAnswers = new int[0];
+            DoTestMonotonicDecreasingPath(true, 5, edges, answers, noAnswers);
+
+            edges = new (int from, int to, double dist)[]
+            {
+                (0, 1, 4),
+                (1, 2, 3),
+                (2, 5, -1),
+                (2, 3, 2),
+                (3, 6, -2),
+                (3, 1, 1),
+                (1, 4, -3)
+            };
+            answers = new (int t, double dist, string path)[]
+            {
+                (1, 4, "0"),
+                (2, 7, "01"),
+                (5, 6, "012"),
+                (3, 9, "012"),
+                (6, 7, "0123"),
+                (4, 1, "01")
+            };
+            noAnswers = new int[0];
+            DoTestMonotonicDecreasingPath(true, 7, edges, answers, noAnswers);
+        }
+
+        [TestMethod]
+        public void TestMonotonicIncreasingPath()
+        {
+            (int from, int to, double dist)[] edges =
+            {
+                (0, 1, -30),
+                (1, 2, 20),
+                (0, 3, 1),
+                (3, 2, 10),
+                (2, 4, 15),
+                (2, 5, 35),
+                (2, 6, 5)
+            };
+            (int t, double dist, string path)[] answers =
+            {
+                (1, -30, "0"),
+                (2, -10, "01"),
+                (3, 1, "0"),
+                (4, 26, "032"),
+                (5, 25, "012"),
+            };
+            int[] noAnswers = { 6 };
+            DoTestMonotonicDecreasingPath(false, 7, edges, answers, noAnswers);
+
+            edges = new (int from, int to, double dist)[]
+            {
+                (0, 1, 8),
+                (0, 2, 4),
+                (2, 1, 5),
+                (1, 3, 6),
+                (1, 4, 9)
+            };
+            answers = new (int t, double dist, string path)[]
+            {
+                (1, 8, "0"),
+                (2, 4, "0"),
+                (3, 15, "021"),
+                (4, 17, "01"),
+            };
+            noAnswers = new int[0];
+            DoTestMonotonicDecreasingPath(false, 5, edges, answers, noAnswers);
+
+            edges = new (int from, int to, double dist)[]
+            {
+                (0, 1, 20),
+                (0, 2, 10),
+                (2, 1, 15),
+                (1, 3, 25),
+                (1, 4, 30)
+            };
+            answers = new (int t, double dist, string path)[]
+            {
+                (1, 20, "0"),
+                (2, 10, "0"),
+                (3, 45, "01"),
+                (4, 50, "01")
+            };
+            noAnswers = new int[0];
+            DoTestMonotonicDecreasingPath(false, 5, edges, answers, noAnswers);
         }
     }
 }
