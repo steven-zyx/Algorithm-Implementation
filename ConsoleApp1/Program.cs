@@ -66,7 +66,6 @@ namespace ConsoleApp1
             //ShowArbitrage();
             //ShowMaxFlow();
             //Show2Satisfiability();
-            //LinearProgramming();
             Console.ReadLine();
         }
 
@@ -204,11 +203,11 @@ namespace ConsoleApp1
         {
             string[] emailList = new string[]
             {
-                "zhuyuxuan@beyondsoft.com",
-                "v-yuzhu@microsoft.com",
-                "steven_chuh@foxmail.com",
-                "xiedongxidong@beyondsoft.com",
-                "v-dox@microsoft.com",
+                "John@company.com",
+                "Steven@company.com",
+                "Amy@company.com",
+                "Andy@home.com",
+                "Linda@home.com",
             };
             new SpamCampaign(emailList);
         }
@@ -913,7 +912,7 @@ it was the spring of hope it was the winter of despair";
             }
         }
 
-        private static void LinearProgramming()
+        private static void LinearProgramming_Brute()
         {
             Func<int, int, int, int, int, int, int, int, int, int, bool> conditions = (a, b, c, d, e, f, g, h, i, j) =>
                       {
